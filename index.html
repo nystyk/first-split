@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <!-- ======================================================================= -->
+    <!-- I. CONFIGURAREA ȘI RESURSELE PAGINII (HEAD)                          -->
+    <!-- ======================================================================= -->
+
+    <!-- I.A. META-DATE ȘI TITLU -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al Doilea Război Mondial: O Cronologie Interactivă pe Hartă</title>
+
+    <!-- I.B. BIBLIOTECI EXTERNE (CSS & JS) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Roboto+Slab:wght@300;400;700&family=Teko:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- I.C. STILURI CSS PERSONALIZATE -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ======================================================================= -->
+    <!-- II. STRUCTURA HTML A PAGINII (BODY)                                   -->
+    <!-- ======================================================================= -->
+
+    <div id="main-container">
+        <div id="app-header">
+            <h1 class="font-cinzel">Al Doilea Război Mondial</h1>
+        </div>
+        <div id="map-container">
+            <div id="map"></div>
+            <div id="legend-panel"></div>
+            <div id="overlay-container">
+                <svg id="line-canvas"></svg>
+                <div id="dots-container"></div>
+                <div id="labels-container"></div>
+            </div>
+        </div>
+        
+         <div id="filter-container">
+            <div id="timeline-slider-wrapper">
+                <div id="slider-tooltip"></div>
+                <input type="range" min="0" max="8" value="0" class="w-full" id="timeline-slider">
+                <div id="slider-labels"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- II.E. FERESTRE MODALE -->
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center p-4 z-[2001] hidden">
+        <div class="modal-content w-full max-w-3xl max-h-[90vh] overflow-y-auto relative text-gray-300 bg-gray-900 rounded-lg shadow-2xl">
+            <button id="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
+            <img id="modalImage" src="" alt="Event Image" class="w-full h-64 object-cover rounded-t-lg">
+            <div class="p-8">
+                <h2 id="modalTitle" class="text-3xl md:text-4xl font-bold mb-2 font-teko text-white"></h2>
+                <p id="modalDescription" class="text-base leading-relaxed"></p>
+                <div class="mt-6 border-t border-gray-700 pt-6">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-400 font-teko tracking-wide">Explorează cu AI</h3>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 mb-4">
+                        <button id="deeperDiveBtn" class="ai-btn flex-1 text-white font-bold py-2 px-4 rounded-lg">✨ Analiză Aprofundată</button>
+                        <button id="personalStoryBtn" class="ai-btn flex-1 text-white font-bold py-2 px-4 rounded-lg">✨ Poveste Personală</button>
+                    </div>
+                    <div id="aiContent" class="mt-4 p-4 bg-black bg-opacity-20 rounded-lg min-h-[100px] border border-gray-700 hidden">
+                        <div id="loader" class="flex justify-center items-center h-full hidden"><div class="loader"></div></div>
+                        <p id="aiResult" class="text-gray-300 whitespace-pre-wrap"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="contextModal" class="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center p-4 z-[2002] hidden">
+        <div class="context-modal-content w-full max-w-2xl p-8 rounded-lg text-gray-300 relative">
+            <button id="closeContextModal" class="absolute top-3 right-3 text-gray-400 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
+            <h2 id="contextModalTitle" class="text-4xl font-bold mb-4 font-teko text-white"></h2>
+            <p id="contextModalDescription" class="text-lg leading-relaxed"></p>
+        </div>
+    </div>
+
+    <!-- ======================================================================= -->
+    <!-- III. SCRIPTURI JAVASCRIPT                                             -->
+    <!-- ======================================================================= -->
+    <script src="script.js"></script>
+</body>
+</html>

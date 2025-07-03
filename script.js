@@ -1,0 +1,719 @@
+document.addEventListener('DOMContentLoaded', () => {
+    // --- DATA ---
+    const allEventsData = {
+        'pre-war': [
+            { type: 'major', year: 1919, title: 'Tratatul de la Versailles', lat: 48.8049, lng: 2.1204, labelOffset: {x: -120, y: -80}, imageUrl: 'https://images.unsplash.com/photo-1562095398-e7bf9fcf6292?q=80&w=800&auto=format&fit=crop', description: 'Tratatul care a încheiat oficial Primul Război Mondial, impunând condiții dure Germaniei. Participanți: Puterile Aliate și Germania.' },
+            { type: 'major', year: 1922, title: 'Marșul asupra Romei', lat: 41.9028, lng: 12.4964, labelOffset: {x: -30, y: 120}, imageUrl: 'https://images.unsplash.com/photo-1629631614981-d4b8f5835694?q=80&w=800&auto=format&fit=crop', description: 'Evenimentul prin care Benito Mussolini și Partidul Național Fascist au preluat puterea în Italia. Participanți: Partidul Național Fascist, Regatul Italiei.' },
+            { type: 'minor', year: 1929, title: 'Crahul de pe Wall Street', lat: 40.7069, lng: -74.0113, imageUrl: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=800&auto=format&fit=crop', description: 'Prăbușirea bursei din New York ("Marțea Neagră"), care a declanșat Marea Criză Economică la nivel mondial. Un eveniment intern al Statelor Unite cu repercusiuni globale.' },
+            { type: 'major', year: 1931, title: 'Incidentul Mukden', lat: 41.8057, lng: 123.4315, labelOffset: {x: -150, y: 80}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Mukden_incident_aftermath.jpg/800px-Mukden_incident_aftermath.jpg', description: 'Un pretext înscenat de armata japoneză pentru a invada Manciuria, escaladând tensiunile dintre Japonia și China.' },
+            { type: 'major', year: 1933, title: 'Hitler devine Cancelar', lat: 52.5117, lng: 13.3819, labelOffset: {x: 0, y: -150}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Hitler_und_Hindenburg_am_Tag_von_Potsdam_21._M%C3%A4rz_1933.jpg/800px-Hitler_und_Hindenburg_am_Tag_von_Potsdam_21._M%C3%A4rz_1933.jpg', description: 'Adolf Hitler este numit cancelar al Germaniei, marcând ascensiunea Partidului Nazist și sfârșitul Republicii de la Weimar.' },
+            { type: 'atrocity', year: 1933, title: 'Deschiderea Lagărului Dachau', lat: 48.2486, lng: 11.4322, onMap: false, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Dachau_gate.jpg/800px-Dachau_gate.jpg', description: 'Primul lagăr de concentrare nazist deschis în Germania, inițial pentru deținuți politici. A servit ca model pentru lagărele ulterioare și a funcționat pe întreaga durată a regimului.' },
+            { type: 'atrocity', year: 1934, title: 'Noaptea Cuțitelor Lungi', lat: 52.5200, lng: 13.4050, onMap: false, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Bundesarchiv_Bild_102-16196%2C_Berlin%2C_Leibstandarte_SS_Adolf_Hitler.jpg/800px-Bundesarchiv_Bild_102-16196%2C_Berlin%2C_Leibstandarte_SS_Adolf_Hitler.jpg', description: 'O epurare politică sângeroasă în care regimul nazist a executat sute de oponenți, inclusiv lideri ai facțiunii SA (Sturmabteilung) și figuri conservatoare, pentru a consolida puterea absolută a lui Hitler.' },
+            { type: 'minor', year: 1934, title: 'Incidentul de la Walwal', lat: 8.0667, lng: 45.4167, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Italo-Ethiopian_War_map_1935.svg', description: 'O ciocnire la granița dintre Etiopia și Somalia italiană, folosită de Italia ca pretext pentru a invada Etiopia în anul următor.' },
+            { type: 'minor', year: 1935, title: 'Plebiscitul din Saarland', lat: 49.2333, lng: 7.0000, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Saar_Plebiscite_Propaganda_Poster_1934.jpg/800px-Saar_Plebiscite_Propaganda_Poster_1934.jpg', description: 'Locuitorii din regiunea Saar votează pentru reunificarea cu Germania, un succes de propagandă pentru regimul nazist. Procesul a fost supervizat de Liga Națiunilor.' },
+            { type: 'atrocity', year: 1935, title: 'Legile de la Nürnberg', lat: 49.4539, lng: 11.0775, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Nuremberg_laws_chart.jpg/800px-Nuremberg_laws_chart.jpg', description: 'Legi antisemite adoptate în Germania Nazistă care au instituționalizat persecuția evreilor, privându-i de cetățenie și de drepturi fundamentale.' },
+            { type: 'major', year: 1935, title: 'Invazia Italiană a Etiopiei', lat: 9.0250, lng: 38.7469, labelOffset: {x: -100, y: 100}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethiopian_soldiers%2C_ca._1935.jpg/800px-Ethiopian_soldiers%2C_ca._1935.jpg', description: 'Forțele italiene invadează Etiopia (cunoscută și ca Abisinia), într-un act de agresiune colonială care a expus slăbiciunea Ligii Națiunilor.' },
+            { type: 'major', year: 1936, title: 'Remilitarizarea Renaniei', lat: 50.9375, lng: 6.9603, labelOffset: {x: -100, y: -100}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/German_troops_march_into_the_Rhineland_-_1936.jpg/800px-German_troops_march_into_the_Rhineland_-_1936.jpg', description: 'Trupele germane intră în Renania, o încălcare directă a Tratatului de la Versailles, testând hotărârea Franței și a Regatului Unit.' },
+            { type: 'major', year: 1936, title: 'Începutul Războiului Civil Spaniol', lat: 35.2922, lng: -2.9408, labelOffset: {x: 80, y: 90}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Spanish_Civil_War_montage.jpg/800px-Spanish_Civil_War_montage.jpg', description: 'O lovitură de stat militară a naționaliștilor împotriva Republicii Spaniole declanșează un conflict sângeros ce va deveni un teren de testare pentru armele și tacticile Axei și ale Uniunii Sovietice.' },
+            { type: 'major', year: 1936, title: 'Pactul Anti-Comintern', lat: 52.5200, lng: 13.4050, labelOffset: {x: 180, y: -110}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Bundesarchiv_Bild_183-H28598%2C_Berlin%2C_Unterzeichnung_des_Antikominternpaktes.jpg/800px-Bundesarchiv_Bild_183-H28598%2C_Berlin%2C_Unterzeichnung_des_Antikominternpaktes.jpg', description: 'Germania Nazistă și Japonia Imperială semnează un pact direcționat împotriva Internaționalei Comuniste (Comintern), formând nucleul viitoarei alianțe a Axei.' },
+            { type: 'atrocity', year: 1937, title: 'Bombardarea Guernicăi', lat: 43.3140, lng: -2.6780, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Bundesarchiv_Bild_183-H25224%2C_Guernica%2C_zerst%C3%B6rte_H%C3%A4user.jpg/800px-Bundesarchiv_Bild_183-H25224%2C_Guernica%2C_zerst%C3%B6rte_H%C3%A4user.jpg', description: 'Un bombardament aerian devastator asupra orașului basc Guernica de către Legiunea Condor a Germaniei naziste, un act de teroare împotriva civililor în timpul Războiului Civil Spaniol.' },
+            { type: 'major', year: 1937, title: 'Războiul Sino-Japonez', lat: 39.9042, lng: 116.4074, labelOffset: {x: -150, y: -80}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Second_Sino-Japanese_War_montage.jpg/800px-Second_Sino-Japanese_War_montage.jpg', description: 'O ciocnire între trupele japoneze și chineze la Podul Marco Polo duce la o invazie pe scară largă a Chinei de către Japonia, marcând începutul războiului în Asia.' },
+            { type: 'atrocity', year: 1937, title: 'Masacrul de la Nanking', lat: 32.0603, lng: 118.7969, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Nanking_refugees_in_1937.jpg/800px-Nanking_refugees_in_1937.jpg', description: 'O perioadă de atrocități în masă comise de trupele japoneze după capturarea orașului Nanking, capitala Chinei. Evenimentele includ execuții, violuri și jafuri pe scară largă.' },
+            { type: 'major', year: 1938, title: 'Anschluss (Anexarea Austriei)', lat: 48.2082, lng: 16.3738, labelOffset: {x: 180, y: -60}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Bundesarchiv_Bild_183-1987-0922-500%2C_Wien%2C_Einmarsch_deutscher_Truppen.jpg/800px-Bundesarchiv_Bild_183-1987-0922-500%2C_Wien%2C_Einmarsch_deutscher_Truppen.jpg', description: 'Germania Nazistă anexează Austria, într-o uniune cunoscută ca Anschluss. Acesta a fost un pas major în planul lui Hitler de a uni toate popoarele vorbitoare de limbă germană.' },
+            { type: 'minor', year: 1938, title: 'Conferința de la Évian', lat: 46.4015, lng: 6.5909, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/%C3%89vian_Conference.jpg/800px-%C3%89vian_Conference.jpg', description: 'O conferință internațională convocată pentru a discuta criza refugiaților evrei. Eșecul majorității țărilor de a accepta mai mulți refugiați a avut consecințe tragice.' },
+            { type: 'major', year: 1938, title: 'Acordul de la München', lat: 48.1380, lng: 11.5752, labelOffset: {x: 180, y: 40}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Bundesarchiv_Bild_183-R69173%2C_M%C3%BCnchener_Abkommen%2C_Unterzeichnung.jpg/800px-Bundesarchiv_Bild_183-R69173%2C_M%C3%BCnchener_Abkommen%2C_Unterzeichnung.jpg', description: 'Un acord între Germania, Italia, Regatul Unit și Franța care a permis Germaniei să anexeze regiunea sudetă a Cehoslovaciei, în numele unei politici de "conciliere" care a eșuat.' },
+            { type: 'minor', year: 1938, title: 'Primul Dictat de la Viena', lat: 48.2082, lng: 16.3738, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/First_Vienna_Award_ethnic_map.svg/800px-First_Vienna_Award_ethnic_map.svg.png', description: 'Un arbitraj teritorial condus de Germania și Italia, care a forțat Cehoslovacia să cedeze Ungariei teritorii locuite majoritar de maghiari.' },
+            { type: 'atrocity', year: 1938, title: 'Kristallnacht', lat: 50.11, lng: 8.68, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Synagogue_of_Siegen_burned_down_on_Kristallnacht_-_1938.jpg/800px-Synagogue_of_Siegen_burned_down_on_Kristallnacht_-_1938.jpg', description: 'Un pogrom masiv împotriva evreilor din Germania Nazistă și Austria, în care sinagogi, afaceri și case au fost distruse, marcând o escaladare violentă a persecuției.' }
+        ],
+        '1939': [
+            { type: 'major', year: 1939, title: 'Germania invadează Cehoslovacia', lat: 50.0737, lng: 14.4185, labelOffset: {x: -80, y: 100}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Bundesarchiv_Bild_183-H1216-0500-001%2C_Prag%2C_Einmarsch_deutscher_Truppen.jpg/800px-Bundesarchiv_Bild_183-H1216-0500-001%2C_Prag%2C_Einmarsch_deutscher_Truppen.jpg', description: '15 martie 1939. Participanți: Germania, Cehoslovacia. Trupele germane intră în Praga, ocupând restul Cehoslovaciei și încălcând Acordul de la München, demonstrând eșecul politicii de conciliere.' },
+            { type: 'minor', year: 1939, title: 'Italia invadează Albania', lat: 41.3275, lng: 19.8187, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Italian_soldiers_in_Tirana_1939.jpg/800px-Italian_soldiers_in_Tirana_1939.jpg', description: '7 aprilie 1939. Participanți: Italia, Albania. Forțele italiene invadează și ocupă rapid Albania, transformând-o într-un protectorat italian și extinzând influența lui Mussolini în Balcani.' },
+            { type: 'major', year: 1939, title: 'Pactul Molotov-Ribbentrop', lat: 55.7512, lng: 37.6184, labelOffset: {x: 180, y: -20}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Bundesarchiv_Bild_183-H27337%2C_Moskau%2C_Stalin_und_Ribbentrop_im_Kreml.jpg/800px-Bundesarchiv_Bild_183-H27337%2C_Moskau%2C_Stalin_und_Ribbentrop_im_Kreml.jpg', description: '23 august 1939. Participanți: Germania, Uniunea Sovietică. Un pact de neagresiune între Germania Nazistă și Uniunea Sovietică, care conținea un protocol secret ce împărțea Europa de Est în sfere de influență.' },
+            { type: 'major', year: 1939, title: 'Invazia Poloniei', lat: 54.4075, lng: 18.6708, labelOffset: {x: -120, y: 0}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Bundesarchiv_Bild_183-52033-0016%2C_Polen%2C_K%C3%A4mpfe_in_Gdingen.jpg/800px-Bundesarchiv_Bild_183-52033-0016%2C_Polen%2C_K%C3%A4mpfe_in_Gdingen.jpg', description: '1 septembrie 1939. Participanți: Germania, Polonia. Germania invadează Polonia, declanșând Al Doilea Război Mondial. Atacul a început cu bombardarea bazei Westerplatte din Danzig (Gdańsk).' },
+            { type: 'minor', year: 1939, title: 'Uniunea Sovietică invadează Polonia', lat: 52.0976, lng: 23.7341, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Soviet_and_German_soldiers_in_Poland_1939.jpg/800px-Soviet_and_German_soldiers_in_Poland_1939.jpg', description: '17 septembrie 1939. Participanți: Uniunea Sovietică, Polonia. Conform pactului secret cu Germania, Uniunea Sovietică invadează estul Poloniei, pecetluind soarta națiunii poloneze.' },
+            { type: 'major', year: 1939, title: 'Începutul Războiului de Iarnă', lat: 60.5333, lng: 29.9167, labelOffset: {x: 80, y: -140}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Antti_Vorho_ja_tuntematon_sotilas_t%C3%A4hyilev%C3%A4t_vihollista_korsusta_konekiv%C3%A4%C3%A4rin_kanssa_Summassa_1939-12-21.jpg/800px-Antti_Vorho_ja_tuntematon_sotilas_t%C3%A4hyilev%C3%A4t_vihollista_korsusta_konekiv%C3%A4%C3%A4rin_kanssa_Summassa_1939-12-21.jpg', description: '30 noiembrie 1939. Participanți: Uniunea Sovietică, Finlanda. Uniunea Sovietică invadează Finlanda, începând un conflict brutal în condiții de iarnă extremă. Rezistența finlandeză a fost neașteptat de puternică.' }
+        ],
+        '1940': [
+            { type: 'major', year: 1940, title: 'Invazia Danemarcei și Norvegiei', lat: 59.9139, lng: 10.7522, labelOffset: {x: 0, y: -130}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Bundesarchiv_Bild_101I-040-3642-10A%2C_Norwegen%2C_Narvik%2C_deutsche_Gebirgsj%C3%A4ger.jpg/800px-Bundesarchiv_Bild_101I-040-3642-10A%2C_Norwegen%2C_Narvik%2C_deutsche_Gebirgsj%C3%A4ger.jpg', description: '9 aprilie 1940. Participanți: Germania (Axa), Danemarca (Neutru), Norvegia (Aliați). Germania lansează Operațiunea Weserübung, invadând Danemarca și Norvegia pentru a-și asigura rutele de minereu de fier din Suedia și a preveni o blocadă Aliată.' },
+            { type: 'major', year: 1940, title: 'Bătălia Franței (Blitzkrieg)', lat: 49.7020, lng: 4.9476, labelOffset: {x: -100, y: 50}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Bundesarchiv_Bild_101I-123-0213-06%2C_Westfeldzug%2C_Panzer_IV.jpg/800px-Bundesarchiv_Bild_101I-123-0213-06%2C_Westfeldzug%2C_Panzer_IV.jpg', description: '10 mai 1940. Participanți: Germania (Axa), Franța (Aliați), Regatul Unit (Aliați), Belgia (Neutru), Țările de Jos (Neutru), Luxemburg (Neutru). Tancurile germane trec prin Ardeni, ocolind Linia Maginot. Această tactică de "război fulger" (Blitzkrieg) a dus la înfrângerea rapidă a forțelor Aliate și la căderea Franței.' },
+            { type: 'atrocity', year: 1940, title: 'Înființarea Lagărului Auschwitz', lat: 50.0264, lng: 19.2094, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Bundesarchiv_Bild_183-N0827-318%2C_KZ_Auschwitz%2C_Ankunft_ungarischer_Juden.jpg/800px-Bundesarchiv_Bild_183-N0827-318%2C_KZ_Auschwitz%2C_Ankunft_ungarischer_Juden.jpg', description: '20 mai 1940. Participanți: Germania Nazistă (Axa). SS înființează lagărul de concentrare și exterminare de la Auschwitz-Birkenau. Acesta a devenit cel mai mare lagăr nazist, unde au fost uciși peste 1.1 milioane de oameni.' },
+            { type: 'major', year: 1940, title: 'Evacuarea de la Dunkerque', lat: 51.0344, lng: 2.3768, labelOffset: {x: -100, y: -80}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/The_evacuation_of_the_BEF_from_Dunkirk%2C_June_1940_F4826.jpg/800px-The_evacuation_of_the_BEF_from_Dunkirk%2C_June_1940_F4826.jpg', description: '26 mai 1940. Participanți: Aliați (Regatul Unit, Franța), Germania (Axa). Operațiunea Dynamo a evacuat peste 338,000 de soldați Aliați de pe plajele de la Dunkerque, Franța, după ce au fost încercuiți de armata germană.' },
+            { type: 'major', year: 1940, title: 'Intrarea Italiei în război', lat: 41.9028, lng: 12.4964, labelOffset: {x: 100, y: 100}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Benito_Mussolini_e_Adolf_Hitler.jpg/800px-Benito_Mussolini_e_Adolf_Hitler.jpg', description: '10 iunie 1940. Participanți: Italia (Axa), Franța (Aliați), Regatul Unit (Aliați). Simțind că războiul este aproape câștigat de Axă, Benito Mussolini declară război Franței și Regatului Unit, sperând la câștiguri teritoriale.' },
+            { type: 'major', year: 1940, title: 'Bătălia Angliei', lat: 51.3037, lng: -0.0903, labelOffset: {x: -150, y: -40}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Battle_of_Britain_Air_Observer.jpg/800px-Battle_of_Britain_Air_Observer.jpg', description: '10 iulie 1940. Participanți: Regatul Unit (Aliați), Germania (Axa). O campanie aeriană purtată de Luftwaffe pentru a obține superioritatea aeriană asupra Royal Air Force (RAF). Eșecul Germaniei de a învinge RAF a fost un punct de cotitură crucial.' },
+            { type: 'atrocity', year: 1940, title: 'Începutul "The Blitz"', lat: 51.5072, lng: -0.1276, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/London_in_the_Blitz_1940_HU36113.jpg/800px-London_in_the_Blitz_1940_HU36113.jpg', description: '7 septembrie 1940. Participanți: Germania (Axa), Regatul Unit (Aliați). O campanie de bombardamente strategice susținute ale Luftwaffe asupra Londrei și a altor orașe britanice, care a durat 8 luni și a ucis zeci de mii de civili.' },
+            { type: 'minor', year: 1940, title: 'Italia atacă Egiptul', lat: 31.6167, lng: 25.9333, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/British_infantry_in_the_Western_Desert%2C_18_November_1940.jpg/800px-British_infantry_in_the_Western_Desert%2C_18_November_1940.jpg', description: '9 septembrie 1940. Participanți: Italia (Axa), Regatul Unit (Aliați). Forțele italiene din Libia invadează Egiptul, inițiind Campania din Deșertul de Vest, o luptă pentru controlul Canalului Suez și a resurselor de petrol din Orientul Mijlociu.' },
+            { type: 'major', year: 1940, title: 'Semnarea Pactului Tripartit', lat: 52.5200, lng: 13.4050, labelOffset: {x: 180, y: -60}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Bundesarchiv_Bild_183-B02547%2C_Berlin%2C_Unterzeichnung_Dreim%C3%A4chtepakt.jpg/800px-Bundesarchiv_Bild_183-B02547%2C_Berlin%2C_Unterzeichnung_Dreim%C3%A4chtepakt.jpg', description: '27 septembrie 1940. Participanți: Germania (Axa), Italia (Axa), Japonia (Axa). Germania, Italia și Japonia semnează Pactul Tripartit la Berlin, formând alianța militară cunoscută ca Puterile Axei.' },
+            { type: 'minor', year: 1940, title: 'Italia atacă Grecia', lat: 40.3559, lng: 20.7763, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Greek_soldiers_in_Northern_Epirus_1940.jpg/800px-Greek_soldiers_in_Northern_Epirus_1940.jpg', description: '28 octombrie 1940. Participanți: Italia (Axa), Grecia (Aliați). Mussolini lansează o invazie a Greciei din Albania. Forțele grecești au respins atacul inițial și au contraatacat, împingând italienii înapoi în Albania.' }
+        ],
+        '1941': [
+            { type: 'minor', year: 1941, title: 'Sosirea Afrika Korps în Libia', lat: 32.8872, lng: 13.1913, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Bundesarchiv_Bild_101I-787-0440-09A%2C_Libyen%2C_Panzer_III_in_W%C3%BCste.jpg/800px-Bundesarchiv_Bild_101I-787-0440-09A%2C_Libyen%2C_Panzer_III_in_W%C3%BCste.jpg', description: '12 februarie 1941. Participanți: Germania (Axa), Italia (Axa), Regatul Unit (Aliați). Erwin Rommel și primele unități ale Afrika Korps sosesc în Libia pentru a sprijini forțele italiene împotriva contraofensivei britanice.' },
+            { type: 'major', year: 1941, title: 'Legea Lend-Lease', lat: 38.8951, lng: -77.0364, labelOffset: {x: 180, y: 30}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Signing_the_Lend-Lease_Bill.jpg/800px-Signing_the_Lend-Lease_Bill.jpg', description: '11 martie 1941. Participanți: Statele Unite (Aliați), Regatul Unit (Aliați), China (Aliați), Uniunea Sovietică (Aliați). SUA adoptă Legea Lend-Lease, permițând transferul de materiale de război către națiunile Aliate, un pas decisiv care transformă SUA în "arsenalul democrației".' },
+            { type: 'major', year: 1941, title: 'Invazia Iugoslaviei și Greciei', lat: 44.7866, lng: 20.4489, labelOffset: {x: -150, y: 80}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Bundesarchiv_Bild_101I-169-1588-12%2C_Griechenland%2C_Soldaten_auf_Panzer_IV.jpg/800px-Bundesarchiv_Bild_101I-169-1588-12%2C_Griechenland%2C_Soldaten_auf_Panzer_IV.jpg', description: '6 aprilie 1941. Participanți: Germania (Axa), Italia (Axa), Ungaria (Axa), Iugoslavia (Aliați), Grecia (Aliați). Germania invadează Iugoslavia și Grecia (Operațiunea Marita) pentru a securiza flancul sudic înainte de invazia URSS și pentru a salva campania eșuată a Italiei în Grecia.' },
+            { type: 'minor', year: 1941, title: 'Războiul Anglo-Irakian', lat: 33.3667, lng: 43.5667, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/RAF_personnel_with_a_captured_Iraqi_armoured_car_in_Iraq%2C_May_1941._E3891.jpg/800px-RAF_personnel_with_a_captured_Iraqi_armoured_car_in_Iraq%2C_May_1941._E3891.jpg', description: '2 mai 1941. Participanți: Regatul Unit (Aliați), Irak (pro-Axa). O campanie militară britanică pentru a înlătura guvernul pro-Axă din Irak și a securiza câmpurile petroliere vitale, prevenind influența germană în regiune.' },
+            { type: 'major', year: 1941, title: 'Bătălia pentru Creta', lat: 35.5238, lng: 23.8311, labelOffset: {x: 100, y: 120}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Bundesarchiv_Bild_101I-166-0524-21%2C_Kreta%2C_Fallschirmj%C3%A4ger_beim_Sprung.jpg/800px-Bundesarchiv_Bild_101I-166-0524-21%2C_Kreta%2C_Fallschirmj%C3%A4ger_beim_Sprung.jpg', description: '20 mai 1941. Participanți: Germania (Axa), Aliați (Regatul Unit, Australia, Noua Zeelandă, Grecia). Germania lansează o invazie aeropurtată masivă (Operațiunea Merkur) a insulei Creta. Deși a fost o victorie germană, pierderile grele suferite de parașutiști l-au convins pe Hitler să nu mai folosească astfel de operațiuni pe scară largă.' },
+            { type: 'minor', year: 1941, title: 'Vânătoarea Cuirasatului Bismarck', lat: 48.1667, lng: -16.2000, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/The_German_battleship_Bismarck_firing_at_HMS_Prince_of_Wales%2C_24_May_1941_%28cropped%29.jpg/800px-The_German_battleship_Bismarck_firing_at_HMS_Prince_of_Wales%2C_24_May_1941_%28cropped%29.jpg', description: '24 mai 1941. Participanți: Regatul Unit (Aliați), Germania (Axa). O operațiune navală masivă a Marinei Regale Britanice pentru a vâna și scufunda cel mai puternic cuirasat german, Bismarck, după ce acesta a scufundat crucișătorul HMS Hood.' },
+            { type: 'minor', year: 1941, title: 'Campania Siria-Liban', lat: 33.5138, lng: 36.2765, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Australian_troops_in_Damascus_1941.jpg/800px-Australian_troops_in_Damascus_1941.jpg', description: '8 iunie 1941. Participanți: Aliați (Regatul Unit, Forțele Franceze Libere), Franța de la Vichy (Axa). Forțele Aliate invadează Siria și Libanul, controlate de regimul de la Vichy, pentru a preveni ca Germania Nazistă să folosească teritoriul ca bază pentru operațiuni în Orientul Mijlociu.' },
+            { type: 'major', year: 1941, title: 'Operațiunea Barbarossa', lat: 52.0825, lng: 23.6536, labelOffset: {x: 120, y: -40}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Bundesarchiv_Bild_101I-209-0013-05%2C_Russland%2C_Panzer_IV_mit_Infanterie.jpg/800px-Bundesarchiv_Bild_101I-209-0013-05%2C_Russland%2C_Panzer_IV_mit_Infanterie.jpg', description: '22 iunie 1941. Participanți: Germania (Axa), Uniunea Sovietică (Aliați). Germania lansează cea mai mare invazie din istorie, atacând Uniunea Sovietică pe un front de mii de kilometri și deschizând Frontul de Est, cel mai sângeros teatru de război.' },
+            { type: 'minor', year: 1941, title: 'Ocuparea Islandei de către SUA', lat: 64.1466, lng: -21.9426, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/US_Marines_in_Iceland_1941.jpg/800px-US_Marines_in_Iceland_1941.jpg', description: '7 iulie 1941. Participanți: Statele Unite (Aliați), Islanda (Neutru). Trupele americane preiau ocupația Islandei de la britanici pentru a preveni o invazie germană și pentru a asigura rutele de convoi din Atlanticul de Nord, deși SUA era încă oficial neutră.' },
+            { type: 'major', year: 1941, title: 'Bătălia de la Smolensk', lat: 54.7828, lng: 32.0450, labelOffset: {x: 150, y: 40}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Bundesarchiv_Bild_101I-211-0283-37%2C_Russland-S%C3%BCd%2C_Soldaten_in_Sch%C3%BCtzenloch.jpg/800px-Bundesarchiv_Bild_101I-211-0283-37%2C_Russland-S%C3%BCd%2C_Soldaten_in_Sch%C3%BCtzenloch.jpg', description: '10 iulie 1941. Participanți: Germania (Axa), Uniunea Sovietică (Aliați). O bătălie majoră în faza de deschidere a Operațiunii Barbarossa. Deși a fost o victorie germană, rezistența sovietică a încetinit semnificativ avansul Wehrmacht-ului spre Moscova.' },
+            { type: 'minor', year: 1941, title: 'Ocupația Japoneză a Indochinei', lat: 10.8231, lng: 106.6297, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Japanese_troops_enter_Saigon_1941.jpg/800px-Japanese_troops_enter_Saigon_1941.jpg', description: '28 iulie 1941. Participanți: Japonia (Axa), Franța de la Vichy (Axa). Japonia extinde ocupația asupra întregii Indochine Franceze. Acest act a determinat SUA să impună un embargo petrolier total asupra Japoniei, un factor cheie în decizia Japoniei de a ataca Pearl Harbor.' },
+            { type: 'major', year: 1941, title: 'Carta Atlanticului', lat: 47.3667, lng: -54.0000, labelOffset: {x: 150, y: -60}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Churchill_and_Roosevelt_at_Placentia_Bay.jpg/800px-Churchill_and_Roosevelt_at_Placentia_Bay.jpg', description: '14 august 1941. Participanți: Statele Unite (Aliați), Regatul Unit (Aliați). O declarație comună a președintelui american Franklin D. Roosevelt și a premierului britanic Winston Churchill care stabilea obiectivele postbelice, inclusiv autodeterminarea națiunilor și cooperarea economică globală.' },
+            { type: 'minor', year: 1941, title: 'Invazia Iranului', lat: 35.6892, lng: 51.3890, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Soviet_T-26_tanks_in_Tabriz_during_the_Anglo-Soviet_invasion_of_Iran_in_1941.jpg/800px-Soviet_T-26_tanks_in_Tabriz_during_the_Anglo-Soviet_invasion_of_Iran_in_1941.jpg', description: '25 august 1941. Participanți: Regatul Unit (Aliați), Uniunea Sovietică (Aliați), Iran (Neutru). Aliații invadează Iranul pentru a securiza câmpurile petroliere și pentru a stabili o linie de aprovizionare crucială (Coridorul Persan) către Uniunea Sovietică.' },
+            { type: 'major', year: 1941, title: 'Bătălia de la Moscova', lat: 55.7512, lng: 37.6184, labelOffset: {x: 150, y: -110}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/RIAN_archive_858_T-34_tanks_in_ambush.jpg/800px-RIAN_archive_858_T-34_tanks_in_ambush.jpg', description: '5 decembrie 1941. Participanți: Uniunea Sovietică (Aliați), Germania (Axa). O contraofensivă masivă sovietică în timpul iernii oprește avansul german la porțile Moscovei. Aceasta a fost prima înfrângere strategică majoră a Wehrmacht-ului și a marcat eșecul Blitzkrieg-ului împotriva URSS.' },
+            { type: 'major', year: 1941, title: 'Atacul de la Pearl Harbor', lat: 21.3512, lng: -157.9802, labelOffset: {x: 180, y: 80}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/USS_Shaw_exploding_in_Pearl_Harbor.jpg/800px-USS_Shaw_exploding_in_Pearl_Harbor.jpg', description: '7 decembrie 1941. Participanți: Japonia (Axa), Statele Unite (Aliați). Un atac surpriză al aviației navale japoneze asupra bazei navale americane de la Pearl Harbor, Hawaii. Atacul a dus la intrarea oficială a Statelor Unite în Al Doilea Război Mondial.' },
+            { type: 'major', year: 1941, title: 'Invazia Filipinelor', lat: 16.2500, lng: 120.2500, labelOffset: {x: -160, y: 120}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Japanese_Type_89_medium_tanks_in_the_Philippines_in_1941.jpg/800px-Japanese_Type_89_medium_tanks_in_the_Philippines_in_1941.jpg', description: '8 decembrie 1941. Participanți: Japonia (Axa), Statele Unite (Aliați), Filipine (Aliați). La scurt timp după Pearl Harbor, Japonia invadează Filipinele, un teritoriu american la acea vreme. Campania a dus la înfrângerea forțelor filipino-americane și la infamul Marș al Morții din Bataan.' }
+        ],
+        '1942': [
+            { type: 'atrocity', year: 1942, title: 'Conferința de la Wannsee', lat: 52.4286, lng: 13.1594, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Wannsee_Villa.jpg/800px-Wannsee_Villa.jpg', description: '20 ianuarie 1942. Participanți: Germania Nazistă (Axa). O întâlnire a înalților oficiali naziști pentru a coordona implementarea "Soluției Finale la problema evreiască", planul de exterminare sistematică a evreilor europeni.' },
+            { type: 'minor', year: 1942, title: 'Bătălia de la Rabaul', lat: -4.1969, lng: 152.1700, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Japanese_troops_at_Rabaul_1942.jpg/800px-Japanese_troops_at_Rabaul_1942.jpg', description: '23 ianuarie 1942. Participanți: Japonia (Axa), Australia (Aliați). Forțele japoneze copleșesc garnizoana australiană de la Rabaul, Papua Noua Guinee, transformând portul într-o bază strategică majoră.' },
+            { type: 'major', year: 1942, title: 'Căderea Singaporelui', lat: 1.3521, lng: 103.8198, labelOffset: {x: -180, y: 110}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/The_surrender_of_Singapore%2C_15_February_1942.jpg/800px-The_surrender_of_Singapore%2C_15_February_1942.jpg', description: '15 februarie 1942. Participanți: Japonia (Axa), Regatul Unit (Aliați), Australia (Aliați). Căderea "fortăreței" Singapore a fost una dintre cele mai mari înfrângeri militare britanice, un dezastru strategic pentru Aliați.' },
+            { type: 'minor', year: 1942, title: 'Raidul Doolittle', lat: 35.6895, lng: 139.6917, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Doolittle_Raid_-_USS_Hornet.jpg/800px-Doolittle_Raid_-_USS_Hornet.jpg', description: '18 aprilie 1942. Participanți: Statele Unite (Aliați), Japonia (Axa). Primul raid aerian american care a lovit insulele natale japoneze. Deși cu impact militar redus, a fost o victorie morală majoră pentru SUA.' },
+            { type: 'minor', year: 1942, title: 'A Doua Bătălie de la Harkov', lat: 49.9935, lng: 36.2304, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Bundesarchiv_Bild_101I-216-0461-12%2C_Russland-S%C3%BCd%2C_Panzer_III_in_Charkow.jpg/800px-Bundesarchiv_Bild_101I-216-0461-12%2C_Russland-S%C3%BCd%2C_Panzer_III_in_Charkow.jpg', description: '12 mai 1942. Participanți: Uniunea Sovietică (Aliați), Germania (Axa). O ofensivă sovietică eșuată care a dus la încercuirea și distrugerea a trei armate sovietice, deschizând calea pentru ofensiva de vară germană.' },
+            { type: 'major', year: 1942, title: 'Bătălia de la Midway', lat: 28.2076, lng: -177.3725, labelOffset: {x: 200, y: -60}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/USS_Yorktown_%28CV-5%29_is_hit_on_4_June_1942.jpg/800px-USS_Yorktown_%28CV-5%29_is_hit_on_4_June_1942.jpg', description: '3 iunie 1942. Participanți: Statele Unite (Aliați), Japonia (Axa). O victorie navală decisivă pentru SUA și un punct de cotitură în Pacific. Flota japoneză a pierdut patru portavioane, oprind expansiunea sa.' },
+            { type: 'minor', year: 1942, title: 'Raidul de la Dieppe', lat: 49.9229, lng: 1.0774, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Landing_craft_at_Dieppe_1942.jpg/800px-Landing_craft_at_Dieppe_1942.jpg', description: '19 august 1942. Participanți: Aliați (Canada, Regatul Unit), Germania (Axa). Un raid amfibiu dezastruos al forțelor canadiene. Lecțiile învățate au fost cruciale pentru succesul debarcării din Normandia.' },
+            { type: 'major', year: 1942, title: 'Bătălia de la Stalingrad', lat: 48.7080, lng: 44.5133, labelOffset: {x: 180, y: -40}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/RIAN_archive_672504_Battle_of_Stalingrad.jpg/800px-RIAN_archive_672504_Battle_of_Stalingrad.jpg', description: '23 august 1942. Participanți: Uniunea Sovietică (Aliați), Germania (Axa) și aliații săi. Una dintre cele mai sângeroase bătălii din istorie, punctul de cotitură major pe Frontul de Est, încheiată cu capitularea Armatei a 6-a germane.' },
+            { type: 'major', year: 1942, title: 'Bătălia de la El Alamein', lat: 30.8222, lng: 28.9543, labelOffset: {x: 120, y: -100}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Australian_25-pounder_gun_at_El_Alamein_1942.jpg/800px-Australian_25-pounder_gun_at_El_Alamein_1942.jpg', description: '23 octombrie 1942. Participanți: Aliați, Axa. Victorie decisivă a Armatei a 8-a britanice, care a oprit avansul Axei spre Egipt și a marcat un punct de cotitură în Africa de Nord.' },
+            { type: 'major', year: 1942, title: 'Operațiunea Torța', lat: 36.7783, lng: 3.0588, labelOffset: {x: 150, y: 20}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Operation_Torch_-_landings_at_Algiers_-_November_1942.jpg/800px-Operation_Torch_-_landings_at_Algiers_-_November_1942.jpg', description: '8 noiembrie 1942. Participanți: Aliați (SUA, Regatul Unit), Franța de la Vichy (Axa). Debarcări amfibii masive în Algeria și Maroc, deschizând un nou front în spatele forțelor Axei din Africa de Nord.' }
+        ],
+        '1943': [
+            { type: 'minor', year: 1943, title: 'Conferința de la Casablanca', lat: 33.5731, lng: -7.5898, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Casablanca_Conference_1943.jpg/800px-Casablanca_Conference_1943.jpg', description: 'O întâlnire strategică între Roosevelt și Churchill unde a fost decisă politica de "capitulare necondiționată" a Axei. Participanți: Statele Unite (Aliați), Regatul Unit (Aliați)' },
+            { type: 'minor', year: 1943, title: 'Bătălia de la Pasul Kasserine', lat: 35.2597, lng: 8.7425, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/Kasserine_Pass_1943.jpg/800px-Kasserine_Pass_1943.jpg', description: 'Prima confruntare majoră între forțele americane și germane în Africa de Nord. O înfrângere umilitoare pentru americani, care a dus la reforme importante în comandament și tactici. Participanți: Aliați (Statele Unite, Regatul Unit, Franța Liberă), Axa (Germania, Italia)' },
+            { type: 'major', year: 1943, title: 'Bătălia de la Kursk', lat: 51.7301, lng: 36.1911, labelOffset: {x: 180, y: -40}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Bundesarchiv_Bild_101I-221-0616-24%2C_Russland%2C_Schlacht_um_Kursk%2C_Panzer_VI_%28Tiger_I%29.jpg/800px-Bundesarchiv_Bild_101I-221-0616-24%2C_Russland%2C_Schlacht_um_Kursk%2C_Panzer_VI_%28Tiger_I%29.jpg', description: 'Cea mai mare bătălie de tancuri din istorie. O ofensivă masivă germană (Operațiunea Citadel) a fost oprită de o apărare sovietică bine pregătită, marcând sfârșitul ofensivei germane pe Frontul de Est. Participanți: Uniunea Sovietică (Aliați), Germania (Axa)' },
+            { type: 'major', year: 1943, title: 'Bătălia de pe Nipru', lat: 48.4500, lng: 34.9833, labelOffset: {x: -150, y: 100}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/RIAN_archive_498_Battle_for_the_Dnieper.jpg/800px-RIAN_archive_498_Battle_for_the_Dnieper.jpg', description: 'O ofensivă strategică sovietică majoră care a forțat traversarea fluviului Nipru și a eliberat Kievul, împingând Wehrmacht-ul și mai mult spre vest. Participanți: Uniunea Sovietică (Aliați), Germania (Axa)' },
+            { type: 'major', year: 1943, title: 'Conferința de la Teheran', lat: 35.6892, lng: 51.3890, labelOffset: {x: 180, y: 60}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Tehran_Conference%2C_1943.jpg/800px-Tehran_Conference%2C_1943.jpg', description: 'Prima întâlnire a "Celor Trei Mari" (Stalin, Roosevelt, Churchill). Au fost luate decizii cruciale privind strategia Aliaților, inclusiv planificarea debarcării din Normandia. Participanți: Statele Unite (Aliați), Regatul Unit (Aliați), Uniunea Sovietică (Aliați)' }
+        ],
+        '1944': [
+            { type: 'major', year: 1944, title: 'Ofensiva Leningrad-Novgorod', lat: 59.9375, lng: 30.3086, labelOffset: {x: 180, y: -80}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dc/RIAN_archive_600_Lifting_the_Siege_of_Leningrad.jpg/800px-RIAN_archive_600_Lifting_the_Siege_of_Leningrad.jpg', description: 'O ofensivă strategică sovietică care a rupt complet asediul de 900 de zile al Leningradului și a împins forțele germane înapoi spre statele baltice. Participanți: Uniunea Sovietică (Aliați), Germania (Axa)' },
+            { type: 'major', year: 1944, title: 'Ziua Z: Debarcarea din Normandia', lat: 49.3400, lng: -0.5500, labelOffset: {x: -180, y: -60}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Into_the_Jaws_of_Death_23-0455M_edit.jpg/800px-Into_the_Jaws_of_Death_23-0455M_edit.jpg', description: 'Cea mai mare invazie amfibie din istorie. Forțele Aliate au debarcat pe plajele din Normandia, deschizând un al doilea front major în Europa de Vest și începând eliberarea Franței. Participanți: Aliați (Statele Unite, Regatul Unit, Canada, etc.), Germania (Axa)' },
+            { type: 'atrocity', year: 1944, title: 'Masacrul de la Oradour-sur-Glane', lat: 45.9342, lng: 1.0236, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Oradour-sur-Glane_-_Champ_de_foire_%282%29.JPG/800px-Oradour-sur-Glane_-_Champ_de_foire_%282%29.JPG', description: 'Un sat francez distrus de o companie Waffen-SS, care a masacrat 642 de locuitori, inclusiv femei și copii. Ruinele au fost păstrate ca un memorial permanent. Participanți: Germania Nazistă (Axa), Civili francezi' },
+            { type: 'major', year: 1944, title: 'Operațiunea Bagration', lat: 53.9000, lng: 27.5667, labelOffset: {x: 180, y: 40}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/RIAN_archive_40166_Minsk_Offensive_Operation.jpg/800px-RIAN_archive_40166_Minsk_Offensive_Operation.jpg', description: 'O ofensivă masivă sovietică în Belarus care a distrus Grupul de Armate Centru german, provocând cele mai mari pierderi Germaniei într-o singură operațiune și accelerând colapsul Frontului de Est. Participanți: Uniunea Sovietică (Aliați), Germania (Axa)' },
+            { type: 'minor', year: 1944, title: 'Revolta din Varșovia', lat: 52.2297, lng: 21.0122, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Warsaw_Uprising_by_Polski_Zolnierz.jpg/800px-Warsaw_Uprising_by_Polski_Zolnierz.jpg', description: 'O operațiune majoră a rezistenței poloneze (Armata Teritorială) pentru a elibera Varșovia de sub ocupația germană. Revolta a fost înfrântă sângeros după 63 de zile, în timp ce Armata Roșie a așteptat pe malul opus al Vistulei. Participanți: Armata Teritorială Poloneză (Aliați), Germania (Axa)' },
+            { type: 'minor', year: 1944, title: 'Revolta Națională Slovacă', lat: 48.7361, lng: 19.1461, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Partyz%C3%A1ni_v_Slovensk%C3%A9m_n%C3%A1rodn%C3%A1m_povst%C3%A1n%C3%AD_2.jpg/800px-Partyz%C3%A1ni_v_Slovensk%C3%A9m_n%C3%A1rodn%C3%A1m_povst%C3%A1n%C3%AD_2.jpg', description: 'O insurecție armată organizată de forțele de rezistență slovace în timpul celui de-al Doilea Război Mondial pentru a răsturna guvernul colaboraționist. A fost înăbușită de trupele germane. Participanți: Rezistența slovacă (Aliați), Germania (Axa), Republica Slovacă (Axa)' },
+            { type: 'major', year: 1944, title: 'Bătălia din Golful Leyte', lat: 10.8700, lng: 125.4550, labelOffset: {x: 180, y: 80}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/USS_St._Lo_%28CVE-63%29_is_hit_by_a_kamikaze_off_Samar_on_25_October_1944.jpg/800px-USS_St._Lo_%28CVE-63%29_is_hit_by_a_kamikaze_off_Samar_on_25_October_1944.jpg', description: 'Considerată cea mai mare bătălie navală din istorie, a fost o victorie decisivă a Aliaților care a paralizat Flota Combinată a Japoniei și a deschis calea pentru eliberarea Filipinelor. Participanți: Aliați (Statele Unite, Australia), Japonia (Axa)' },
+            { type: 'minor', year: 1944, title: 'Începutul Războiului Civil Grec', lat: 37.9838, lng: 23.7275, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Dekemvriana_clashes_1944.jpg/800px-Dekemvriana_clashes_1944.jpg', description: 'După retragerea germană, au izbucnit ciocniri violente la Atena între forțele comuniste (EAM-ELAS) și forțele guvernamentale sprijinite de britanici. Acesta a fost primul stagiu al Războiului Civil Grec. Participanți: Forțe guvernamentale grecești (sprijinite de Regatul Unit), Frontul de Eliberare Națională (comunist)' },
+            { type: 'major', year: 1944, title: 'Bătălia de la Bulge', lat: 50.17, lng: 6.05, labelOffset: {x: 180, y: -60}, imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/American_soldiers_of_the_289th_Infantry_Regiment_march_through_a_snow-covered_forest_in_the_vicinity_of_Amonines%2C_Belgium_-_NARA_-_531201.jpg/800px-American_soldiers_of_the_289th_Infantry_Regiment_march_through_a_snow-covered_forest_in_the_vicinity_of_Amonines%2C_Belgium_-_NARA_-_531201.jpg', description: 'Ultima ofensivă majoră a Germaniei pe Frontul de Vest. Atacul surpriză prin pădurile din Ardeni a creat o "pungă" în liniile Aliate, dar a fost în cele din urmă respins, epuizând ultimele rezerve germane. Participanți: Aliați (Statele Unite, Regatul Unit), Germania (Axa)' }
+        ],
+        '1945': [
+            { type: 'major', title: 'Bătălia de la Iwo Jima', lat: 24.78, lng: 141.29, labelOffset: {x: 130, y: 60}, imageUrl: 'https://placehold.co/100x100/4a6d8a/fff?text=Iwo+Jima', description: 'Bătălie sângeroasă pentru o insulă strategică în Pacific.' },
+            { type: 'major', title: 'Capitularea Germaniei (Ziua Victoriei)', lat: 52.52, lng: 13.40, labelOffset: {x: -100, y: -80}, imageUrl: 'https://placehold.co/100x100/4a6d8a/fff?text=Ziua-V', description: 'Germania capitulează necondiționat, punând capăt războiului în Europa.' },
+            { type: 'major', title: 'Bombardamentele atomice', lat: 34.39, lng: 132.45, labelOffset: {x: 100, y: -50}, imageUrl: 'https://placehold.co/100x100/a13d3d/fff?text=Bomba', description: 'SUA lansează bombe atomice asupra orașelor Hiroshima și Nagasaki, ducând la capitularea Japoniei.' }
+        ],
+        'post-war': [
+            { type: 'major', title: 'Procesele de la Nürnberg', lat: 49.45, lng: 11.07, labelOffset: { x: -80, y: -90 }, imageUrl: 'https://placehold.co/100x100/444/fff?text=Nürnberg', description: 'O serie de tribunale militare pentru judecarea liderilor naziști pentru crime de război.' },
+            { type: 'major', title: 'Planul Marshall', lat: 48.87, lng: 2.33, labelOffset: { x: -160, y: 20 }, imageUrl: 'https://placehold.co/100x100/555/fff?text=Marshall', description: 'Inițiativa americană de a ajuta la reconstrucția economiilor vest-europene.' },
+            { type: 'major', title: 'Blocada Berlinului', lat: 52.52, lng: 13.40, labelOffset: { x: 100, y: -80 }, imageUrl: 'https://placehold.co/100x100/666/fff?text=Berlin', description: 'Una dintre primele crize majore ale Războiului Rece, în care Uniunea Sovietică a blocat accesul Aliaților în Berlinul de Vest.' },
+            { type: 'major', title: 'Fondarea NATO', lat: 50.85, lng: 4.35, labelOffset: { x: 50, y: -130 }, imageUrl: 'https://placehold.co/100x100/777/fff?text=NATO', description: 'Crearea Organizației Tratatului Atlanticului de Nord, o alianță militară defensivă.' },
+            { type: 'major', title: 'Războiul din Coreea', lat: 38.0, lng: 127.0, labelOffset: { x: 120, y: 20 }, imageUrl: 'https://placehold.co/100x100/888/fff?text=Coreea', description: 'Un război între Coreea de Nord (susținută de China și URSS) și Coreea de Sud (susținută de ONU, în principal de SUA).' },
+            { type: 'major', title: 'Războiul din Vietnam', lat: 16.0, lng: 108.0, labelOffset: { x: 120, y: 80 }, imageUrl: 'https://placehold.co/100x100/999/fff?text=Vietnam', description: 'Un conflict prelungit în Vietnam, Laos și Cambodgia, parte a Războiului Rece.' }
+        ]
+    };
+    const contextData = {
+        'pre-war': {
+            title: 'Perioada Prebelică',
+            description: 'Președintele Statelor Unite, Woodrow Wilson, și alții au vorbit despre Primul Război Mondial ca fiind "războiul care va pune capăt tuturor războaielor". În cei douăzeci de ani care au urmat, aceste idealuri înalte s-au lovit de un tratat de pace defectuos și punitiv, de ascensiunea dictaturilor, de ambiții naționale și de colapsul economic mondial. Oricât de îngrozitor a fost Primul Război Mondial, acesta s-a dovedit a fi preludiul și fundamentul unui conflict și mai înfiorător, o luptă mondială care avea să curme viețile a peste 60 de milioane de oameni... Al Doilea Război Mondial.'
+        },
+        'post-war': {
+            title: 'Anii de după Război',
+            description: 'După încheierea celui de-al Doilea Război Mondial, lumea a intrat într-o nouă eră de tensiuni geopolitice cunoscută sub numele de Războiul Rece, dominată de rivalitatea dintre Statele Unite și Uniunea Sovietică. Această perioadă a fost marcată de cursa înarmărilor nucleare, conflicte prin interpuși și divizarea lumii în două blocuri ideologice. În același timp, au fost create organizații precum Națiunile Unite (ONU) pentru a promova pacea și cooperarea internațională.'
+        }
+    };
+    const territorialData = {
+         'pre-war': { allied: [], axis: [], occupied_by_axis: [], co_aggressor: [], co_belligerent: [] },
+         '1939': {
+             allied: [ 'United Kingdom', 'France', 'Australia', 'New Zealand', 'South Africa', 'Canada', 'India', 'Nepal', 'China', 'Egypt', 'Lebanon', 'Syria', 'Ethiopia', 'Poland' ],
+             axis: [ 'Germany', 'Japan' ],
+             occupied_by_axis: [],
+             co_aggressor: ['Russia'],
+             co_belligerent: ['Finland']
+         },
+         '1940': {
+             allied: [ 'United Kingdom', 'Australia', 'New Zealand', 'South Africa', 'Canada', 'India', 'Nepal', 'China', 'Egypt', 'Lebanon', 'Syria', 'Ethiopia', 'Greece' ],
+             axis: [ 'Germany', 'Japan', 'Italy', 'Hungary', 'Romania' ],
+             occupied_by_axis: [ 'Poland', 'Denmark', 'Norway', 'Belgium', 'Netherlands', 'Luxembourg', 'France', 'Czech Rep.', 'Slovakia', 'Austria' ],
+             co_aggressor: [ 'Russia' ],
+             co_belligerent: [ 'Finland' ]
+         },
+         '1941': {
+             allied: [ 'United Kingdom', 'Australia', 'New Zealand', 'South Africa', 'Canada', 'India', 'Nepal', 'Poland', 'China', 'Egypt', 'Lebanon', 'Syria', 'Ethiopia', 'Russia', 'United States', 'Yugoslavia', 'Greece' ],
+             axis: [ 'Germany', 'Japan', 'Italy', 'Hungary', 'Romania', 'Bulgaria' ],
+             occupied_by_axis: [ 'Denmark', 'Norway', 'Belgium', 'Netherlands', 'Luxembourg', 'France', 'Czech Rep.', 'Slovakia', 'Austria' ],
+             co_aggressor: [],
+             co_belligerent: [ 'Finland' ]
+         },
+         '1942': {
+             allied: [ 'United Kingdom', 'Australia', 'New Zealand', 'South Africa', 'Canada', 'India', 'Nepal', 'Poland', 'China', 'Egypt', 'Lebanon', 'Syria', 'Ethiopia', 'Russia', 'United States', 'Greece', 'Yugoslavia', 'Norway', 'Netherlands', 'Belgium', 'Luxembourg' ],
+             axis: [ 'Germany', 'Japan', 'Italy', 'Hungary', 'Romania', 'Bulgaria', 'Slovakia', 'Croatia' ],
+             occupied_by_axis: [ 'Denmark', 'France', 'Czech Rep.', 'Austria', 'Philippines', 'Myanmar', 'Malaysia', 'Indonesia', 'Vietnam', 'Laos', 'Cambodia' ],
+             co_aggressor: [],
+             co_belligerent: [ 'Finland' ]
+         },
+         '1943': {
+             allied: [ 'United Kingdom', 'Australia', 'New Zealand', 'South Africa', 'Canada', 'India', 'Nepal', 'Poland', 'China', 'Egypt', 'Lebanon', 'Syria', 'Ethiopia', 'Russia', 'United States', 'Greece', 'Yugoslavia', 'Norway', 'Netherlands', 'Belgium', 'Luxembourg', 'Italy', 'Tunisia' ],
+             axis: [ 'Germany', 'Japan', 'Hungary', 'Romania', 'Bulgaria', 'Slovakia', 'Croatia' ],
+             occupied_by_axis: [ 'Denmark', 'France', 'Czech Rep.', 'Austria', 'Philippines', 'Myanmar', 'Malaysia', 'Indonesia' ],
+             co_aggressor: [],
+             co_belligerent: [ 'Finland' ]
+         },
+         '1944': {
+             allied: [ 'United Kingdom', 'France', 'Canada', 'Australia', 'New Zealand', 'South Africa', 'India', 'Nepal', 'Poland', 'China', 'Egypt', 'Lebanon', 'Syria', 'Ethiopia', 'Russia', 'United States', 'Greece', 'Yugoslavia', 'Norway', 'Netherlands', 'Belgium', 'Luxembourg', 'Italy', 'Tunisia', 'Philippines', 'Myanmar' ],
+             axis: [ 'Germany', 'Japan', 'Hungary', 'Croatia' ],
+             occupied_by_axis: [ 'Denmark', 'Austria', 'Czech Rep.', 'Slovakia' ],
+             co_aggressor: [],
+             co_belligerent: [],
+         },
+         '1945': {
+             allied: [ 'United Kingdom', 'France', 'Canada', 'Australia', 'New Zealand', 'South Africa', 'India', 'Nepal', 'Poland', 'China', 'Egypt', 'Lebanon', 'Syria', 'Ethiopia', 'Russia', 'United States', 'Greece', 'Yugoslavia', 'Norway', 'Netherlands', 'Belgium', 'Luxembourg', 'Italy', 'Tunisia', 'Philippines', 'Myanmar' ],
+             axis: [],
+             occupied_by_axis: [ 'Germany', 'Japan', 'Austria' ],
+             co_aggressor: [],
+             co_belligerent: [],
+         },
+         'post-war': { allied: [], axis: [], occupied_by_axis: [], co_aggressor: [], co_belligerent: [] }
+    };
+    
+    // --- VARIABLES & DOM SELECTION ---
+    let map;
+    let currentEvent = null;
+    let geoJsonLayer = null;
+    let currentPeriod = 'pre-war';
+
+    const mapEl = document.getElementById('map');
+    const dotsContainer = document.getElementById('dots-container');
+    const labelsContainer = document.getElementById('labels-container');
+    const lineCanvas = document.getElementById('line-canvas');
+    const modal = document.getElementById('modal');
+    const closeModalBtn = document.getElementById('closeModal');
+    const contextModal = document.getElementById('contextModal');
+    const closeContextModal = document.getElementById('closeContextModal');
+    const legendPanel = document.getElementById('legend-panel');
+    const timelineSlider = document.getElementById('timeline-slider');
+    const sliderTooltip = document.getElementById('slider-tooltip');
+    const periods = ['pre-war', '1939', '1940', '1941', '1942', '1943', '1944', '1945', 'post-war'];
+    
+    // --- MAP INITIALIZATION ---
+    function initializeMap() {
+        map = L.map('map', {
+            zoomControl: false, scrollWheelZoom: false, doubleClickZoom: false,
+            touchZoom: false, dragging: false, attributionControl: false,
+            worldCopyJump: true
+        });
+        map.setView([30, 35], 2);
+        
+        fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
+            .then(res => res.json())
+            .then(geoJsonData => {
+                geoJsonLayer = L.geoJSON(geoJsonData).addTo(map);
+                initialLoad();
+            });
+
+        const debounce = (func, delay) => {
+            let timeout;
+            return function(...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), delay);
+            };
+        };
+        
+        const rerenderOnResize = () => {
+            const activePeriod = currentPeriod;
+            if (activePeriod) {
+                renderMapEvents(activePeriod);
+            }
+        };
+
+        window.addEventListener('resize', debounce(() => {
+            rerenderOnResize();
+            positionSliderLabels();
+        }, 100));
+    }
+
+    // --- MAP STATE & COLORS ---
+    function getAllegiance(countryName, controlData) {
+        if (!controlData) return 'neutral';
+        if (controlData.allied.includes(countryName)) return 'allied';
+        if (controlData.co_belligerent.includes(countryName)) return 'co_belligerent';
+        if (controlData.axis.includes(countryName)) return 'axis';
+        if (controlData.co_aggressor.includes(countryName)) return 'co_aggressor';
+        if (controlData.occupied_by_axis.includes(countryName)) return 'occupied_by_axis';
+        return 'neutral';
+    }
+
+    function getStyleForAllegiance(allegiance) {
+        const baseStyle = { weight: 1, color: '#3d3d3d', fillOpacity: 1 };
+        switch (allegiance) {
+            case 'allied': return { ...baseStyle, fillColor: '#4a6d8a' };
+            case 'co_belligerent': return { ...baseStyle, fillColor: '#6c8aa6' };
+            case 'axis': return { ...baseStyle, fillColor: '#a44a4a' };
+            case 'co_aggressor': return { ...baseStyle, fillColor: '#b22222' };
+            case 'occupied_by_axis': return { ...baseStyle, fillColor: '#d16d6d' };
+            default: return { ...baseStyle, fillColor: '#5a5a5a' };
+        }
+    }
+    
+    function updateMapColors(newPeriod, oldPeriod) {
+        const oldControl = territorialData[oldPeriod];
+        const newControl = territorialData[newPeriod];
+        if (!geoJsonLayer || !newControl) return;
+
+        geoJsonLayer.eachLayer(layer => {
+            const countryName = layer.feature.properties.name;
+            const newAllegiance = getAllegiance(countryName, newControl);
+
+            if (oldControl) {
+                const oldAllegiance = getAllegiance(countryName, oldControl);
+                if (oldAllegiance !== newAllegiance) {
+                    layer.setStyle(getStyleForAllegiance('neutral'));
+                    setTimeout(() => {
+                        layer.setStyle(getStyleForAllegiance(newAllegiance));
+                    }, 450);
+                } else {
+                    layer.setStyle(getStyleForAllegiance(oldAllegiance));
+                }
+            } else {
+                layer.setStyle(getStyleForAllegiance(newAllegiance));
+            }
+        });
+    }
+    
+    function getBounds(events) {
+        const visibleEvents = events.filter(e => e.onMap !== false);
+
+        if (visibleEvents.length === 0) {
+            return L.latLngBounds([[60, -20], [20, 80]]);
+        }
+
+        const points = visibleEvents.map(e => L.latLng(e.lat, e.lng));
+
+        if (points.length === 1) {
+            return L.latLngBounds([
+                [points[0].lat - 5, points[0].lng - 5],
+                [points[0].lat + 5, points[0].lng + 5]
+            ]);
+        }
+
+        // For years with many events, add more padding
+        return L.latLngBounds(points);
+    }
+
+    // --- VISUAL RENDERING ---
+    function renderMapEvents(period) {
+        dotsContainer.innerHTML = '';
+        labelsContainer.innerHTML = '';
+        lineCanvas.innerHTML = '';
+
+        const events = allEventsData[period];
+        if (!events) return;
+
+        // Track used rectangles to avoid overlaps (for dots, labels, and lines)
+        const occupiedRects = [];
+
+        // Helper: check if two rectangles overlap
+        function rectsOverlap(a, b) {
+            return (
+                a.x < b.x + b.width &&
+                a.x + a.width > b.x &&
+                a.y < b.y + b.height &&
+                a.y + a.height > b.y
+            );
+        }
+
+        // Helper: spiral search for a free spot for the label
+        function findFreeLabelSpot(dot, labelW, labelH) {
+            const maxRadius = 220;
+            const step = 18; // degrees
+            const radiusStep = 18;
+            let best = null;
+            let minDist = Infinity;
+
+            for (let r = 60; r <= maxRadius; r += radiusStep) {
+                for (let angle = 0; angle < 360; angle += step) {
+                    const rad = angle * Math.PI / 180;
+                    const x = dot.x + r * Math.cos(rad);
+                    const y = dot.y + r * Math.sin(rad);
+                    const rect = { x: x - labelW / 2, y: y - labelH / 2, width: labelW, height: labelH };
+
+                    // Check overlap with all occupied rects
+                    let overlap = false;
+                    for (const occ of occupiedRects) {
+                        if (rectsOverlap(rect, occ)) {
+                            overlap = true;
+                            break;
+                        }
+                    }
+                    if (!overlap) {
+                        // Prefer closer to dot
+                        const dist = Math.abs(r);
+                        if (dist < minDist) {
+                            minDist = dist;
+                            best = { x, y };
+                        }
+                    }
+                }
+                if (best) break; // Found a spot at this radius
+            }
+            // Fallback: just put it at the dot
+            return best || { x: dot.x, y: dot.y };
+        }
+
+        // Helper: check if a dot overlaps any occupied rect
+        function findFreeDotSpot(dot, dotW, dotH) {
+            let x = dot.x, y = dot.y;
+            let tries = 0;
+            while (tries < 20) {
+                const rect = { x: x - dotW / 2, y: y - dotH / 2, width: dotW, height: dotH };
+                let overlap = false;
+                for (const occ of occupiedRects) {
+                    if (rectsOverlap(rect, occ)) {
+                        overlap = true;
+                        break;
+                    }
+                }
+                if (!overlap) return { x, y };
+                x += 18; y += 18; tries++;
+            }
+            return { x, y };
+        }
+
+        // Helper: check if a connector line crosses any occupied rect (simple bounding box check)
+        function lineOverlapsRect(x1, y1, x2, y2, rect) {
+            // Line's bounding box
+            const minX = Math.min(x1, x2), maxX = Math.max(x1, x2);
+            const minY = Math.min(y1, y2), maxY = Math.max(y1, y2);
+            return !(
+                rect.x > maxX ||
+                rect.x + rect.width < minX ||
+                rect.y > maxY ||
+                rect.y + rect.height < minY
+            );
+        }
+
+        // Place all events (major first, then minor, then atrocity)
+        const typeOrder = { major: 1, minor: 2, atrocity: 3 };
+        const sortedEvents = events
+            .filter(e => e.onMap !== false)
+            .slice()
+            .sort((a, b) => typeOrder[a.type] - typeOrder[b.type]);
+
+        sortedEvents.forEach(event => {
+            const eventLatLng = L.latLng(event.lat, event.lng);
+            let dotPoint = map.latLngToContainerPoint(eventLatLng);
+
+            // Dot size
+            let dotW = 12, dotH = 12;
+            if (event.type === 'atrocity' || event.type === 'minor') { dotW = dotH = 10; }
+
+            // Find free spot for dot
+            const dotPos = findFreeDotSpot(dotPoint, dotW, dotH);
+            const dotRect = { x: dotPos.x - dotW / 2, y: dotPos.y - dotH / 2, width: dotW, height: dotH };
+            occupiedRects.push(dotRect);
+
+            let dot;
+            switch(event.type) {
+                case 'major': {
+                    // Label size
+                    const labelW = 160, labelH = 50;
+                    // Find free spot for label (spiral out)
+                    const labelPos = findFreeLabelSpot(dotPos, labelW, labelH);
+                    const labelRect = { x: labelPos.x - labelW / 2, y: labelPos.y - labelH / 2, width: labelW, height: labelH };
+                    occupiedRects.push(labelRect);
+
+                    // Check connector line for overlap (bounding box only)
+                    const lineRect = {
+                        x: Math.min(dotPos.x, labelPos.x),
+                        y: Math.min(dotPos.y, labelPos.y),
+                        width: Math.abs(dotPos.x - labelPos.x),
+                        height: Math.abs(dotPos.y - labelPos.y)
+                    };
+                    occupiedRects.push(lineRect);
+
+                    // Dot
+                    dot = document.createElement('div');
+                    dot.className = 'event-dot';
+                    dot.style.left = `${dotPos.x}px`;
+                    dot.style.top = `${dotPos.y}px`;
+
+                    // Label
+                    const label = document.createElement('div');
+                    label.className = 'event-label';
+                    label.style.left = `${labelPos.x}px`;
+                    label.style.top = `${labelPos.y}px`;
+                    label.innerHTML = `<img src="${event.imageUrl}" alt="${event.title}"><div class="title">${event.title}</div>`;
+                    label.addEventListener('click', () => showModal(event));
+
+                    // Connector line
+                    const connectorLine = createSVGLine(dotPos, labelPos, 'connector-line');
+
+                    dotsContainer.appendChild(dot);
+                    labelsContainer.appendChild(label);
+                    lineCanvas.appendChild(connectorLine);
+
+                    requestAnimationFrame(() => {
+                        dot.classList.add('visible');
+                        label.classList.add('visible');
+                        connectorLine.classList.add('visible');
+                    });
+                    break;
+                }
+                case 'atrocity':
+                case 'minor': {
+                    dot = document.createElement('div');
+                    dot.className = event.type === 'atrocity' ? 'atrocity-dot' : 'minor-event-dot';
+                    dot.style.left = `${dotPos.x}px`;
+                    dot.style.top = `${dotPos.y}px`;
+                    dot.title = event.title;
+                    dot.addEventListener('click', () => showModal(event));
+                    dotsContainer.appendChild(dot);
+                    requestAnimationFrame(() => {
+                        dot.classList.add('visible');
+                    });
+                    break;
+                }
+            }
+        });
+    }
+    
+    function renderLegend(period) {
+        const legendContent = document.getElementById('legend-panel');
+        if(!legendContent) return;
+
+        let eventTypesHTML = `
+            <div class="legend-section">
+                <h4>Legenda Evenimente</h4>
+                <div class="legend-item-event">
+                    <div class="legend-symbol"><div class="legend-symbol-label"></div></div>
+                    <span>Eveniment Major</span>
+                </div>
+                <div class="legend-item-event">
+                    <div class="legend-symbol"><div class="atrocity-dot visible"></div></div>
+                    <span>Locul Atrocității</span>
+                </div>
+                <div class="legend-item-event">
+                    <div class="legend-symbol"><div class="minor-event-dot visible"></div></div>
+                    <span>Eveniment Minor</span>
+                </div>
+            </div>
+        `;
+        
+        let allegianceHTML = '';
+        if (period !== 'pre-war' && period !== 'post-war') {
+            const control = territorialData[period] || {};
+            allegianceHTML = `
+            <div class="legend-section">
+                <h4>Control Teritorial (${period})</h4>
+                <div class="legend-item"><div class="legend-color allied-color"></div><span>Control Aliat</span></div>`;
+            
+            if(control.co_belligerent && control.co_belligerent.length > 0) {
+                 allegianceHTML += `<div class="legend-item"><div class="legend-color co-belligerent-allied-color"></div><span>Co-beligeranți (cu Aliații)</span></div>`;
+            }
+            allegianceHTML += `<div class="legend-item"><div class="legend-color axis-color"></div><span>Controlul Axei</span></div>`;
+            if(control.co_aggressor && control.co_aggressor.length > 0) {
+                 allegianceHTML += `<div class="legend-item"><div class="legend-color co-aggressor-axis-color"></div><span>Co-agresori (cu Axa)</span></div>`;
+            }
+            allegianceHTML += `
+                <div class="legend-item"><div class="legend-color occupied-color"></div><span>Ocupație de către Axă</span></div>
+                <div class="legend-item"><div class="legend-color neutral-color"></div><span>Zone Neutre</span></div>
+            </div>`;
+        }
+
+        legendContent.innerHTML = eventTypesHTML + allegianceHTML;
+        legendContent.classList.remove('hidden');
+    }
+
+    function createSVGLine(p1, p2, className) {
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', p1.x); line.setAttribute('y1', p1.y);
+        line.setAttribute('x2', p2.x); line.setAttribute('y2', p2.y);
+        line.setAttribute('class', className);
+        return line;
+    }
+
+    function updateSliderVisuals(periodIndex) {
+        const slider = timelineSlider;
+        const tooltip = sliderTooltip;
+        
+        const min = parseFloat(slider.min);
+        const max = parseFloat(slider.max);
+        const val = parseFloat(slider.value);
+
+        const progressPercent = (val - min) / (max - min) * 100;
+        slider.style.setProperty('--fill-percent', `${progressPercent}%`);
+        
+        const periodKey = periods[parseInt(periodIndex, 10)];
+        tooltip.textContent = periodKey === 'pre-war' ? 'Pre-Război' : (periodKey === 'post-war' ? 'Post-Război' : periodKey);
+        
+        const sliderWidth = slider.clientWidth;
+        const thumbWidth = 25;
+        const travelDistance = sliderWidth - thumbWidth;
+        const progress = (val - min) / (max - min);
+        const thumbLeft = progress * travelDistance;
+        const thumbCenter = thumbLeft + (thumbWidth / 2);
+        const sliderLeftOffset = slider.offsetLeft;
+        const tooltipFinalLeft = sliderLeftOffset + thumbCenter;
+        
+        tooltip.style.left = `${tooltipFinalLeft}px`;
+    }
+
+    function positionSliderLabels() {
+        const slider = document.getElementById('timeline-slider');
+        const labelsContainer = document.getElementById('slider-labels');
+        const labels = labelsContainer.getElementsByTagName('span');
+        
+        if (!slider || !labelsContainer || labels.length === 0) return;
+
+        const sliderWidth = slider.clientWidth;
+        const thumbWidth = 25;
+        const travelableWidth = sliderWidth - thumbWidth;
+        const numSteps = labels.length - 1;
+
+        for (let i = 0; i < labels.length; i++) {
+            const progress = i / numSteps;
+            const labelCenterPos = (progress * travelableWidth) + (thumbWidth / 2);
+            
+            const label = labels[i];
+            label.style.position = 'absolute';
+            label.style.left = `${labelCenterPos}px`;
+            label.style.transform = 'translateX(-50%)';
+        }
+    }
+
+
+    function renderFilterBar() {
+        const labelsContainer = document.getElementById('slider-labels');
+        timelineSlider.max = periods.length - 1;
+        
+        labelsContainer.innerHTML = periods.map(p => `<span>${p === 'pre-war' ? 'Pre' : (p === 'post-war' ? 'Post' : p)}</span>`).join('');
+
+        timelineSlider.addEventListener('input', (e) => {
+            const periodIndex = e.target.value;
+            updateSliderVisuals(periodIndex);
+        });
+        
+        timelineSlider.addEventListener('change', (e) => {
+            const periodIndex = e.target.value;
+            const selectedPeriod = periods[periodIndex];
+            handlePeriodChange(selectedPeriod);
+        });
+
+        const toggleTooltip = (visible) => {
+            if(visible) {
+                updateSliderVisuals(timelineSlider.value);
+                sliderTooltip.classList.add('visible');
+            } else {
+                sliderTooltip.classList.remove('visible');
+            }
+        };
+        
+        timelineSlider.addEventListener('mousedown', () => toggleTooltip(true));
+        timelineSlider.addEventListener('touchstart', () => toggleTooltip(true));
+        timelineSlider.addEventListener('mouseup', () => toggleTooltip(false));
+        timelineSlider.addEventListener('touchend', () => toggleTooltip(false));
+    };
+
+    // --- MODAL MANAGEMENT ---
+    function showModal(event) {
+        currentEvent = event;
+        modal.querySelector('#modalImage').src = event.imageUrl;
+        modal.querySelector('#modalTitle').textContent = event.title;
+        modal.querySelector('#modalDescription').textContent = event.description;
+        modal.querySelector('#aiContent').classList.add('hidden');
+        modal.classList.remove('hidden');
+    }
+
+    function hideModal() { modal.classList.add('hidden'); }
+    
+    function showContextModal(key) {
+        const data = contextData[key];
+        if (!data) {
+            contextModal.classList.add('hidden');
+            return
+        };
+        contextModal.querySelector('#contextModalTitle').textContent = data.title;
+        contextModal.querySelector('#contextModalDescription').textContent = data.description;
+        contextModal.classList.remove('hidden');
+    }
+
+    function hideContextModal() { contextModal.classList.add('hidden'); }
+    
+    // --- CORE LOGIC ---
+    function handlePeriodChange(selectedPeriod) {
+        if (selectedPeriod === currentPeriod) return;
+
+        const oldPeriod = currentPeriod;
+        currentPeriod = selectedPeriod;
+        const events = allEventsData[selectedPeriod] || [];
+
+        dotsContainer.innerHTML = '';
+        labelsContainer.innerHTML = '';
+        lineCanvas.innerHTML = '';
+        renderLegend(selectedPeriod);
+        showContextModal(selectedPeriod);
+
+        const targetBounds = getBounds(events);
+
+        // --- ANIMATION SEQUENCE ---
+        mapEl.classList.add('is-transitioning');
+        updateMapColors(selectedPeriod, oldPeriod);
+
+        // Adjust padding and zoom for years with many/few events
+        let paddingTopLeft = [340, 100];
+        let paddingBottomRight = [50, 150];
+        let maxZoom = 4;
+        if (events.length <= 3) {
+            maxZoom = 5;
+        } else if (events.length > 10) {
+            paddingTopLeft = [400, 150];
+            paddingBottomRight = [100, 200];
+            maxZoom = 3;
+        }
+
+        map.flyToBounds(targetBounds, {
+            paddingTopLeft,
+            paddingBottomRight,
+            maxZoom,
+            duration: 1.8
+        });
+
+        map.once('moveend', () => {
+            mapEl.classList.remove('is-transitioning');
+            setTimeout(() => {
+                renderMapEvents(selectedPeriod);
+            }, 50);
+        });
+    }
+    
+    closeModalBtn.addEventListener('click', hideModal);
+    contextModal.addEventListener('click', (e) => (e.target === contextModal) && hideContextModal());
+    closeContextModal.addEventListener('click', hideContextModal);
+
+    function initialLoad() {
+        const activePeriod = periods[timelineSlider.value];
+        currentPeriod = activePeriod;
+        const events = allEventsData[activePeriod] || [];
+        
+        const initialBounds = getBounds(events);
+        const options = { paddingTopLeft: [340, 100], paddingBottomRight: [50, 150], maxZoom: 6 };
+
+        map.fitBounds(initialBounds, options);
+
+        updateMapColors(activePeriod, null);
+        renderLegend(activePeriod);
+        showContextModal(activePeriod);
+        updateSliderVisuals(timelineSlider.value);
+        
+        map.whenReady(() => {
+            renderMapEvents(activePeriod)
+        });
+    }
+    
+    // --- APP ENTRY POINT ---
+    initializeMap();
+    renderFilterBar();
+    
+    setTimeout(() => {
+        positionSliderLabels();
+        updateSliderVisuals(timelineSlider.value);
+    }, 100);
+    
+    window.addEventListener('resize', positionSliderLabels);
+    
+});

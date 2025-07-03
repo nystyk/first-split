@@ -1,0 +1,380 @@
+/* ----------------------------------------------------------------------- */
+/* I.C.1. Stiluri Globale și Fonturi                                     */
+/* ----------------------------------------------------------------------- */
+body, html {
+    font-family: 'Roboto Slab', serif;
+    background-color: #2d2d2d;
+    color: #f0f0f0;
+    overflow: hidden;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+h1, h2, .font-teko { font-family: 'Teko', sans-serif; }
+.font-cinzel { font-family: 'Cinzel', serif; }
+
+/* ----------------------------------------------------------------------- */
+/* I.C.2. Structura Principală a Paginii                                 */
+/* ----------------------------------------------------------------------- */
+#main-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+#app-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 1rem;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+    z-index: 1002;
+    pointer-events: none;
+}
+#app-header h1 {
+    font-size: 3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
+}
+
+/* ----------------------------------------------------------------------- */
+/* I.C.3. Stiluri pentru Hartă și Leaflet                                */
+/* ----------------------------------------------------------------------- */
+#map-container {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+}
+#map {
+    width: 100%;
+    height: 100%;
+    background-color: #3d3d3d;
+    transition: filter 0.4s ease-in-out;
+}
+#map.is-transitioning {
+    filter: blur(4px);
+}
+.leaflet-container {
+    background: #3d3d3d;
+}
+.leaflet-interactive {
+    transition: fill 0.4s ease-in-out;
+}
+
+/* ----------------------------------------------------------------------- */
+/* I.C.4. Stiluri pentru Suprapunerea Evenimentelor (Puncte, Etichete)   */
+/* ----------------------------------------------------------------------- */
+#overlay-container {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.event-label, .event-dot, .atrocity-dot, .minor-event-dot {
+    position: absolute;
+    pointer-events: all;
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}
+
+.event-label {
+    display: flex;
+    align-items: center;
+    background-color: rgba(20, 20, 20, 0.85);
+    border: 1px solid #9a9a9a;
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.7);
+    padding: 4px;
+    width: 160px;
+    height: 50px;
+    cursor: pointer;
+    transform-origin: center;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.5s ease-out, transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+.event-label:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.9);
+    z-index: 1001;
+}
+.event-label.visible {
+    opacity: 1;
+}
+
+.event-label img {
+    width: 42px; height: 42px; object-fit: cover;
+    border-radius: 4px; margin-right: 8px;
+}
+.event-label .title {
+    color: #e0e0e0; font-size: 12px;
+    line-height: 1.2; font-weight: 600;
+}
+
+.event-dot {
+    background-color: #f0f0f0;
+    border: 2px solid #000;
+    border-radius: 50%;
+    width: 12px; height: 12px;
+    transform: translate(-50%, -50%);
+    z-index: 999;
+}
+.atrocity-dot {
+    background-color: #e74c3c;
+    border: 1px solid #f0f0f0;
+    width: 10px; height: 10px;
+    transform: translate(-50%, -50%);
+    border-radius: 0;
+    cursor: pointer;
+    z-index: 999;
+    transition: opacity 0.5s ease-out, transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+.minor-event-dot {
+    background-color: #f1c40f;
+    border: 1px solid #333;
+    width: 10px; height: 10px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 999;
+    transition: opacity 0.5s ease-out, transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+
+.atrocity-dot:hover,
+.minor-event-dot:hover {
+    transform: translate(-50%, -50%) scale(1.8);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+    z-index: 1001;
+}
+
+.event-dot.visible, .atrocity-dot.visible, .minor-event-dot.visible {
+    opacity: 1;
+}
+
+/* ----------------------------------------------------------------------- */
+/* I.C.5. Stiluri pentru Liniile de Conectare (SVG)                       */
+/* ----------------------------------------------------------------------- */
+#line-canvas {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+}
+
+.connector-line {
+    stroke-width: 1.5;
+    stroke: rgba(255, 255, 224, 0.7);
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}
+.connector-line.visible {
+     opacity: 1;
+}
+
+/* ----------------------------------------------------------------------- */
+/* I.C.6. Stiluri pentru Panoul Legendei                                 */
+/* ----------------------------------------------------------------------- */
+#legend-panel {
+    position: absolute;
+    bottom: 10rem;
+    left: 2rem;
+    z-index: 1001;
+    padding: 1rem 1.5rem;
+    background: rgba(40,40,40,0.85);
+    backdrop-filter: blur(5px);
+    border-radius: 8px;
+    border: 1px solid #666;
+    pointer-events: all;
+    width: 280px;
+}
+.legend-section {
+    margin-top: 1rem;
+}
+.legend-section:first-child {
+    margin-top: 0;
+}
+.legend-section h4 {
+    font-family: 'Teko', sans-serif;
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #666;
+    padding-bottom: 4px;
+}
+.legend-item, .legend-item-event {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    font-size: 0.85rem;
+}
+.legend-symbol {
+    width: 45px;
+    height: 25px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.legend-symbol-label {
+    width: 40px; height: 20px;
+    background-color: rgba(20, 20, 20, 0.85);
+    border: 1px solid #9a9a9a;
+    border-radius: 3px;
+}
+.legend-symbol .event-dot,
+.legend-symbol .atrocity-dot,
+.legend-symbol .minor-event-dot {
+    position: relative;
+    opacity: 1;
+    transform: none;
+}
+.legend-color {
+    width: 30px;
+    height: 15px;
+    margin-right: 10px;
+    border: 1px solid #000;
+}
+.allied-color { background-color: #4a6d8a; }
+.co-belligerent-allied-color { background-color: #6c8aa6; }
+.axis-color { background-color: #a44a4a; }
+.co-aggressor-axis-color { background-color: #b22222; }
+.occupied-color { background-color: #d16d6d; }
+.neutral-color { background-color: #5a5a5a; }
+
+/* ----------------------------------------------------------------------- */
+/* I.C.7. Stiluri pentru Bara de Filtrare și Cronologie (Slider)         */
+/* ----------------------------------------------------------------------- */
+#filter-container {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    flex-shrink: 0;
+    padding: 1rem;
+    background-color: rgba(31, 31, 31, 0.8);
+    backdrop-filter: blur(5px);
+    border-top: 1px solid #444;
+    z-index: 1002;
+}
+
+#timeline-slider-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    padding: 35px 12.5px 0 12.5px; /* Spațiu adăugat pentru tooltip */
+}
+
+#slider-tooltip {
+    position: absolute;
+    top: -20px;
+    left: 0;
+    background-color: #3498db;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-family: 'Teko', sans-serif;
+    font-size: 1.2rem;
+    transform: translateX(-50%) translateY(0);
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+}
+#slider-tooltip.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-5px);
+}
+#slider-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #3498db transparent transparent transparent;
+}
+
+#timeline-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(to right, #3498db 0%, #3498db var(--fill-percent, 0%), #555 var(--fill-percent, 0%), #555 100%);
+    outline: none;
+    opacity: 0.8;
+    transition: opacity .2s, background 0.1s linear;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 0;
+}
+#timeline-slider:hover {
+    opacity: 1;
+}
+
+#timeline-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #e0e0e0;
+    border-radius: 50%;
+    border: 2px solid #333;
+    margin-top: -10px;
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+#timeline-slider:active::-webkit-slider-thumb {
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(52, 152, 219, 0.7);
+}
+
+#timeline-slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #e0e0e0;
+    border-radius: 50%;
+    border: 2px solid #333;
+    transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+}
+ #timeline-slider:active::-moz-range-thumb {
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(52, 152, 219, 0.7);
+}
+
+#slider-labels {
+    position: relative;
+    width: 100%;
+    height: 20px;
+    padding: 0;
+    margin: 0;
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: #aaa;
+}
+
+#slider-labels span {
+    position: absolute;
+    top: 0;
+    white-space: nowrap;
+}
+
+/* ----------------------------------------------------------------------- */
+/* I.C.8. Stiluri pentru Modale și Animații                              */
+/* ----------------------------------------------------------------------- */
+#modal { transition: opacity 0.3s ease-in-out; }
+.modal-content { animation: slideUp 0.4s ease-out; }
+@keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.ai-btn { background-color: #4a5568; transition: background-color 0.3s, transform 0.2s; }
+.ai-btn:hover { background-color: #2d3748; transform: translateY(-2px); }
+.ai-btn:disabled { background-color: #2d3748; opacity: 0.5; cursor: not-allowed; }
+.loader { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.context-modal-content {
+    background-color: rgba(40,40,40,0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+}
