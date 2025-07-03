@@ -1,182 +1,5 @@
 /* ----------------------------------------------------------------------- */
-/* I.C.1. Stiluri Globale și Fonturi                                     */
-/* ----------------------------------------------------------------------- */
-body, html {
-    font-family: 'Roboto Slab', serif;
-    background-color: #2d2d2d;
-    color: #f0f0f0;
-    overflow: hidden;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-h1, h2, .font-teko { font-family: 'Teko', sans-serif; }
-.font-cinzel { font-family: 'Cinzel', serif; }
-
-/* ----------------------------------------------------------------------- */
-/* I.C.2. Structura Principală a Paginii                                 */
-/* ----------------------------------------------------------------------- */
-#main-container {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-}
-
-#app-header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    padding: 1rem;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
-    z-index: 1002;
-    pointer-events: none;
-}
-#app-header h1 {
-    font-size: 3rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.8);
-}
-
-/* ----------------------------------------------------------------------- */
-/* I.C.3. Stiluri pentru Hartă și Leaflet                                */
-/* ----------------------------------------------------------------------- */
-#map-container {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-}
-#map {
-    width: 100%;
-    height: 100%;
-    background-color: #3d3d3d;
-    transition: filter 0.4s ease-in-out;
-}
-#map.is-transitioning {
-    filter: blur(4px);
-}
-.leaflet-container {
-    background: #3d3d3d;
-}
-.leaflet-interactive {
-    transition: fill 0.4s ease-in-out;
-}
-
-/* ----------------------------------------------------------------------- */
-/* I.C.4. Stiluri pentru Suprapunerea Evenimentelor (Puncte, Etichete)   */
-/* ----------------------------------------------------------------------- */
-#overlay-container {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 1000;
-}
-
-.event-label, .event-dot, .atrocity-dot, .minor-event-dot {
-    position: absolute;
-    pointer-events: all;
-    opacity: 0;
-    transition: opacity 0.5s ease-out;
-}
-
-.event-label {
-    display: flex;
-    align-items: center;
-    background-color: rgba(20, 20, 20, 0.85);
-    border: 1px solid #9a9a9a;
-    border-radius: 6px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.7);
-    padding: 4px;
-    width: 160px;
-    height: 50px;
-    cursor: pointer;
-    transform-origin: center;
-    transform: translate(-50%, -50%);
-    transition: opacity 0.5s ease-out, transform 0.2s ease-out, box-shadow 0.2s ease-out;
-}
-.event-label:hover {
-    transform: translate(-50%, -50%) scale(1.1);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.9);
-    z-index: 1001;
-}
-.event-label.visible {
-    opacity: 1;
-}
-
-.event-label img {
-    width: 42px; height: 42px; object-fit: cover;
-    border-radius: 4px; margin-right: 8px;
-}
-.event-label .title {
-    color: #e0e0e0; font-size: 12px;
-    line-height: 1.2; font-weight: 600;
-}
-
-.event-dot {
-    background-color: #f0f0f0;
-    border: 2px solid #000;
-    border-radius: 50%;
-    width: 12px; height: 12px;
-    transform: translate(-50%, -50%);
-    z-index: 999;
-}
-.atrocity-dot {
-    background-color: #e74c3c;
-    border: 1px solid #f0f0f0;
-    width: 10px; height: 10px;
-    transform: translate(-50%, -50%);
-    border-radius: 0;
-    cursor: pointer;
-    z-index: 999;
-    transition: opacity 0.5s ease-out, transform 0.2s ease-out, box-shadow 0.2s ease-out;
-}
-.minor-event-dot {
-    background-color: #f1c40f;
-    border: 1px solid #333;
-    width: 10px; height: 10px;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    cursor: pointer;
-    z-index: 999;
-    transition: opacity 0.5s ease-out, transform 0.2s ease-out, box-shadow 0.2s ease-out;
-}
-
-.atrocity-dot:hover,
-.minor-event-dot:hover {
-    transform: translate(-50%, -50%) scale(1.8);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
-    z-index: 1001;
-}
-
-.event-dot.visible, .atrocity-dot.visible, .minor-event-dot.visible {
-    opacity: 1;
-}
-
-/* ----------------------------------------------------------------------- */
-/* I.C.5. Stiluri pentru Liniile de Conectare (SVG)                       */
-/* ----------------------------------------------------------------------- */
-#line-canvas {
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-}
-
-.connector-line {
-    stroke-width: 1.5;
-    stroke: rgba(255, 255, 224, 0.7);
-    opacity: 0;
-    transition: opacity 0.5s ease-out;
-}
-.connector-line.visible {
-     opacity: 1;
-}
-
-/* ----------------------------------------------------------------------- */
-/* I.C.6. Stiluri pentru Panoul Legendei                                 */
+/* 6. Stiluri pentru Panoul Legendei                                     */
 /* ----------------------------------------------------------------------- */
 #legend-panel {
     position: absolute;
@@ -246,7 +69,7 @@ h1, h2, .font-teko { font-family: 'Teko', sans-serif; }
 .neutral-color { background-color: #5a5a5a; }
 
 /* ----------------------------------------------------------------------- */
-/* I.C.7. Stiluri pentru Bara de Filtrare și Cronologie (Slider)         */
+/* 7. Stiluri pentru Bara de Filtrare și Cronologie (Slider)             */
 /* ----------------------------------------------------------------------- */
 #filter-container {
     position: absolute;
@@ -362,7 +185,7 @@ h1, h2, .font-teko { font-family: 'Teko', sans-serif; }
 }
 
 /* ----------------------------------------------------------------------- */
-/* I.C.8. Stiluri pentru Modale și Animații                              */
+/* 8. Stiluri pentru Modale și Animații                                  */
 /* ----------------------------------------------------------------------- */
 #modal { transition: opacity 0.3s ease-in-out; }
 .modal-content { animation: slideUp 0.4s ease-out; }
