@@ -14,8 +14,6 @@ function initializeMap() {
     fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
         .then(res => res.json())
         .then(geoJsonData => {
-            // This was the problem area. We now add the GeoJSON layer without a default style,
-            // allowing the updateMapColors function to correctly style it from the start.
             state.geoJsonLayer = L.geoJSON(geoJsonData).addTo(state.map);
             initialLoad();
         });
@@ -42,9 +40,6 @@ function initializeMap() {
 
 /**
  * Determines the allegiance of a country for a given period.
- * @param {string} countryName - The name of the country.
- * @param {object} controlData - The territorial control data for the period.
- * @returns {string} The allegiance status (e.g., 'allied', 'axis').
  */
 function getAllegiance(countryName, controlData) {
     if (!controlData) return 'neutral';
@@ -58,8 +53,6 @@ function getAllegiance(countryName, controlData) {
 
 /**
  * Returns the style object for a country based on its allegiance.
- * @param {string} allegiance - The allegiance status.
- * @returns {object} A Leaflet path style object.
  */
 function getStyleForAllegiance(allegiance) {
     const baseStyle = { weight: 1, color: '#3d3d3d', fillOpacity: 1 };
@@ -75,8 +68,6 @@ function getStyleForAllegiance(allegiance) {
 
 /**
  * Updates the colors of the countries on the map with a transition effect.
- * @param {string} newPeriod - The period to transition to.
- * @param {string} oldPeriod - The period to transition from.
  */
 function updateMapColors(newPeriod, oldPeriod) {
     const oldControl = territorialData[oldPeriod];
@@ -105,8 +96,6 @@ function updateMapColors(newPeriod, oldPeriod) {
 
 /**
  * Calculates the optimal map bounds to fit all visible events for a period.
- * @param {Array<object>} events - An array of event objects for the period.
- * @returns {L.LatLngBounds} A Leaflet LatLngBounds object.
  */
 function getBounds(events) {
     const visibleEvents = events.filter(e => e.onMap !== false);
@@ -119,8 +108,7 @@ function getBounds(events) {
 }
 
 /**
- * Renders event dots, labels, and connector lines using a simple, robust placement logic.
- * @param {string} period - The current period to render events for.
+ * REVISED: Renders event dots and labels using a more robust layout algorithm.
  */
 function renderMapEvents(period) {
     const { dom } = state;
@@ -128,56 +116,182 @@ function renderMapEvents(period) {
     dom.labelsContainer.innerHTML = '';
     dom.lineCanvas.innerHTML = '';
 
-    const events = allEventsData[period];
-    if (!events) return;
+    const events = allEventsData[period] || [];
+    if (events.length === 0) return;
+    
+    const allMapEvents = events.filter(e => e.onMap !== false);
+    const majorEvents = allMapEvents.filter(e => e.type === 'major');
+    const otherEvents = allMapEvents.filter(e => e.type !== 'major');
 
-    const typeOrder = { major: 1, minor: 2, atrocity: 3 };
-    const sortedEvents = (events || []).filter(e => e.onMap !== false).sort((a, b) => typeOrder[a.type] - typeOrder[b.type]);
+    const placedItems = []; // Will store rects for labels AND dots
+    const mapBounds = dom.mapEl.getBoundingClientRect();
 
-    sortedEvents.forEach(event => {
+    // --- Render non-major events first (simple dots) ---
+    otherEvents.forEach(event => {
         const dotPoint = state.map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
-
-        const dot = document.createElement('div');
-        dot.className = event.type === 'major' ? 'event-dot' : (event.type === 'atrocity' ? 'atrocity-dot' : 'minor-event-dot');
+        const dot = createEventDot(event);
         dot.style.left = `${dotPoint.x}px`;
         dot.style.top = `${dotPoint.y}px`;
-        dot.title = event.title;
-        dot.addEventListener('click', () => showModal(event));
         dom.dotsContainer.appendChild(dot);
-
-        if (event.type === 'major') {
-            // Use the manual offset if it exists, otherwise place it simply above the dot.
-            const labelPos = event.labelOffset 
-                ? { x: dotPoint.x + event.labelOffset.x, y: dotPoint.y + event.labelOffset.y }
-                : { x: dotPoint.x, y: dotPoint.y - 60 };
-
-            const label = document.createElement('div');
-            label.className = 'event-label';
-            label.style.left = `${labelPos.x}px`;
-            label.style.top = `${labelPos.y}px`;
-            label.innerHTML = `<img src="${event.imageUrl}" alt="${event.title}"><div class="title">${event.title}</div>`;
-            label.addEventListener('click', () => showModal(event));
-            dom.labelsContainer.appendChild(label);
-
-            const connectorLine = createSVGLine(dotPoint, labelPos, 'connector-line');
-            dom.lineCanvas.appendChild(connectorLine);
-
-            requestAnimationFrame(() => {
-                label.classList.add('visible');
-                connectorLine.classList.add('visible');
-            });
-        }
         requestAnimationFrame(() => dot.classList.add('visible'));
+        // Add dot to obstacles list
+        placedItems.push({
+            x: dotPoint.x - 6, y: dotPoint.y - 6,
+            width: 12, height: 12
+        });
     });
+    
+    // --- Sort major events to be processed from the center of the screen outwards ---
+    // This gives the most constrained events (in the middle) priority in finding a good spot.
+    const screenCenter = { x: mapBounds.width / 2, y: mapBounds.height / 2 };
+    const sortedMajorEvents = majorEvents
+        .map(event => {
+            const point = state.map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
+            const distanceToCenter = Math.hypot(point.x - screenCenter.x, point.y - screenCenter.y);
+            return { event, point, distanceToCenter };
+        })
+        .sort((a, b) => a.distanceToCenter - b.distanceToCenter);
+
+
+    // --- Render major events with labels using the new layout logic ---
+    sortedMajorEvents.forEach(({ event, point: dotPoint }) => {
+        const dot = createEventDot(event);
+        dot.style.left = `${dotPoint.x}px`;
+        dot.style.top = `${dotPoint.y}px`;
+        dom.dotsContainer.appendChild(dot);
+        requestAnimationFrame(() => dot.classList.add('visible'));
+
+        // Add the dot itself as an obstacle for other labels
+        const dotRect = { x: dotPoint.x - 6, y: dotPoint.y - 6, width: 12, height: 12 };
+        placedItems.push(dotRect);
+
+        // Find the best position for the label using the new scoring algorithm
+        const bestPosition = findOptimalLabelPosition(dotPoint, placedItems, mapBounds);
+        
+        // Add the new label's rectangle to the list of placed items
+        placedItems.push(bestPosition.rect);
+        
+        const label = createEventLabel(event);
+        label.style.left = `${bestPosition.x}px`;
+        label.style.top = `${bestPosition.y}px`;
+        dom.labelsContainer.appendChild(label);
+
+        const connectorLine = createSVGLine(dotPoint, {x: bestPosition.x, y: bestPosition.y}, 'connector-line');
+        dom.lineCanvas.appendChild(connectorLine);
+
+        requestAnimationFrame(() => {
+            label.classList.add('visible');
+            connectorLine.classList.add('visible');
+        });
+    });
+}
+
+/**
+ * NEW & IMPROVED: Finds the best non-overlapping position for a label using a scoring system.
+ */
+function findOptimalLabelPosition(anchorPoint, obstacles, mapBounds) {
+    const LABEL_WIDTH = 160;
+    const LABEL_HEIGHT = 50;
+    const PADDING = 5; // Padding between elements
+    const VIEWPORT_MARGIN = 10; // Margin from the edge of the screen
+
+    let bestCandidate = null;
+    let bestScore = Infinity;
+
+    // Generate candidate positions in a spiral pattern
+    for (let radius = 70; radius < 500; radius += 15) {
+        for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 8) { // Test 16 angles
+            const x = anchorPoint.x + radius * Math.cos(angle);
+            const y = anchorPoint.y + radius * Math.sin(angle);
+
+            const rect = {
+                x: x - LABEL_WIDTH / 2,
+                y: y - LABEL_HEIGHT / 2,
+                width: LABEL_WIDTH,
+                height: LABEL_HEIGHT
+            };
+
+            // --- SCORE THE CANDIDATE ---
+            let score = 0;
+
+            // 1. Penalty for being outside the viewport
+            if (rect.x < VIEWPORT_MARGIN || rect.x + rect.width > mapBounds.width - VIEWPORT_MARGIN ||
+                rect.y < VIEWPORT_MARGIN || rect.y + rect.height > mapBounds.height - VIEWPORT_MARGIN) {
+                score += 10000; // Very high penalty
+            }
+
+            // 2. Penalty for overlapping with existing obstacles
+            for (const obstacle of obstacles) {
+                if (checkCollision(rect, obstacle, PADDING)) {
+                    score += 5000; // High penalty for each collision
+                }
+            }
+            
+            // 3. Penalty for distance from anchor (to prefer closer labels)
+            score += radius;
+
+            // 4. Update best candidate if this one is better
+            if (score < bestScore) {
+                bestScore = score;
+                bestCandidate = { x, y, rect };
+            }
+
+            // If we find a "perfect" score (no collisions, within a reasonable distance), we can stop early.
+            if (bestScore < 200) { // This threshold means no collisions and relatively close
+                 return bestCandidate;
+            }
+        }
+    }
+    
+    // Fallback if no good position is found (should be rare)
+     if (!bestCandidate) {
+        return {
+            x: anchorPoint.x,
+            y: anchorPoint.y - 100,
+            rect: { x: anchorPoint.x - LABEL_WIDTH/2, y: anchorPoint.y - 100 - LABEL_HEIGHT/2, width: LABEL_WIDTH, height: LABEL_HEIGHT }
+        };
+    }
+
+    return bestCandidate;
 }
 
 
 /**
+ * Checks if two rectangles overlap, including padding.
+ */
+function checkCollision(rect1, rect2, padding) {
+    return (
+        rect1.x < rect2.x + rect2.width + padding &&
+        rect1.x + rect1.width + padding > rect2.x &&
+        rect1.y < rect2.y + rect2.height + padding &&
+        rect1.y + rect1.height + padding > rect2.y
+    );
+}
+
+/**
+ * Helper to create a generic event dot element.
+ */
+function createEventDot(event) {
+    const dot = document.createElement('div');
+    dot.className = event.type === 'major' ? 'event-dot' : (event.type === 'atrocity' ? 'atrocity-dot' : 'minor-event-dot');
+    dot.title = event.title;
+    dot.addEventListener('click', () => showModal(event));
+    return dot;
+}
+
+/**
+ * Helper to create an event label element.
+ */
+function createEventLabel(event) {
+    const label = document.createElement('div');
+    label.className = 'event-label';
+    label.innerHTML = `<img src="${event.imageUrl}" alt="${event.title}"><div class="title">${event.title}</div>`;
+    label.addEventListener('click', () => showModal(event));
+    return label;
+}
+
+/**
  * Helper to create an SVG line element.
- * @param {object} p1 - The starting point {x, y}.
- * @param {object} p2 - The ending point {x, y}.
- * @param {string} className - The CSS class for the line.
- * @returns {SVGElement} The created SVG line element.
  */
 function createSVGLine(p1, p2, className) {
     const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');

@@ -41,13 +41,15 @@
     transition: opacity 0.5s ease-out;
 }
 
+/* NEW STYLE for event labels to match the reference image */
 .event-label {
     display: flex;
     align-items: center;
-    background-color: rgba(20, 20, 20, 0.85);
-    border: 1px solid #9a9a9a;
-    border-radius: 6px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.7);
+    background-color: rgba(28, 28, 30, 0.85); /* Darker, less transparent background */
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(180, 180, 180, 0.4); /* Subtler border */
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
     padding: 4px;
     width: 160px;
     height: 50px;
@@ -57,8 +59,8 @@
     transition: opacity 0.5s ease-out, transform 0.2s ease-out, box-shadow 0.2s ease-out;
 }
 .event-label:hover {
-    transform: translate(-50%, -50%) scale(1.1);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.9);
+    transform: translate(-50%, -50%) scale(1.05); /* Less aggressive hover scale */
+    box-shadow: 0 6px 20px rgba(0,0,0,0.8);
     z-index: 1001;
 }
 .event-label.visible {
@@ -67,11 +69,15 @@
 
 .event-label img {
     width: 42px; height: 42px; object-fit: cover;
-    border-radius: 4px; margin-right: 8px;
+    border-radius: 2px; /* Sharper corners */
+    margin-right: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
 }
 .event-label .title {
-    color: #e0e0e0; font-size: 12px;
-    line-height: 1.2; font-weight: 600;
+    color: #e8e8e8; 
+    font-size: 12px;
+    line-height: 1.25; 
+    font-weight: 600;
 }
 
 .event-dot {
@@ -123,9 +129,10 @@
     pointer-events: none;
 }
 
+/* UPDATED STYLE for connector lines */
 .connector-line {
-    stroke-width: 1.5;
-    stroke: rgba(255, 255, 224, 0.7);
+    stroke-width: 2px; /* Made lines thicker */
+    stroke: rgba(220, 220, 220, 0.75); /* Made lines more opaque */
     opacity: 0;
     transition: opacity 0.5s ease-out;
 }
