@@ -14,6 +14,8 @@ function initializeMap() {
     fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
         .then(res => res.json())
         .then(geoJsonData => {
+            // This was the problem area. We now add the GeoJSON layer without a default style,
+            // allowing the updateMapColors function to correctly style it from the start.
             state.geoJsonLayer = L.geoJSON(geoJsonData).addTo(state.map);
             initialLoad();
         });
@@ -117,77 +119,37 @@ function getBounds(events) {
 }
 
 /**
- * Renders event dots, labels, and connector lines onto the map overlay.
+ * Renders event dots, labels, and connector lines using a simple, robust placement logic.
  * @param {string} period - The current period to render events for.
  */
 function renderMapEvents(period) {
-    state.dom.dotsContainer.innerHTML = '';
-    state.dom.labelsContainer.innerHTML = '';
-    state.dom.lineCanvas.innerHTML = '';
+    const { dom } = state;
+    dom.dotsContainer.innerHTML = '';
+    dom.labelsContainer.innerHTML = '';
+    dom.lineCanvas.innerHTML = '';
 
     const events = allEventsData[period];
     if (!events) return;
-
-    const occupiedRects = [];
-
-    function rectsOverlap(a, b) {
-        return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
-    }
-
-    function findFreeSpot(initialPos, width, height, isLabel = false) {
-        const maxRadius = 220;
-        const step = 18;
-        const radiusStep = 18;
-        let best = null;
-        let minDist = Infinity;
-
-        let rect = { x: initialPos.x - width / 2, y: initialPos.y - height / 2, width, height };
-        if (!occupiedRects.some(occ => rectsOverlap(rect, occ))) {
-            return initialPos;
-        }
-
-        if (!isLabel) return initialPos;
-
-        for (let r = 60; r <= maxRadius; r += radiusStep) {
-            for (let angle = 0; angle < 360; angle += step) {
-                const rad = angle * Math.PI / 180;
-                const x = initialPos.x + r * Math.cos(rad);
-                const y = initialPos.y + r * Math.sin(rad);
-                rect = { x: x - width / 2, y: y - height / 2, width, height };
-                if (!occupiedRects.some(occ => rectsOverlap(rect, occ))) {
-                    const dist = Math.hypot(x - initialPos.x, y - initialPos.y);
-                    if (dist < minDist) {
-                        minDist = dist;
-                        best = { x, y };
-                    }
-                }
-            }
-            if (best) return best;
-        }
-        return best || initialPos;
-    }
 
     const typeOrder = { major: 1, minor: 2, atrocity: 3 };
     const sortedEvents = (events || []).filter(e => e.onMap !== false).sort((a, b) => typeOrder[a.type] - typeOrder[b.type]);
 
     sortedEvents.forEach(event => {
         const dotPoint = state.map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
-        const dotSize = (event.type === 'atrocity' || event.type === 'minor') ? 10 : 12;
-        const dotPos = findFreeSpot(dotPoint, dotSize, dotSize);
-        occupiedRects.push({ x: dotPos.x - dotSize / 2, y: dotPos.y - dotSize / 2, width: dotSize, height: dotSize });
 
         const dot = document.createElement('div');
         dot.className = event.type === 'major' ? 'event-dot' : (event.type === 'atrocity' ? 'atrocity-dot' : 'minor-event-dot');
-        dot.style.left = `${dotPos.x}px`;
-        dot.style.top = `${dotPos.y}px`;
+        dot.style.left = `${dotPoint.x}px`;
+        dot.style.top = `${dotPoint.y}px`;
         dot.title = event.title;
         dot.addEventListener('click', () => showModal(event));
-        state.dom.dotsContainer.appendChild(dot);
+        dom.dotsContainer.appendChild(dot);
 
         if (event.type === 'major') {
-            const labelW = 160, labelH = 50;
-            const labelPos = findFreeSpot(dotPos, labelW, labelH, true);
-            occupiedRects.push({ x: labelPos.x - labelW / 2, y: labelPos.y - labelH / 2, width: labelW, height: labelH });
+            // Use the manual offset if it exists, otherwise place it simply above the dot.
+            const labelPos = event.labelOffset 
+                ? { x: dotPoint.x + event.labelOffset.x, y: dotPoint.y + event.labelOffset.y }
+                : { x: dotPoint.x, y: dotPoint.y - 60 };
 
             const label = document.createElement('div');
             label.className = 'event-label';
@@ -195,10 +157,10 @@ function renderMapEvents(period) {
             label.style.top = `${labelPos.y}px`;
             label.innerHTML = `<img src="${event.imageUrl}" alt="${event.title}"><div class="title">${event.title}</div>`;
             label.addEventListener('click', () => showModal(event));
-            state.dom.labelsContainer.appendChild(label);
+            dom.labelsContainer.appendChild(label);
 
-            const connectorLine = createSVGLine(dotPos, labelPos, 'connector-line');
-            state.dom.lineCanvas.appendChild(connectorLine);
+            const connectorLine = createSVGLine(dotPoint, labelPos, 'connector-line');
+            dom.lineCanvas.appendChild(connectorLine);
 
             requestAnimationFrame(() => {
                 label.classList.add('visible');
@@ -208,6 +170,7 @@ function renderMapEvents(period) {
         requestAnimationFrame(() => dot.classList.add('visible'));
     });
 }
+
 
 /**
  * Helper to create an SVG line element.

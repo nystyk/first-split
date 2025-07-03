@@ -60,6 +60,7 @@ function initialLoad() {
     showContextModal(activePeriod);
     updateSliderVisuals(state.dom.timelineSlider.value);
     
+    // Correctly reference state.map
     state.map.whenReady(() => {
         renderMapEvents(activePeriod);
     });
