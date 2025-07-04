@@ -22,7 +22,7 @@ function initializeMap() {
     });
     state.map.setView(config.map.initialCenter, config.map.initialZoom);
     
-    // FIX: Create and append hover containers to the main map container, not a Leaflet pane.
+    // Create and append hover containers to the main map container, not a Leaflet pane.
     const mapContainer = document.getElementById('map-container');
 
     const hoverBoxContainer = document.createElement('div');
@@ -62,7 +62,7 @@ function initializeMap() {
 }
 
 /**
- * NEW: Sets up the proximity-based hover system.
+ * Sets up the proximity-based hover system.
  */
 function initializeHoverSystem() {
     // Update the cache of dot positions when the map moves or zooms
@@ -97,7 +97,7 @@ function initializeHoverSystem() {
 }
 
 /**
- * NEW: Updates the cache of screen positions for all interactive dots.
+ * Updates the cache of screen positions for all interactive dots.
  */
 function updateHoverableDotsCache() {
     hoverState.hoverableDots = [];
@@ -105,8 +105,7 @@ function updateHoverableDotsCache() {
     dots.forEach(dot => {
         const eventId = dot.dataset.eventId;
         const event = findEventById(eventId);
-        if (event) {
-            // Use the actual rendered position of the dot element
+        if (event && !dot.classList.contains('hiding')) { // Only cache visible dots
             const rect = dot.getBoundingClientRect();
             const mapRect = state.dom.mapEl.getBoundingClientRect();
             const x = rect.left - mapRect.left + (rect.width / 2);
@@ -123,7 +122,7 @@ function updateHoverableDotsCache() {
 }
 
 /**
- * NEW: Helper to find an event object by its generated ID.
+ * Helper to find an event object by its generated ID.
  */
 function findEventById(id) {
     for (const period in allEventsData) {
@@ -211,43 +210,73 @@ function getEventId(event) {
 }
 
 /**
- * Renders all events as dots, clearing the DOM first and adjusting for collisions.
+ * REWRITTEN: Renders events by animating only the affected dots.
  */
 function renderMapEvents(period, forceClear = false) {
     const { dom } = state;
     
-    dom.dotsContainer.innerHTML = '';
+    // If forcing a clear (e.g., on resize or period change), wipe and redraw everything.
+    if (forceClear) {
+        dom.dotsContainer.innerHTML = '';
+    }
     
     const events = allEventsData[period] || [];
-    const eventsToRender = events.filter(e => e.onMap !== false && state.eventFilters[e.type]);
+    
+    // Get the set of IDs that SHOULD be visible based on current filters
+    const visibleEventIds = new Set(
+        events
+            .filter(e => e.onMap !== false && state.eventFilters[e.type])
+            .map(getEventId)
+    );
 
-    // 1. Calculate initial positions
-    let dotPoints = eventsToRender.map(event => {
-        const point = state.map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
-        return {
-            id: getEventId(event),
-            x: point.x,
-            y: point.y,
-            originalX: point.x,
-            originalY: point.y,
-            event: event
-        };
+    // Get the set of IDs that ARE CURRENTLY rendered in the DOM
+    const renderedElements = Array.from(dom.dotsContainer.children);
+    const renderedEventIds = new Set(renderedElements.map(el => el.dataset.eventId));
+
+    // --- HIDE elements that are rendered but shouldn't be ---
+    renderedElements.forEach(el => {
+        if (!visibleEventIds.has(el.dataset.eventId)) {
+            el.classList.add('hiding');
+            el.addEventListener('transitionend', () => el.remove(), { once: true });
+        }
     });
 
-    // 2. Adjust for collisions
-    dotPoints = adjustForCollisions(dotPoints);
-
-    // 3. Render the adjusted dots
-    dotPoints.forEach(dotData => {
-        const dot = createEventDot(dotData.event, dotData.id);
-        dot.style.left = `${dotData.x}px`;
-        dot.style.top = `${dotData.y}px`;
-        dom.dotsContainer.appendChild(dot);
-        requestAnimationFrame(() => dot.classList.add('visible'));
+    // --- SHOW elements that should be visible but aren't rendered ---
+    const eventsToAdd = events.filter(event => {
+        const id = getEventId(event);
+        return visibleEventIds.has(id) && !renderedEventIds.has(id);
     });
 
-    // 4. Update the cache for the hover system with final positions
-    setTimeout(updateHoverableDotsCache, 50);
+    if (eventsToAdd.length > 0) {
+        // Get positions of all dots that will be on screen (existing + new) for collision detection
+        const allVisibleEvents = events.filter(e => visibleEventIds.has(getEventId(e)));
+        let dotPoints = allVisibleEvents.map(event => {
+            const point = state.map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
+            return {
+                id: getEventId(event),
+                x: point.x,
+                y: point.y,
+                event: event
+            };
+        });
+
+        // Adjust for collisions
+        dotPoints = adjustForCollisions(dotPoints);
+
+        // Render only the NEW dots in their adjusted positions
+        dotPoints.forEach(dotData => {
+            if (!renderedEventIds.has(dotData.id)) { // Check if it's a new dot
+                const dot = createEventDot(dotData.event, dotData.id);
+                dot.style.left = `${dotData.x}px`;
+                dot.style.top = `${dotData.y}px`;
+                dom.dotsContainer.appendChild(dot);
+                requestAnimationFrame(() => dot.classList.add('visible'));
+            }
+        });
+    }
+
+    // Update the hover cache after animations have had time to start
+    setTimeout(updateHoverableDotsCache, 400);
 }
 
 /**
@@ -365,7 +394,7 @@ function hideHoverBox(immediate = false) {
     if (immediate) {
         hideAction();
     } else {
-        // FIX: Use a much shorter timeout for a faster disappearance
+        // Use a shorter timeout for a faster disappearance
         hoverState.timeout = setTimeout(hideAction, 75);
     }
 }
