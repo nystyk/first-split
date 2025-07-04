@@ -96,9 +96,11 @@ function updateMapColors(newPeriod, oldPeriod) {
 
 /**
  * Calculates the optimal map bounds to fit all visible events for a period.
+ * @param {Array<object>} events - An array of event objects for the period.
+ * @returns {L.LatLngBounds} A Leaflet LatLngBounds object.
  */
 function getBounds(events) {
-    const visibleEvents = events.filter(e => e.onMap !== false);
+    const visibleEvents = events.filter(e => e.onMap !== false && state.eventFilters[e.type]);
     if (visibleEvents.length === 0) return L.latLngBounds([[60, -20], [20, 80]]);
     const points = visibleEvents.map(e => L.latLng(e.lat, e.lng));
     if (points.length === 1) {
@@ -108,7 +110,7 @@ function getBounds(events) {
 }
 
 /**
- * REVISED: Renders event dots and labels using a more robust layout algorithm.
+ * REVISED: Renders event dots and labels based on current filters.
  */
 function renderMapEvents(period) {
     const { dom } = state;
@@ -118,15 +120,16 @@ function renderMapEvents(period) {
 
     const events = allEventsData[period] || [];
     if (events.length === 0) return;
-    
-    const allMapEvents = events.filter(e => e.onMap !== false);
-    const majorEvents = allMapEvents.filter(e => e.type === 'major');
-    const otherEvents = allMapEvents.filter(e => e.type !== 'major');
 
-    const placedItems = []; // Will store rects for labels AND dots
+    // Apply the visibility filters from the state
+    const visibleEvents = events.filter(e => e.onMap !== false && state.eventFilters[e.type]);
+    
+    const majorEvents = visibleEvents.filter(e => e.type === 'major');
+    const otherEvents = visibleEvents.filter(e => e.type !== 'major');
+
+    const placedItems = [];
     const mapBounds = dom.mapEl.getBoundingClientRect();
 
-    // --- Render non-major events first (simple dots) ---
     otherEvents.forEach(event => {
         const dotPoint = state.map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
         const dot = createEventDot(event);
@@ -134,15 +137,12 @@ function renderMapEvents(period) {
         dot.style.top = `${dotPoint.y}px`;
         dom.dotsContainer.appendChild(dot);
         requestAnimationFrame(() => dot.classList.add('visible'));
-        // Add dot to obstacles list
         placedItems.push({
             x: dotPoint.x - 6, y: dotPoint.y - 6,
             width: 12, height: 12
         });
     });
     
-    // --- Sort major events to be processed from the center of the screen outwards ---
-    // This gives the most constrained events (in the middle) priority in finding a good spot.
     const screenCenter = { x: mapBounds.width / 2, y: mapBounds.height / 2 };
     const sortedMajorEvents = majorEvents
         .map(event => {
@@ -152,8 +152,6 @@ function renderMapEvents(period) {
         })
         .sort((a, b) => a.distanceToCenter - b.distanceToCenter);
 
-
-    // --- Render major events with labels using the new layout logic ---
     sortedMajorEvents.forEach(({ event, point: dotPoint }) => {
         const dot = createEventDot(event);
         dot.style.left = `${dotPoint.x}px`;
@@ -161,14 +159,11 @@ function renderMapEvents(period) {
         dom.dotsContainer.appendChild(dot);
         requestAnimationFrame(() => dot.classList.add('visible'));
 
-        // Add the dot itself as an obstacle for other labels
         const dotRect = { x: dotPoint.x - 6, y: dotPoint.y - 6, width: 12, height: 12 };
         placedItems.push(dotRect);
 
-        // Find the best position for the label using the new scoring algorithm
         const bestPosition = findOptimalLabelPosition(dotPoint, placedItems, mapBounds);
         
-        // Add the new label's rectangle to the list of placed items
         placedItems.push(bestPosition.rect);
         
         const label = createEventLabel(event);
@@ -187,20 +182,19 @@ function renderMapEvents(period) {
 }
 
 /**
- * NEW & IMPROVED: Finds the best non-overlapping position for a label using a scoring system.
+ * Finds the best non-overlapping position for a label using a scoring system.
  */
 function findOptimalLabelPosition(anchorPoint, obstacles, mapBounds) {
     const LABEL_WIDTH = 160;
     const LABEL_HEIGHT = 50;
-    const PADDING = 5; // Padding between elements
-    const VIEWPORT_MARGIN = 10; // Margin from the edge of the screen
+    const PADDING = 5;
+    const VIEWPORT_MARGIN = 10;
 
     let bestCandidate = null;
     let bestScore = Infinity;
 
-    // Generate candidate positions in a spiral pattern
     for (let radius = 70; radius < 500; radius += 15) {
-        for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 8) { // Test 16 angles
+        for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 8) {
             const x = anchorPoint.x + radius * Math.cos(angle);
             const y = anchorPoint.y + radius * Math.sin(angle);
 
@@ -211,39 +205,32 @@ function findOptimalLabelPosition(anchorPoint, obstacles, mapBounds) {
                 height: LABEL_HEIGHT
             };
 
-            // --- SCORE THE CANDIDATE ---
             let score = 0;
 
-            // 1. Penalty for being outside the viewport
             if (rect.x < VIEWPORT_MARGIN || rect.x + rect.width > mapBounds.width - VIEWPORT_MARGIN ||
                 rect.y < VIEWPORT_MARGIN || rect.y + rect.height > mapBounds.height - VIEWPORT_MARGIN) {
-                score += 10000; // Very high penalty
+                score += 10000;
             }
 
-            // 2. Penalty for overlapping with existing obstacles
             for (const obstacle of obstacles) {
                 if (checkCollision(rect, obstacle, PADDING)) {
-                    score += 5000; // High penalty for each collision
+                    score += 5000;
                 }
             }
             
-            // 3. Penalty for distance from anchor (to prefer closer labels)
             score += radius;
 
-            // 4. Update best candidate if this one is better
             if (score < bestScore) {
                 bestScore = score;
                 bestCandidate = { x, y, rect };
             }
 
-            // If we find a "perfect" score (no collisions, within a reasonable distance), we can stop early.
-            if (bestScore < 200) { // This threshold means no collisions and relatively close
+            if (bestScore < 200) {
                  return bestCandidate;
             }
         }
     }
     
-    // Fallback if no good position is found (should be rare)
      if (!bestCandidate) {
         return {
             x: anchorPoint.x,

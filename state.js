@@ -6,6 +6,12 @@ const state = {
     currentEvent: null,
     geoJsonLayer: null,
     currentPeriod: 'pre-war',
+    // NEW: Filters for event visibility
+    eventFilters: {
+        major: true,
+        minor: true,
+        atrocity: true
+    },
 
     // Cached DOM elements
     dom: {

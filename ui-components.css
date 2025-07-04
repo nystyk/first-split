@@ -33,6 +33,7 @@
     align-items: center;
     margin-top: 8px;
     font-size: 0.85rem;
+    cursor: pointer; /* Make the whole item clickable */
 }
 .legend-symbol {
     width: 45px;
@@ -67,6 +68,52 @@
 .co-aggressor-axis-color { background-color: #b22222; }
 .occupied-color { background-color: #d16d6d; }
 .neutral-color { background-color: #5a5a5a; }
+
+/* --- NEW: Styles for Legend Toggles --- */
+.legend-toggle {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #e0e0e0;
+    margin-top: 10px;
+}
+.legend-toggle input[type="checkbox"] {
+    display: none; /* Hide the default checkbox */
+}
+.legend-toggle .checkbox-visual {
+    width: 18px;
+    height: 18px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 2px solid #888;
+    border-radius: 4px;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+.legend-toggle .checkbox-visual .checkmark {
+    width: 10px;
+    height: 10px;
+    background-color: #3498db;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    transform: scale(0);
+    transition: transform 0.2s ease-in-out;
+}
+.legend-toggle input[type="checkbox"]:checked + .checkbox-visual {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+.legend-toggle input[type="checkbox"]:checked + .checkbox-visual .checkmark {
+    transform: scale(1);
+}
+.legend-toggle .legend-symbol {
+    width: 30px;
+    margin-right: 0;
+    margin-left: auto;
+}
+
 
 /* ----------------------------------------------------------------------- */
 /* 7. Stiluri pentru Bara de Filtrare și Cronologie (Slider)             */

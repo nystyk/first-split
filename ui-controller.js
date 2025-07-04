@@ -1,37 +1,60 @@
 // --- UI CONTROLLER ---
 
 /**
- * Renders the legend panel with event types and territorial control information.
- * @param {string} period - The current period to display in the legend.
+ * NEW: Renders the legend with interactive toggles for event types.
+ * @param {string} period - The current period.
  */
 function renderLegend(period) {
-    let eventTypesHTML = `
-        <div class="legend-section">
-            <h4>Legenda Evenimente</h4>
-            <div class="legend-item-event"><div class="legend-symbol"><div class="legend-symbol-label"></div></div><span>Eveniment Major</span></div>
-            <div class="legend-item-event"><div class="legend-symbol"><div class="atrocity-dot visible"></div></div><span>Locul Atrocității</span></div>
-            <div class="legend-item-event"><div class="legend-symbol"><div class="minor-event-dot visible"></div></div><span>Eveniment Minor</span></div>
-        </div>`;
+    const legendPanel = state.dom.legendPanel;
     
+    // Define the event types to be displayed in the legend
+    const eventTypes = [
+        { type: 'major', label: 'Eveniment Major', symbolHtml: '<div class="legend-symbol-label"></div>' },
+        { type: 'atrocity', label: 'Locul Atrocității', symbolHtml: '<div class="atrocity-dot visible"></div>' },
+        { type: 'minor', label: 'Eveniment Minor', symbolHtml: '<div class="minor-event-dot visible"></div>' }
+    ];
+
+    let eventTypesHTML = `<div class="legend-section"><h4>Legenda Evenimente</h4>`;
+    
+    // Create a toggle for each event type
+    eventTypes.forEach(item => {
+        const isChecked = state.eventFilters[item.type];
+        eventTypesHTML += `
+            <label class="legend-toggle" for="toggle-${item.type}">
+                <input type="checkbox" id="toggle-${item.type}" data-type="${item.type}" ${isChecked ? 'checked' : ''}>
+                <span class="checkbox-visual"><span class="checkmark"></span></span>
+                <span>${item.label}</span>
+                <div class="legend-symbol">${item.symbolHtml}</div>
+            </label>
+        `;
+    });
+    eventTypesHTML += `</div>`;
+    
+    // Generate HTML for territorial control based on the period
     let allegianceHTML = '';
     if (period !== 'pre-war' && period !== 'post-war') {
-        const control = territorialData[period] || {};
         allegianceHTML = `<div class="legend-section"><h4>Control Teritorial (${period})</h4>`;
         allegianceHTML += `<div class="legend-item"><div class="legend-color allied-color"></div><span>Control Aliat</span></div>`;
-        if (control.co_belligerent && control.co_belligerent.length > 0) {
-            allegianceHTML += `<div class="legend-item"><div class="legend-color co-belligerent-allied-color"></div><span>Co-beligeranți (cu Aliații)</span></div>`;
-        }
         allegianceHTML += `<div class="legend-item"><div class="legend-color axis-color"></div><span>Controlul Axei</span></div>`;
-        if (control.co_aggressor && control.co_aggressor.length > 0) {
-            allegianceHTML += `<div class="legend-item"><div class="legend-color co-aggressor-axis-color"></div><span>Co-agresori (cu Axa)</span></div>`;
-        }
         allegianceHTML += `<div class="legend-item"><div class="legend-color occupied-color"></div><span>Ocupație de către Axă</span></div>`;
         allegianceHTML += `<div class="legend-item"><div class="legend-color neutral-color"></div><span>Zone Neutre</span></div></div>`;
     }
 
-    state.dom.legendPanel.innerHTML = eventTypesHTML + allegianceHTML;
-    state.dom.legendPanel.classList.remove('hidden');
+    legendPanel.innerHTML = eventTypesHTML + allegianceHTML;
+    legendPanel.classList.remove('hidden');
+
+    // Add event listeners to the new checkboxes
+    document.querySelectorAll('.legend-toggle input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+            const eventType = e.target.dataset.type;
+            const isVisible = e.target.checked;
+            state.eventFilters[eventType] = isVisible;
+            // Re-render the map events to reflect the new filter state
+            renderMapEvents(state.currentPeriod); 
+        });
+    });
 }
+
 
 /**
  * Updates the visual state of the timeline slider and its tooltip.
@@ -114,16 +137,24 @@ function renderFilterBar() {
  */
 function showModal(event) {
     state.currentEvent = event;
-    state.dom.modal.querySelector('#modalImage').src = event.imageUrl;
-    state.dom.modal.querySelector('#modalTitle').textContent = event.title;
-    state.dom.modal.querySelector('#modalDescription').textContent = event.description;
-    state.dom.modal.querySelector('#aiContent').classList.add('hidden');
-    state.dom.modal.classList.remove('hidden');
+    const modal = state.dom.modal;
+    document.getElementById('modalTitle').textContent = event.title;
+    document.getElementById('modalDescription').textContent = event.description;
+    document.getElementById('modalImage').src = event.imageUrl;
+    
+    document.getElementById('aiContent').style.display = 'none';
+    document.getElementById('aiResult').textContent = '';
+    document.getElementById('deeperDiveBtn').disabled = false;
+    document.getElementById('personalStoryBtn').disabled = false;
+
+    modal.classList.remove('hidden');
 }
 
 function hideModal() {
     state.dom.modal.classList.add('hidden');
+    state.currentEvent = null;
 }
+
 
 /**
  * Shows the context modal for pre-war or post-war periods.
@@ -142,4 +173,53 @@ function showContextModal(key) {
 
 function hideContextModal() {
     state.dom.contextModal.classList.add('hidden');
+}
+
+// --- AI Interaction Logic ---
+async function getAiResponse(prompt) {
+    console.log("Sending prompt to AI:", prompt);
+    await new Promise(resolve => setTimeout(resolve, 1500)); 
+    
+    if (prompt.includes("personală")) {
+        return "Într-un sat mic de lângă Varșovia, în 1944, tânăra Elżbieta asculta cu teamă zgomotul luptelor. Fratele ei, un membru al Armatei Teritoriale, plecase să lupte în Revoltă. Zilele treceau încet, marcate de speranță și frică. Într-o seară, un soldat rănit i-a bătut la ușă, aducând vestea că fratele ei a căzut eroic. Deși zdrobită de durere, Elżbieta a găsit puterea de a-l îngriji pe soldat, devenind un simbol al rezistenței tăcute a poporului polonez.";
+    }
+    return "Analiza AI indică faptul că acest eveniment a fost un punct de cotitură strategic, modificând echilibrul de putere în regiune. Consecințele pe termen lung au inclus realinieri geopolitice și un impact economic semnificativ, care a influențat deciziile ulterioare ale ambelor tabere. Factorii cheie au fost logistica superioară și utilizarea inovatoare a noilor tehnologii militare.";
+}
+
+document.getElementById('deeperDiveBtn').addEventListener('click', async () => {
+    if (!state.currentEvent) return;
+    const prompt = `Oferă o analiză aprofundată a evenimentului: ${state.currentEvent.title}.`;
+    handleAiRequest(prompt);
+});
+
+document.getElementById('personalStoryBtn').addEventListener('click', async () => {
+    if (!state.currentEvent) return;
+    const prompt = `Creează o poveste personală, emoționantă, din perspectiva unui civil afectat de evenimentul: ${state.currentEvent.title}.`;
+    handleAiRequest(prompt);
+});
+
+async function handleAiRequest(prompt) {
+    const aiContent = document.getElementById('aiContent');
+    const loader = document.getElementById('loader');
+    const resultP = document.getElementById('aiResult');
+    const diveBtn = document.getElementById('deeperDiveBtn');
+    const storyBtn = document.getElementById('personalStoryBtn');
+
+    aiContent.style.display = 'block';
+    loader.style.display = 'flex';
+    resultP.textContent = '';
+    diveBtn.disabled = true;
+    storyBtn.disabled = true;
+
+    try {
+        const response = await getAiResponse(prompt);
+        resultP.textContent = response;
+    } catch (error) {
+        console.error("AI Error:", error);
+        resultP.textContent = "Ne pare rău, a apărut o eroare la generarea răspunsului.";
+    } finally {
+        loader.style.display = 'none';
+        diveBtn.disabled = false;
+        storyBtn.disabled = false;
+    }
 }
