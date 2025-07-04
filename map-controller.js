@@ -1,7 +1,18 @@
 // --- MAP CONTROLLER ---
 
+// Global state for the new proximity-based hover system
+let hoverState = {
+    activeEventId: null,
+    timeout: null,
+    hoverableDots: [], // Cache for dot positions and data
+    activeElements: { // To hold direct references to the active elements
+        box: null,
+        line: null
+    }
+};
+
 /**
- * Initializes the Leaflet map and fetches the GeoJSON data for country borders.
+ * Initializes the Leaflet map and the hover system.
  */
 function initializeMap() {
     state.map = L.map('map', {
@@ -11,11 +22,26 @@ function initializeMap() {
     });
     state.map.setView(config.map.initialCenter, config.map.initialZoom);
     
+    // FIX: Create and append hover containers to the main map container, not a Leaflet pane.
+    const mapContainer = document.getElementById('map-container');
+
+    const hoverBoxContainer = document.createElement('div');
+    hoverBoxContainer.id = 'hover-box-container';
+    mapContainer.appendChild(hoverBoxContainer);
+    state.dom.hoverBoxContainer = hoverBoxContainer;
+    
+    const hoverLineSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    hoverLineSvg.id = 'hover-line-canvas';
+    mapContainer.appendChild(hoverLineSvg);
+    state.dom.hoverLineCanvas = hoverLineSvg;
+
+
     fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
         .then(res => res.json())
         .then(geoJsonData => {
             state.geoJsonLayer = L.geoJSON(geoJsonData).addTo(state.map);
             initialLoad();
+            initializeHoverSystem(); // Initialize the new hover logic
         });
 
     const debounce = (func, delay) => {
@@ -26,16 +52,85 @@ function initializeMap() {
         };
     };
     
-    const rerenderOnResize = () => {
-        if (state.currentPeriod) {
-            renderMapEvents(state.currentPeriod);
-        }
-    };
-
+    // Re-render on resize to ensure positions are correct
     window.addEventListener('resize', debounce(() => {
-        rerenderOnResize();
+        if (state.currentPeriod) {
+            renderMapEvents(state.currentPeriod, true); // Force a full re-render
+        }
         positionSliderLabels();
     }, 100));
+}
+
+/**
+ * NEW: Sets up the proximity-based hover system.
+ */
+function initializeHoverSystem() {
+    // Update the cache of dot positions when the map moves or zooms
+    state.map.on('moveend zoomend', updateHoverableDotsCache);
+
+    // Listen for mouse movement on the entire map container
+    state.dom.mapEl.addEventListener('mousemove', (e) => {
+        const mapBounds = state.dom.mapEl.getBoundingClientRect();
+        const cursor = { x: e.clientX - mapBounds.left, y: e.clientY - mapBounds.top };
+        let foundDot = null;
+
+        // Check cursor proximity to each cached dot
+        for (const dot of hoverState.hoverableDots) {
+            const distance = Math.hypot(cursor.x - dot.x, cursor.y - dot.y);
+            if (distance < 25) { // 25px activation radius
+                foundDot = dot;
+                break;
+            }
+        }
+
+        if (foundDot) {
+            // If near a dot, show its box (or keep it shown)
+            if (hoverState.activeEventId !== foundDot.id) {
+                showHoverBox(foundDot.event, foundDot);
+            }
+            clearTimeout(hoverState.timeout); // Cancel any pending hide actions
+        } else {
+            // If not near any dot, start the process to hide the box
+            hideHoverBox();
+        }
+    });
+}
+
+/**
+ * NEW: Updates the cache of screen positions for all interactive dots.
+ */
+function updateHoverableDotsCache() {
+    hoverState.hoverableDots = [];
+    const dots = document.querySelectorAll('.event-dot, .minor-event-dot, .atrocity-dot');
+    dots.forEach(dot => {
+        const eventId = dot.dataset.eventId;
+        const event = findEventById(eventId);
+        if (event) {
+            // Use the actual rendered position of the dot element
+            const rect = dot.getBoundingClientRect();
+            const mapRect = state.dom.mapEl.getBoundingClientRect();
+            const x = rect.left - mapRect.left + (rect.width / 2);
+            const y = rect.top - mapRect.top + (rect.height / 2);
+
+            hoverState.hoverableDots.push({
+                id: eventId,
+                x: x,
+                y: y,
+                event: event
+            });
+        }
+    });
+}
+
+/**
+ * NEW: Helper to find an event object by its generated ID.
+ */
+function findEventById(id) {
+    for (const period in allEventsData) {
+        const event = allEventsData[period].find(e => getEventId(e) === id);
+        if (event) return event;
+    }
+    return null;
 }
 
 /**
@@ -96,8 +191,6 @@ function updateMapColors(newPeriod, oldPeriod) {
 
 /**
  * Calculates the optimal map bounds to fit all visible events for a period.
- * @param {Array<object>} events - An array of event objects for the period.
- * @returns {L.LatLngBounds} A Leaflet LatLngBounds object.
  */
 function getBounds(events) {
     const visibleEvents = events.filter(e => e.onMap !== false && state.eventFilters[e.type]);
@@ -110,182 +203,192 @@ function getBounds(events) {
 }
 
 /**
- * REVISED: Renders event dots and labels based on current filters.
+ * Generates a unique ID for an event to track its DOM elements.
  */
-function renderMapEvents(period) {
-    const { dom } = state;
-    dom.dotsContainer.innerHTML = '';
-    dom.labelsContainer.innerHTML = '';
-    dom.lineCanvas.innerHTML = '';
-
-    const events = allEventsData[period] || [];
-    if (events.length === 0) return;
-
-    // Apply the visibility filters from the state
-    const visibleEvents = events.filter(e => e.onMap !== false && state.eventFilters[e.type]);
-    
-    const majorEvents = visibleEvents.filter(e => e.type === 'major');
-    const otherEvents = visibleEvents.filter(e => e.type !== 'major');
-
-    const placedItems = [];
-    const mapBounds = dom.mapEl.getBoundingClientRect();
-
-    otherEvents.forEach(event => {
-        const dotPoint = state.map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
-        const dot = createEventDot(event);
-        dot.style.left = `${dotPoint.x}px`;
-        dot.style.top = `${dotPoint.y}px`;
-        dom.dotsContainer.appendChild(dot);
-        requestAnimationFrame(() => dot.classList.add('visible'));
-        placedItems.push({
-            x: dotPoint.x - 6, y: dotPoint.y - 6,
-            width: 12, height: 12
-        });
-    });
-    
-    const screenCenter = { x: mapBounds.width / 2, y: mapBounds.height / 2 };
-    const sortedMajorEvents = majorEvents
-        .map(event => {
-            const point = state.map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
-            const distanceToCenter = Math.hypot(point.x - screenCenter.x, point.y - screenCenter.y);
-            return { event, point, distanceToCenter };
-        })
-        .sort((a, b) => a.distanceToCenter - b.distanceToCenter);
-
-    sortedMajorEvents.forEach(({ event, point: dotPoint }) => {
-        const dot = createEventDot(event);
-        dot.style.left = `${dotPoint.x}px`;
-        dot.style.top = `${dotPoint.y}px`;
-        dom.dotsContainer.appendChild(dot);
-        requestAnimationFrame(() => dot.classList.add('visible'));
-
-        const dotRect = { x: dotPoint.x - 6, y: dotPoint.y - 6, width: 12, height: 12 };
-        placedItems.push(dotRect);
-
-        const bestPosition = findOptimalLabelPosition(dotPoint, placedItems, mapBounds);
-        
-        placedItems.push(bestPosition.rect);
-        
-        const label = createEventLabel(event);
-        label.style.left = `${bestPosition.x}px`;
-        label.style.top = `${bestPosition.y}px`;
-        dom.labelsContainer.appendChild(label);
-
-        const connectorLine = createSVGLine(dotPoint, {x: bestPosition.x, y: bestPosition.y}, 'connector-line');
-        dom.lineCanvas.appendChild(connectorLine);
-
-        requestAnimationFrame(() => {
-            label.classList.add('visible');
-            connectorLine.classList.add('visible');
-        });
-    });
+function getEventId(event) {
+    const sanitizedTitle = event.title.replace(/[^a-zA-Z0-9]/g, '-');
+    return `${event.year}-${sanitizedTitle}`;
 }
 
 /**
- * Finds the best non-overlapping position for a label using a scoring system.
+ * Renders all events as dots, clearing the DOM first and adjusting for collisions.
  */
-function findOptimalLabelPosition(anchorPoint, obstacles, mapBounds) {
-    const LABEL_WIDTH = 160;
-    const LABEL_HEIGHT = 50;
-    const PADDING = 5;
-    const VIEWPORT_MARGIN = 10;
+function renderMapEvents(period, forceClear = false) {
+    const { dom } = state;
+    
+    dom.dotsContainer.innerHTML = '';
+    
+    const events = allEventsData[period] || [];
+    const eventsToRender = events.filter(e => e.onMap !== false && state.eventFilters[e.type]);
 
-    let bestCandidate = null;
-    let bestScore = Infinity;
+    // 1. Calculate initial positions
+    let dotPoints = eventsToRender.map(event => {
+        const point = state.map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
+        return {
+            id: getEventId(event),
+            x: point.x,
+            y: point.y,
+            originalX: point.x,
+            originalY: point.y,
+            event: event
+        };
+    });
 
-    for (let radius = 70; radius < 500; radius += 15) {
-        for (let angle = 0; angle < Math.PI * 2; angle += Math.PI / 8) {
-            const x = anchorPoint.x + radius * Math.cos(angle);
-            const y = anchorPoint.y + radius * Math.sin(angle);
+    // 2. Adjust for collisions
+    dotPoints = adjustForCollisions(dotPoints);
 
-            const rect = {
-                x: x - LABEL_WIDTH / 2,
-                y: y - LABEL_HEIGHT / 2,
-                width: LABEL_WIDTH,
-                height: LABEL_HEIGHT
-            };
+    // 3. Render the adjusted dots
+    dotPoints.forEach(dotData => {
+        const dot = createEventDot(dotData.event, dotData.id);
+        dot.style.left = `${dotData.x}px`;
+        dot.style.top = `${dotData.y}px`;
+        dom.dotsContainer.appendChild(dot);
+        requestAnimationFrame(() => dot.classList.add('visible'));
+    });
 
-            let score = 0;
+    // 4. Update the cache for the hover system with final positions
+    setTimeout(updateHoverableDotsCache, 50);
+}
 
-            if (rect.x < VIEWPORT_MARGIN || rect.x + rect.width > mapBounds.width - VIEWPORT_MARGIN ||
-                rect.y < VIEWPORT_MARGIN || rect.y + rect.height > mapBounds.height - VIEWPORT_MARGIN) {
-                score += 10000;
-            }
+/**
+ * Adjusts dot positions to avoid overlap.
+ */
+function adjustForCollisions(points) {
+    const adjustedPoints = [];
+    const MIN_DISTANCE = 20; // Minimum distance between dot centers
 
-            for (const obstacle of obstacles) {
-                if (checkCollision(rect, obstacle, PADDING)) {
-                    score += 5000;
+    points.forEach(currentPoint => {
+        let attempts = 0;
+        let collision = true;
+
+        while (collision && attempts < 100) {
+            collision = false;
+            for (const placedPoint of adjustedPoints) {
+                const distance = Math.hypot(currentPoint.x - placedPoint.x, currentPoint.y - placedPoint.y);
+                if (distance < MIN_DISTANCE) {
+                    collision = true;
+                    // Nudge the dot away from the one it's colliding with
+                    const angle = Math.atan2(currentPoint.y - placedPoint.y, currentPoint.x - placedPoint.x);
+                    currentPoint.x += Math.cos(angle) * (MIN_DISTANCE - distance);
+                    currentPoint.y += Math.sin(angle) * (MIN_DISTANCE - distance);
+                    break;
                 }
             }
-            
-            score += radius;
-
-            if (score < bestScore) {
-                bestScore = score;
-                bestCandidate = { x, y, rect };
-            }
-
-            if (bestScore < 200) {
-                 return bestCandidate;
-            }
+            attempts++;
         }
-    }
-    
-     if (!bestCandidate) {
-        return {
-            x: anchorPoint.x,
-            y: anchorPoint.y - 100,
-            rect: { x: anchorPoint.x - LABEL_WIDTH/2, y: anchorPoint.y - 100 - LABEL_HEIGHT/2, width: LABEL_WIDTH, height: LABEL_HEIGHT }
-        };
-    }
+        adjustedPoints.push(currentPoint);
+    });
 
-    return bestCandidate;
+    return adjustedPoints;
 }
 
 
 /**
- * Checks if two rectangles overlap, including padding.
+ * Creates a dot element for an event.
  */
-function checkCollision(rect1, rect2, padding) {
-    return (
-        rect1.x < rect2.x + rect2.width + padding &&
-        rect1.x + rect1.width + padding > rect2.x &&
-        rect1.y < rect2.y + rect2.height + padding &&
-        rect1.y + rect1.height + padding > rect2.y
-    );
-}
-
-/**
- * Helper to create a generic event dot element.
- */
-function createEventDot(event) {
+function createEventDot(event, id) {
     const dot = document.createElement('div');
-    dot.className = event.type === 'major' ? 'event-dot' : (event.type === 'atrocity' ? 'atrocity-dot' : 'minor-event-dot');
+    const className = event.type === 'major' ? 'event-dot' : (event.type === 'atrocity' ? 'atrocity-dot' : 'minor-event-dot');
+    dot.className = `event-element ${className}`;
+    dot.dataset.eventId = id;
     dot.title = event.title;
     dot.addEventListener('click', () => showModal(event));
     return dot;
 }
 
 /**
- * Helper to create an event label element.
+ * Creates and displays a hover box and its connecting line with a simple fade animation.
  */
-function createEventLabel(event) {
-    const label = document.createElement('div');
-    label.className = 'event-label';
-    label.innerHTML = `<img src="${event.imageUrl}" alt="${event.title}"><div class="title">${event.title}</div>`;
-    label.addEventListener('click', () => showModal(event));
-    return label;
+function showHoverBox(event, dotData) {
+    clearTimeout(hoverState.timeout);
+    
+    if (hoverState.activeEventId === dotData.id) return;
+
+    hideHoverBox(true); 
+
+    hoverState.activeEventId = dotData.id;
+
+    const box = document.createElement('div');
+    box.className = `event-hover-box ${event.type}`;
+    box.innerHTML = `<img src="${event.imageUrl}" alt="${event.title}"><div class="title">${event.title}</div>`;
+    
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('class', 'hover-connector-line');
+
+    // Store direct references to the active elements
+    hoverState.activeElements = { box, line };
+
+    box.addEventListener('mouseenter', () => clearTimeout(hoverState.timeout));
+    box.addEventListener('mouseleave', hideHoverBox);
+
+    state.dom.hoverBoxContainer.appendChild(box);
+    state.dom.hoverLineCanvas.appendChild(line);
+
+    const mapRect = state.dom.mapEl.getBoundingClientRect();
+    const boxPosition = findHoverBoxPosition(dotData, mapRect);
+
+    // Set line start and end points
+    line.setAttribute('x1', dotData.x);
+    line.setAttribute('y1', dotData.y);
+    line.setAttribute('x2', boxPosition.x);
+    line.setAttribute('y2', boxPosition.y);
+    
+    box.style.left = `${boxPosition.x}px`;
+    box.style.top = `${boxPosition.y}px`;
+    
+    requestAnimationFrame(() => {
+        box.classList.add('visible');
+        line.classList.add('visible');
+    });
 }
 
 /**
- * Helper to create an SVG line element.
+ * Hides the current hover box and line with a delay.
  */
-function createSVGLine(p1, p2, className) {
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', p1.x);
-    line.setAttribute('y1', p1.y);
-    line.setAttribute('x2', p2.x);
-    line.setAttribute('y2', p2.y);
-    line.setAttribute('class', className);
-    return line;
+function hideHoverBox(immediate = false) {
+    const { box, line } = hoverState.activeElements;
+
+    const hideAction = () => {
+        if (box) {
+            box.classList.remove('visible');
+            box.addEventListener('transitionend', () => box.remove(), { once: true });
+        }
+        if (line) {
+            line.classList.remove('visible');
+            line.addEventListener('transitionend', () => line.remove(), { once: true });
+        }
+        hoverState.activeEventId = null;
+        hoverState.activeElements = { box: null, line: null };
+    };
+
+    clearTimeout(hoverState.timeout);
+    if (immediate) {
+        hideAction();
+    } else {
+        // FIX: Use a much shorter timeout for a faster disappearance
+        hoverState.timeout = setTimeout(hideAction, 75);
+    }
+}
+
+/**
+ * Finds an optimal position for the hover box to avoid screen edges.
+ */
+function findHoverBoxPosition(dotData, mapRect) {
+    const BOX_WIDTH = 160;
+    const BOX_HEIGHT = 58;
+    const OFFSET = 100; // Increased distance
+    const screenCenter = { x: mapRect.width / 2, y: mapRect.height / 2 };
+
+    const angle = Math.atan2(dotData.y - screenCenter.y, dotData.x - screenCenter.x);
+    
+    let x = dotData.x + OFFSET * Math.cos(angle);
+    let y = dotData.y + OFFSET * Math.sin(angle);
+
+    // Clamp position to stay within viewport
+    x = Math.max(x, BOX_WIDTH / 2 + 10);
+    x = Math.min(x, mapRect.width - BOX_WIDTH / 2 - 10);
+    y = Math.max(y, BOX_HEIGHT / 2 + 10);
+    y = Math.min(y, mapRect.height - BOX_HEIGHT / 2 - 10);
+    
+    return { x, y };
 }
