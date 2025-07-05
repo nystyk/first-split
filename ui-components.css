@@ -237,11 +237,6 @@
 #modal { transition: opacity 0.3s ease-in-out; }
 .modal-content { animation: slideUp 0.4s ease-out; }
 @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-.ai-btn { background-color: #4a5568; transition: background-color 0.3s, transform 0.2s; }
-.ai-btn:hover { background-color: #2d3748; transform: translateY(-2px); }
-.ai-btn:disabled { background-color: #2d3748; opacity: 0.5; cursor: not-allowed; }
-.loader { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 .context-modal-content {
     background-color: rgba(40,40,40,0.7);
@@ -249,16 +244,42 @@
     border: 1px solid rgba(255,255,255,0.2);
 }
 
-/* --- NEW: Styles for Thematic Overlays --- */
+/* --- Styles for Thematic Overlays --- */
 .thematic-line {
     fill: none;
-    stroke-width: 3px;
+    stroke-width: 4.5px; /* Increased width */
     stroke-linecap: round;
     stroke-linejoin: round;
-    opacity: 0.7;
+    opacity: 1; /* Increased opacity */
+    /* A more prominent shadow to lift the line off the map */
+    filter: drop-shadow(0 0 5px rgba(0,0,0,0.9));
 }
 
 .atlantic-wall {
-    stroke: #e74c3c;
+    stroke: #e74c3c; /* Bright Red */
     stroke-dasharray: 8, 8;
+}
+.maginot-line {
+    stroke: #3498db; /* Bright Blue */
+    stroke-dasharray: 10, 5;
+}
+.siegfried-line {
+    stroke: #f1c40f; /* Bright Yellow */
+    stroke-dasharray: 1, 6;
+}
+.gustav-line {
+    stroke: #9b59b6; /* Bright Purple */
+    stroke-dasharray: 12, 4;
+}
+.gothic-line {
+    stroke: #2ecc71; /* Bright Green */
+    stroke-dasharray: 15, 5, 5, 5;
+}
+.mannerheim-line {
+    stroke: #1abc9c; /* Bright Teal */
+    stroke-dasharray: 1, 8;
+}
+.stalin-line {
+    stroke: #e67e22; /* Bright Orange */
+    stroke-dasharray: 4, 10;
 }

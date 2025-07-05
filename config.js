@@ -7,17 +7,20 @@ const config = {
         initialCenter: [30, 35],
         flyToBounds: {
             duration: 1.8,
-            maxZoomSmall: 5,
-            maxZoomMedium: 4,
-            maxZoomLarge: 3,
-            paddingSmall: [340, 100],
-            paddingLarge: [400, 150],
-            paddingBottomSmall: [50, 150],
-            paddingBottomLarge: [100, 200]
+            // Zoom levels increased for a closer view
+            maxZoomSmall: 6,
+            maxZoomMedium: 5,
+            maxZoomLarge: 4,
+            // Padding reduced for a tighter fit
+            paddingSmall: [250, 50],
+            paddingLarge: [300, 100],
+            paddingBottomSmall: [50, 100],
+            paddingBottomLarge: [100, 150]
         },
         initialFitBounds: {
-            paddingTopLeft: [340, 100],
-            paddingBottomRight: [50, 150],
+            // Padding reduced for a tighter initial fit
+            paddingTopLeft: [250, 50],
+            paddingBottomRight: [50, 100],
             maxZoom: 6
         }
     }

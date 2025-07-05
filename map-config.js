@@ -1,12 +1,12 @@
 // --- MAP CONFIGURATION DATA ---
 const contextData = {
     'pre-war': {
-        title: 'Perioada Prebelică',
-        description: 'Președintele Statelor Unite, Woodrow Wilson, și alții au vorbit despre Primul Război Mondial ca fiind "războiul care va pune capăt tuturor războaielor". În cei douăzeci de ani care au urmat, aceste idealuri înalte s-au lovit de un tratat de pace defectuos și punitiv, de ascensiunea dictaturilor, de ambiții naționale și de colapsul economic mondial. Oricât de îngrozitor a fost Primul Război Mondial, acesta s-a dovedit a fi preludiul și fundamentul unui conflict și mai înfiorător, o luptă mondială care avea să curme viețile a peste 60 de milioane de oameni... Al Doilea Război Mondial.'
+        title: 'Perioada Prebelică: Prăbușirea Ordinii Mondiale',
+        description: 'La sfârșitul anilor 1930, ordinea mondială stabilită după Primul Război Mondial se afla în pragul colapsului. Tratatul de la Versailles, deși menit să asigure o pace durabilă, a impus Germaniei condiții considerate umilitoare, alimentând resentimente naționale. Eșecul Ligii Națiunilor de a gestiona crizele a demonstrat ineficiența sa. În acest climat, ideologiile totalitare au câștigat teren: fascismul în Italia, nazismul în Germania și militarismul expansionist în Japonia. O serie de agresiuni — remilitarizarea Renaniei, Războiul Civil Spaniol, Anexarea Austriei și Acordul de la München — au subminat voința puterilor occidentale de a interveni. Când Hitler a invadat restul Cehoslovaciei în martie 1939, a devenit clar că ambițiile sale nu puteau fi temperate prin concesii. Pactul Molotov-Ribbentrop din august 1939 a asigurat flancul estic al lui Hitler, permițând invazia Poloniei și declanșarea conflictului.'
     },
     'post-war': {
-        title: 'Anii de după Război',
-        description: 'După încheierea celui de-al Doilea Război Mondial, lumea a intrat într-o nouă eră de tensiuni geopolitice cunoscută sub numele de Războiul Rece, dominată de rivalitatea dintre Statele Unite și Uniunea Sovietică. Această perioadă a fost marcată de cursa înarmărilor nucleare, conflicte prin interpuși și divizarea lumii în două blocuri ideologice. În același timp, au fost create organizații precum Națiunile Unite (ONU) pentru a promova pacea și cooperarea internațională.'
+        title: 'Anii de după Război: O Lume Remodelată',
+        description: 'La 2 septembrie 1945, lumea a ieșit dintr-un coșmar, dar a intrat într-o nouă eră de anxietate. Costul uman, estimat la peste 70 de milioane de vieți, și distrugerile materiale au lăsat o amprentă profundă. Războiul a accelerat inovații tehnologice precum radarul, avioanele cu reacție și, în final, arma atomică, care a inaugurat Era Atomică. Eliberarea lagărelor de exterminare a confruntat lumea cu grozăvia Holocaustului, ducând la crearea unor noi concepte de justiție internațională prin Procesele de la Nürnberg. Deși a fost creată Organizația Națiunilor Unite pentru a menține pacea, bazele unei noi confruntări, Războiul Rece, erau deja puse. Deciziile luate la Ialta și Potsdam au reflectat tensiunile crescânde dintre SUA și URSS, iar noua ordine mondială s-a născut sub umbra bombei atomice și a unei Europe divizate de o "Cortină de Fier".'
     }
 };
 const territorialData = {
