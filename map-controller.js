@@ -6,7 +6,8 @@ let hoverState = {
     activeElements: { // To hold direct references to the active elements
         box: null,
         line: null
-    }
+    },
+    pinned: false
 };
 
 /**
@@ -297,6 +298,7 @@ function showHoverBox(event, dotElement) {
  * Hides the current hover box and line with a swift fade-out animation.
  */
 function hideHoverBox(immediate = false) {
+    if (hoverState.pinned) return;
     const { box, line } = hoverState.activeElements;
 
     const hideAction = () => {
@@ -366,3 +368,8 @@ function renderThematicOverlays() {
         }
     }
 }
+
+// Export functions globally for story mode functionality
+window.getEventId = getEventId;
+window.showHoverBox = showHoverBox;
+window.renderMapEvents = renderMapEvents;

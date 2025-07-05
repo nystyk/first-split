@@ -96,3 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateSliderVisuals(state.dom.timelineSlider.value);
     }, 100);
 });
+
+// Export functions globally for story mode functionality
+window.handlePeriodChange = handlePeriodChange;

@@ -37,6 +37,26 @@
         <div id="map-container">
             <div id="map"></div>
             <div id="legend-panel"></div>
+            
+            <!-- Story Mode Controls - Positioned in top-right corner -->
+            <div id="story-controls" class="absolute top-4 right-4 z-[1003] flex items-center gap-1">
+                <button id="story-back" class="story-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button id="story-play" class="story-btn">
+                    <svg id="story-play-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-6.518-3.748A1 1 0 007 8.118v7.764a1 1 0 001.234.97l6.518-1.87A1 1 0 0016 13.882V10.12a1 1 0 00-1.248-.952z" />
+                    </svg>
+                </button>
+                <button id="story-forward" class="story-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+            
             <div id="overlay-container">
                 <svg id="line-canvas"></svg>
                 <div id="dots-container"></div>
