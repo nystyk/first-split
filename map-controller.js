@@ -1,10 +1,8 @@
 // --- MAP CONTROLLER ---
 
-// Global state for the new proximity-based hover system
+// Global state for the hover system
 let hoverState = {
-    activeEventId: null,
-    timeout: null,
-    hoverableDots: [], // Cache for dot positions and data
+    timeout: null, // To manage the hide delay
     activeElements: { // To hold direct references to the active elements
         box: null,
         line: null
@@ -22,7 +20,7 @@ function initializeMap() {
     });
     state.map.setView(config.map.initialCenter, config.map.initialZoom);
     
-    // Create and append hover containers to the main map container, not a Leaflet pane.
+    // Create and append hover containers to the main map container
     const mapContainer = document.getElementById('map-container');
 
     const hoverBoxContainer = document.createElement('div');
@@ -41,7 +39,6 @@ function initializeMap() {
         .then(geoJsonData => {
             state.geoJsonLayer = L.geoJSON(geoJsonData).addTo(state.map);
             initialLoad();
-            initializeHoverSystem(); // Initialize the new hover logic
         });
 
     const debounce = (func, delay) => {
@@ -59,77 +56,6 @@ function initializeMap() {
         }
         positionSliderLabels();
     }, 100));
-}
-
-/**
- * Sets up the proximity-based hover system.
- */
-function initializeHoverSystem() {
-    // Update the cache of dot positions when the map moves or zooms
-    state.map.on('moveend zoomend', updateHoverableDotsCache);
-
-    // Listen for mouse movement on the entire map container
-    state.dom.mapEl.addEventListener('mousemove', (e) => {
-        const mapBounds = state.dom.mapEl.getBoundingClientRect();
-        const cursor = { x: e.clientX - mapBounds.left, y: e.clientY - mapBounds.top };
-        let foundDot = null;
-
-        // Check cursor proximity to each cached dot
-        for (const dot of hoverState.hoverableDots) {
-            const distance = Math.hypot(cursor.x - dot.x, cursor.y - dot.y);
-            if (distance < 25) { // 25px activation radius
-                foundDot = dot;
-                break;
-            }
-        }
-
-        if (foundDot) {
-            // If near a dot, show its box (or keep it shown)
-            if (hoverState.activeEventId !== foundDot.id) {
-                showHoverBox(foundDot.event, foundDot);
-            }
-            clearTimeout(hoverState.timeout); // Cancel any pending hide actions
-        } else {
-            // If not near any dot, start the process to hide the box
-            hideHoverBox();
-        }
-    });
-}
-
-/**
- * Updates the cache of screen positions for all interactive dots.
- */
-function updateHoverableDotsCache() {
-    hoverState.hoverableDots = [];
-    const dots = document.querySelectorAll('.event-dot, .minor-event-dot, .atrocity-dot');
-    dots.forEach(dot => {
-        const eventId = dot.dataset.eventId;
-        const event = findEventById(eventId);
-        if (event && !dot.classList.contains('hiding')) { // Only cache visible dots
-            const rect = dot.getBoundingClientRect();
-            const mapRect = state.dom.mapEl.getBoundingClientRect();
-            const x = rect.left - mapRect.left + (rect.width / 2);
-            const y = rect.top - mapRect.top + (rect.height / 2);
-
-            hoverState.hoverableDots.push({
-                id: eventId,
-                x: x,
-                y: y,
-                event: event
-            });
-        }
-    });
-}
-
-/**
- * Helper to find an event object by its generated ID.
- */
-function findEventById(id) {
-    for (const period in allEventsData) {
-        const event = allEventsData[period].find(e => getEventId(e) === id);
-        if (event) return event;
-    }
-    return null;
 }
 
 /**
@@ -161,7 +87,7 @@ function getStyleForAllegiance(allegiance) {
 }
 
 /**
- * Updates the colors of the countries on the map with a transition effect.
+ * REVISED: Updates the colors of the countries on the map with a fade-through-neutral animation.
  */
 function updateMapColors(newPeriod, oldPeriod) {
     const oldControl = territorialData[oldPeriod];
@@ -174,15 +100,20 @@ function updateMapColors(newPeriod, oldPeriod) {
 
         if (oldControl) {
             const oldAllegiance = getAllegiance(countryName, oldControl);
+            // Only animate if the allegiance has actually changed
             if (oldAllegiance !== newAllegiance) {
+                // Step 1: Fade to neutral color first
                 layer.setStyle(getStyleForAllegiance('neutral'));
+                // Step 2: After a delay, fade to the new, correct color
                 setTimeout(() => {
                     layer.setStyle(getStyleForAllegiance(newAllegiance));
-                }, 450);
+                }, 400); // This delay allows the first transition to be visible
             } else {
-                layer.setStyle(getStyleForAllegiance(oldAllegiance));
+                // If allegiance is the same, just ensure the correct color is set instantly
+                layer.setStyle(getStyleForAllegiance(newAllegiance));
             }
         } else {
+            // For the initial load, set the color directly without animation
             layer.setStyle(getStyleForAllegiance(newAllegiance));
         }
     });
@@ -210,30 +141,27 @@ function getEventId(event) {
 }
 
 /**
- * REWRITTEN: Renders events by animating only the affected dots.
+ * Renders events by animating only the affected dots.
  */
 function renderMapEvents(period, forceClear = false) {
     const { dom } = state;
     
-    // If forcing a clear (e.g., on resize or period change), wipe and redraw everything.
     if (forceClear) {
         dom.dotsContainer.innerHTML = '';
     }
     
     const events = allEventsData[period] || [];
     
-    // Get the set of IDs that SHOULD be visible based on current filters
     const visibleEventIds = new Set(
         events
             .filter(e => e.onMap !== false && state.eventFilters[e.type])
             .map(getEventId)
     );
 
-    // Get the set of IDs that ARE CURRENTLY rendered in the DOM
     const renderedElements = Array.from(dom.dotsContainer.children);
     const renderedEventIds = new Set(renderedElements.map(el => el.dataset.eventId));
 
-    // --- HIDE elements that are rendered but shouldn't be ---
+    // Hide elements that are rendered but shouldn't be
     renderedElements.forEach(el => {
         if (!visibleEventIds.has(el.dataset.eventId)) {
             el.classList.add('hiding');
@@ -241,14 +169,13 @@ function renderMapEvents(period, forceClear = false) {
         }
     });
 
-    // --- SHOW elements that should be visible but aren't rendered ---
+    // Show elements that should be visible but aren't rendered
     const eventsToAdd = events.filter(event => {
         const id = getEventId(event);
         return visibleEventIds.has(id) && !renderedEventIds.has(id);
     });
 
     if (eventsToAdd.length > 0) {
-        // Get positions of all dots that will be on screen (existing + new) for collision detection
         const allVisibleEvents = events.filter(e => visibleEventIds.has(getEventId(e)));
         let dotPoints = allVisibleEvents.map(event => {
             const point = state.map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
@@ -260,12 +187,10 @@ function renderMapEvents(period, forceClear = false) {
             };
         });
 
-        // Adjust for collisions
         dotPoints = adjustForCollisions(dotPoints);
 
-        // Render only the NEW dots in their adjusted positions
         dotPoints.forEach(dotData => {
-            if (!renderedEventIds.has(dotData.id)) { // Check if it's a new dot
+            if (!renderedEventIds.has(dotData.id)) {
                 const dot = createEventDot(dotData.event, dotData.id);
                 dot.style.left = `${dotData.x}px`;
                 dot.style.top = `${dotData.y}px`;
@@ -274,9 +199,6 @@ function renderMapEvents(period, forceClear = false) {
             }
         });
     }
-
-    // Update the hover cache after animations have had time to start
-    setTimeout(updateHoverableDotsCache, 400);
 }
 
 /**
@@ -284,7 +206,7 @@ function renderMapEvents(period, forceClear = false) {
  */
 function adjustForCollisions(points) {
     const adjustedPoints = [];
-    const MIN_DISTANCE = 20; // Minimum distance between dot centers
+    const MIN_DISTANCE = 20;
 
     points.forEach(currentPoint => {
         let attempts = 0;
@@ -296,7 +218,6 @@ function adjustForCollisions(points) {
                 const distance = Math.hypot(currentPoint.x - placedPoint.x, currentPoint.y - placedPoint.y);
                 if (distance < MIN_DISTANCE) {
                     collision = true;
-                    // Nudge the dot away from the one it's colliding with
                     const angle = Math.atan2(currentPoint.y - placedPoint.y, currentPoint.x - placedPoint.x);
                     currentPoint.x += Math.cos(angle) * (MIN_DISTANCE - distance);
                     currentPoint.y += Math.sin(angle) * (MIN_DISTANCE - distance);
@@ -313,7 +234,7 @@ function adjustForCollisions(points) {
 
 
 /**
- * Creates a dot element for an event.
+ * Creates a dot element with direct hover listeners.
  */
 function createEventDot(event, id) {
     const dot = document.createElement('div');
@@ -322,20 +243,22 @@ function createEventDot(event, id) {
     dot.dataset.eventId = id;
     dot.title = event.title;
     dot.addEventListener('click', () => showModal(event));
+
+    dot.addEventListener('mouseenter', () => showHoverBox(event, dot));
+    dot.addEventListener('mouseleave', hideHoverBox);
+    
     return dot;
 }
 
 /**
- * Creates and displays a hover box and its connecting line with a simple fade animation.
+ * Creates and displays a hover box and its connecting line.
  */
-function showHoverBox(event, dotData) {
+function showHoverBox(event, dotElement) {
     clearTimeout(hoverState.timeout);
-    
-    if (hoverState.activeEventId === dotData.id) return;
 
-    hideHoverBox(true); 
-
-    hoverState.activeEventId = dotData.id;
+    if (hoverState.activeElements.box) {
+        hideHoverBox(true);
+    }
 
     const box = document.createElement('div');
     box.className = `event-hover-box ${event.type}`;
@@ -344,21 +267,25 @@ function showHoverBox(event, dotData) {
     const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     line.setAttribute('class', 'hover-connector-line');
 
-    // Store direct references to the active elements
-    hoverState.activeElements = { box, line };
-
     box.addEventListener('mouseenter', () => clearTimeout(hoverState.timeout));
     box.addEventListener('mouseleave', hideHoverBox);
+    
+    hoverState.activeElements = { box, line };
 
     state.dom.hoverBoxContainer.appendChild(box);
     state.dom.hoverLineCanvas.appendChild(line);
 
     const mapRect = state.dom.mapEl.getBoundingClientRect();
-    const boxPosition = findHoverBoxPosition(dotData, mapRect);
+    const dotRect = dotElement.getBoundingClientRect();
+    const dotCenter = {
+        x: dotRect.left - mapRect.left + (dotRect.width / 2),
+        y: dotRect.top - mapRect.top + (dotRect.height / 2)
+    };
 
-    // Set line start and end points
-    line.setAttribute('x1', dotData.x);
-    line.setAttribute('y1', dotData.y);
+    const boxPosition = findHoverBoxPosition(dotCenter, mapRect);
+
+    line.setAttribute('x1', dotCenter.x);
+    line.setAttribute('y1', dotCenter.y);
     line.setAttribute('x2', boxPosition.x);
     line.setAttribute('y2', boxPosition.y);
     
@@ -372,7 +299,7 @@ function showHoverBox(event, dotData) {
 }
 
 /**
- * Hides the current hover box and line with a delay.
+ * Hides the current hover box and line with a swift fade-out animation.
  */
 function hideHoverBox(immediate = false) {
     const { box, line } = hoverState.activeElements;
@@ -386,7 +313,6 @@ function hideHoverBox(immediate = false) {
             line.classList.remove('visible');
             line.addEventListener('transitionend', () => line.remove(), { once: true });
         }
-        hoverState.activeEventId = null;
         hoverState.activeElements = { box: null, line: null };
     };
 
@@ -394,7 +320,6 @@ function hideHoverBox(immediate = false) {
     if (immediate) {
         hideAction();
     } else {
-        // Use a shorter timeout for a faster disappearance
         hoverState.timeout = setTimeout(hideAction, 75);
     }
 }
@@ -405,7 +330,7 @@ function hideHoverBox(immediate = false) {
 function findHoverBoxPosition(dotData, mapRect) {
     const BOX_WIDTH = 160;
     const BOX_HEIGHT = 58;
-    const OFFSET = 100; // Increased distance
+    const OFFSET = 100;
     const screenCenter = { x: mapRect.width / 2, y: mapRect.height / 2 };
 
     const angle = Math.atan2(dotData.y - screenCenter.y, dotData.x - screenCenter.x);
@@ -413,7 +338,6 @@ function findHoverBoxPosition(dotData, mapRect) {
     let x = dotData.x + OFFSET * Math.cos(angle);
     let y = dotData.y + OFFSET * Math.sin(angle);
 
-    // Clamp position to stay within viewport
     x = Math.max(x, BOX_WIDTH / 2 + 10);
     x = Math.min(x, mapRect.width - BOX_WIDTH / 2 - 10);
     y = Math.max(y, BOX_HEIGHT / 2 + 10);
