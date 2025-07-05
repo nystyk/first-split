@@ -1,7 +1,7 @@
 // --- UI CONTROLLER ---
 
 /**
- * REVISED: Renders the legend with interactive toggles for events and thematic overlays.
+ * REVISED: Renders the legend, handles default states, and cleans up irrelevant overlays.
  */
 function renderLegend(period) {
     const legendPanel = state.dom.legendPanel;
@@ -26,20 +26,34 @@ function renderLegend(period) {
     });
     eventTypesHTML += `</div>`;
     
-    // --- Thematic Overlays Toggles ---
-    let thematicHTML = `<div class="legend-section"><h4>Suprapuneri Tematice</h4>`;
-    for (const key in thematicData) {
-        const item = thematicData[key];
-        const isChecked = state.overlayFilters[key];
-        thematicHTML += `
-            <label class="legend-toggle" for="toggle-overlay-${key}">
-                <input type="checkbox" id="toggle-overlay-${key}" data-type="${key}" data-filter-type="overlay" ${isChecked ? 'checked' : ''}>
-                <span class="checkbox-visual"><span class="checkmark"></span></span>
-                <span>${item.label}</span>
-            </label>
-        `;
+    // --- Thematic Overlays Toggles (Context-Sensitive) ---
+    let thematicHTML = '';
+    const relevantOverlays = Object.keys(thematicData).filter(key => thematicData[key].relevantYears.includes(period));
+    
+    // FIX: Set relevant overlays to be ON by default. We check if the state is undefined
+    // to only set it the first time the user enters a relevant year for that session.
+    relevantOverlays.forEach(key => {
+        if (state.overlayFilters[key] === undefined) {
+             state.overlayFilters[key] = true;
+        }
+    });
+
+    if (relevantOverlays.length > 0) {
+        thematicHTML = `<div class="legend-section"><h4>Suprapuneri Tematice</h4>`;
+        relevantOverlays.forEach(key => {
+            const item = thematicData[key];
+            const isChecked = state.overlayFilters[key]; // This will now be true by default
+            thematicHTML += `
+                <label class="legend-toggle" for="toggle-overlay-${key}">
+                    <input type="checkbox" id="toggle-overlay-${key}" data-type="${key}" data-filter-type="overlay" ${isChecked ? 'checked' : ''}>
+                    <span class="checkbox-visual"><span class="checkmark"></span></span>
+                    <span>${item.label}</span>
+                </label>
+            `;
+        });
+        thematicHTML += `</div>`;
     }
-    thematicHTML += `</div>`;
+
 
     // --- Territorial Control Section ---
     let allegianceHTML = '';
@@ -70,6 +84,13 @@ function renderLegend(period) {
             }
         });
     });
+
+    // FIX: Automatically hide overlays that are no longer relevant for the current year
+    for (const key in state.thematicLayers) {
+        if (!relevantOverlays.includes(key) || !state.overlayFilters[key]) {
+             renderThematicOverlays();
+        }
+    }
 }
 
 
@@ -146,22 +167,12 @@ function renderFilterBar() {
 }
 
 // --- MODAL MANAGEMENT ---
-
-/**
- * Shows the main event modal with details.
- */
 function showModal(event) {
     state.currentEvent = event;
     const modal = state.dom.modal;
     document.getElementById('modalTitle').textContent = event.title;
     document.getElementById('modalDescription').textContent = event.description;
     document.getElementById('modalImage').src = event.imageUrl;
-    
-    document.getElementById('aiContent').style.display = 'none';
-    document.getElementById('aiResult').textContent = '';
-    document.getElementById('deeperDiveBtn').disabled = false;
-    document.getElementById('personalStoryBtn').disabled = false;
-
     modal.classList.remove('hidden');
 }
 
@@ -170,10 +181,6 @@ function hideModal() {
     state.currentEvent = null;
 }
 
-
-/**
- * Shows the context modal for pre-war or post-war periods.
- */
 function showContextModal(key) {
     const data = contextData[key];
     if (!data) {
@@ -187,53 +194,4 @@ function showContextModal(key) {
 
 function hideContextModal() {
     state.dom.contextModal.classList.add('hidden');
-}
-
-// --- AI Interaction Logic ---
-async function getAiResponse(prompt) {
-    console.log("Sending prompt to AI:", prompt);
-    await new Promise(resolve => setTimeout(resolve, 1500)); 
-    
-    if (prompt.includes("personală")) {
-        return "Într-un sat mic de lângă Varșovia, în 1944, tânăra Elżbieta asculta cu teamă zgomotul luptelor. Fratele ei, un membru al Armatei Teritoriale, plecase să lupte în Revoltă. Zilele treceau încet, marcate de speranță și frică. Într-o seară, un soldat rănit i-a bătut la ușă, aducând vestea că fratele ei a căzut eroic. Deși zdrobită de durere, Elżbieta a găsit puterea de a-l îngriji pe soldat, devenind un simbol al rezistenței tăcute a poporului polonez.";
-    }
-    return "Analiza AI indică faptul că acest eveniment a fost un punct de cotitură strategic, modificând echilibrul de putere în regiune. Consecințele pe termen lung au inclus realinieri geopolitice și un impact economic semnificativ, care a influențat deciziile ulterioare ale ambelor tabere. Factorii cheie au fost logistica superioară și utilizarea inovatoare a noilor tehnologii militare.";
-}
-
-document.getElementById('deeperDiveBtn').addEventListener('click', async () => {
-    if (!state.currentEvent) return;
-    const prompt = `Oferă o analiză aprofundată a evenimentului: ${state.currentEvent.title}.`;
-    handleAiRequest(prompt);
-});
-
-document.getElementById('personalStoryBtn').addEventListener('click', async () => {
-    if (!state.currentEvent) return;
-    const prompt = `Creează o poveste personală, emoționantă, din perspectiva unui civil afectat de evenimentul: ${state.currentEvent.title}.`;
-    handleAiRequest(prompt);
-});
-
-async function handleAiRequest(prompt) {
-    const aiContent = document.getElementById('aiContent');
-    const loader = document.getElementById('loader');
-    const resultP = document.getElementById('aiResult');
-    const diveBtn = document.getElementById('deeperDiveBtn');
-    const storyBtn = document.getElementById('personalStoryBtn');
-
-    aiContent.style.display = 'block';
-    loader.style.display = 'flex';
-    resultP.textContent = '';
-    diveBtn.disabled = true;
-    storyBtn.disabled = true;
-
-    try {
-        const response = await getAiResponse(prompt);
-        resultP.textContent = response;
-    } catch (error) {
-        console.error("AI Error:", error);
-        resultP.textContent = "Ne pare rău, a apărut o eroare la generarea răspunsului.";
-    } finally {
-        loader.style.display = 'none';
-        diveBtn.disabled = false;
-        storyBtn.disabled = false;
-    }
 }

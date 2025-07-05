@@ -342,11 +342,13 @@ function findHoverBoxPosition(dotData, mapRect) {
 }
 
 /**
- * NEW: Renders thematic overlays based on the current filter state.
+ * REVISED: Renders thematic overlays based on the current filter state and year.
  */
 function renderThematicOverlays() {
     for (const key in thematicData) {
-        const shouldBeVisible = state.overlayFilters[key];
+        // Check if the overlay is toggled ON AND is relevant for the current year
+        const isRelevant = thematicData[key].relevantYears.includes(state.currentPeriod);
+        const shouldBeVisible = state.overlayFilters[key] && isRelevant;
         const layerExists = state.thematicLayers[key];
 
         if (shouldBeVisible && !layerExists) {

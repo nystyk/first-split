@@ -6,6 +6,8 @@ const thematicData = {
     atlanticWall: {
         label: 'Zidul Atlanticului',
         type: 'polyline',
+        // NEW: Specifies which years this overlay is relevant for.
+        relevantYears: ['1942', '1943', '1944'],
         // Coordinates from northern Norway, down the coast of Denmark, Netherlands, Belgium, and France to the Spanish border.
         coords: [
             [70.6, 23.9], [68.0, 13.5], [63.4, 8.5], [62.2, 5.5], [57.7, 8.3],
