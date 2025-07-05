@@ -87,7 +87,7 @@ function getStyleForAllegiance(allegiance) {
 }
 
 /**
- * REVISED: Updates the colors of the countries on the map with a fade-through-neutral animation.
+ * Updates the colors of the countries on the map with a fade-through-neutral animation.
  */
 function updateMapColors(newPeriod, oldPeriod) {
     const oldControl = territorialData[oldPeriod];
@@ -100,20 +100,15 @@ function updateMapColors(newPeriod, oldPeriod) {
 
         if (oldControl) {
             const oldAllegiance = getAllegiance(countryName, oldControl);
-            // Only animate if the allegiance has actually changed
             if (oldAllegiance !== newAllegiance) {
-                // Step 1: Fade to neutral color first
                 layer.setStyle(getStyleForAllegiance('neutral'));
-                // Step 2: After a delay, fade to the new, correct color
                 setTimeout(() => {
                     layer.setStyle(getStyleForAllegiance(newAllegiance));
-                }, 400); // This delay allows the first transition to be visible
+                }, 400);
             } else {
-                // If allegiance is the same, just ensure the correct color is set instantly
                 layer.setStyle(getStyleForAllegiance(newAllegiance));
             }
         } else {
-            // For the initial load, set the color directly without animation
             layer.setStyle(getStyleForAllegiance(newAllegiance));
         }
     });
@@ -344,4 +339,28 @@ function findHoverBoxPosition(dotData, mapRect) {
     y = Math.min(y, mapRect.height - BOX_HEIGHT / 2 - 10);
     
     return { x, y };
+}
+
+/**
+ * NEW: Renders thematic overlays based on the current filter state.
+ */
+function renderThematicOverlays() {
+    for (const key in thematicData) {
+        const shouldBeVisible = state.overlayFilters[key];
+        const layerExists = state.thematicLayers[key];
+
+        if (shouldBeVisible && !layerExists) {
+            // Add the layer to the map
+            const overlay = thematicData[key];
+            if (overlay.type === 'polyline') {
+                const polyline = L.polyline(overlay.coords, overlay.style);
+                polyline.addTo(state.map);
+                state.thematicLayers[key] = polyline;
+            }
+        } else if (!shouldBeVisible && layerExists) {
+            // Remove the layer from the map
+            state.thematicLayers[key].remove();
+            delete state.thematicLayers[key];
+        }
+    }
 }

@@ -1,27 +1,23 @@
 // --- UI CONTROLLER ---
 
 /**
- * NEW: Renders the legend with interactive toggles for event types.
- * @param {string} period - The current period.
+ * REVISED: Renders the legend with interactive toggles for events and thematic overlays.
  */
 function renderLegend(period) {
     const legendPanel = state.dom.legendPanel;
     
-    // Define the event types to be displayed in the legend
+    // --- Event Toggles ---
     const eventTypes = [
         { type: 'major', label: 'Eveniment Major', symbolHtml: '<div class="legend-symbol-label"></div>' },
         { type: 'atrocity', label: 'Locul Atrocității', symbolHtml: '<div class="atrocity-dot visible"></div>' },
         { type: 'minor', label: 'Eveniment Minor', symbolHtml: '<div class="minor-event-dot visible"></div>' }
     ];
-
     let eventTypesHTML = `<div class="legend-section"><h4>Legenda Evenimente</h4>`;
-    
-    // Create a toggle for each event type
     eventTypes.forEach(item => {
         const isChecked = state.eventFilters[item.type];
         eventTypesHTML += `
-            <label class="legend-toggle" for="toggle-${item.type}">
-                <input type="checkbox" id="toggle-${item.type}" data-type="${item.type}" ${isChecked ? 'checked' : ''}>
+            <label class="legend-toggle" for="toggle-event-${item.type}">
+                <input type="checkbox" id="toggle-event-${item.type}" data-type="${item.type}" data-filter-type="event" ${isChecked ? 'checked' : ''}>
                 <span class="checkbox-visual"><span class="checkmark"></span></span>
                 <span>${item.label}</span>
                 <div class="legend-symbol">${item.symbolHtml}</div>
@@ -30,7 +26,22 @@ function renderLegend(period) {
     });
     eventTypesHTML += `</div>`;
     
-    // Generate HTML for territorial control based on the period
+    // --- Thematic Overlays Toggles ---
+    let thematicHTML = `<div class="legend-section"><h4>Suprapuneri Tematice</h4>`;
+    for (const key in thematicData) {
+        const item = thematicData[key];
+        const isChecked = state.overlayFilters[key];
+        thematicHTML += `
+            <label class="legend-toggle" for="toggle-overlay-${key}">
+                <input type="checkbox" id="toggle-overlay-${key}" data-type="${key}" data-filter-type="overlay" ${isChecked ? 'checked' : ''}>
+                <span class="checkbox-visual"><span class="checkmark"></span></span>
+                <span>${item.label}</span>
+            </label>
+        `;
+    }
+    thematicHTML += `</div>`;
+
+    // --- Territorial Control Section ---
     let allegianceHTML = '';
     if (period !== 'pre-war' && period !== 'post-war') {
         allegianceHTML = `<div class="legend-section"><h4>Control Teritorial (${period})</h4>`;
@@ -40,17 +51,23 @@ function renderLegend(period) {
         allegianceHTML += `<div class="legend-item"><div class="legend-color neutral-color"></div><span>Zone Neutre</span></div></div>`;
     }
 
-    legendPanel.innerHTML = eventTypesHTML + allegianceHTML;
+    legendPanel.innerHTML = eventTypesHTML + thematicHTML + allegianceHTML;
     legendPanel.classList.remove('hidden');
 
-    // Add event listeners to the new checkboxes
+    // --- Add Event Listeners ---
     document.querySelectorAll('.legend-toggle input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', (e) => {
-            const eventType = e.target.dataset.type;
+            const filterType = e.target.dataset.filterType;
+            const type = e.target.dataset.type;
             const isVisible = e.target.checked;
-            state.eventFilters[eventType] = isVisible;
-            // Re-render the map events to reflect the new filter state
-            renderMapEvents(state.currentPeriod); 
+
+            if (filterType === 'event') {
+                state.eventFilters[type] = isVisible;
+                renderMapEvents(state.currentPeriod); 
+            } else if (filterType === 'overlay') {
+                state.overlayFilters[type] = isVisible;
+                renderThematicOverlays();
+            }
         });
     });
 }
@@ -58,7 +75,6 @@ function renderLegend(period) {
 
 /**
  * Updates the visual state of the timeline slider and its tooltip.
- * @param {string} periodIndex - The index of the current period.
  */
 function updateSliderVisuals(periodIndex) {
     const slider = state.dom.timelineSlider;
@@ -133,7 +149,6 @@ function renderFilterBar() {
 
 /**
  * Shows the main event modal with details.
- * @param {object} event - The event object to display.
  */
 function showModal(event) {
     state.currentEvent = event;
@@ -158,7 +173,6 @@ function hideModal() {
 
 /**
  * Shows the context modal for pre-war or post-war periods.
- * @param {string} key - The period key ('pre-war' or 'post-war').
  */
 function showContextModal(key) {
     const data = contextData[key];

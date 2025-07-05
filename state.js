@@ -6,12 +6,17 @@ const state = {
     currentEvent: null,
     geoJsonLayer: null,
     currentPeriod: 'pre-war',
-    // NEW: Filters for event visibility
     eventFilters: {
         major: true,
         minor: true,
         atrocity: true
     },
+    // NEW: Filters for thematic overlays
+    overlayFilters: {
+        atlanticWall: false
+    },
+    // NEW: To hold references to the active overlay layers
+    thematicLayers: {},
 
     // Cached DOM elements
     dom: {
@@ -19,6 +24,8 @@ const state = {
         dotsContainer: null,
         labelsContainer: null,
         lineCanvas: null,
+        hoverBoxContainer: null,
+        hoverLineCanvas: null,
         modal: null,
         closeModalBtn: null,
         contextModal: null,

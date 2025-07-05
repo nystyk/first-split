@@ -69,7 +69,7 @@
 .occupied-color { background-color: #d16d6d; }
 .neutral-color { background-color: #5a5a5a; }
 
-/* --- NEW: Styles for Legend Toggles --- */
+/* --- Styles for Legend Toggles --- */
 .legend-toggle {
     display: flex;
     align-items: center;
@@ -247,4 +247,18 @@
     background-color: rgba(40,40,40,0.7);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* --- NEW: Styles for Thematic Overlays --- */
+.thematic-line {
+    fill: none;
+    stroke-width: 3px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.7;
+}
+
+.atlantic-wall {
+    stroke: #e74c3c;
+    stroke-dasharray: 8, 8;
 }
