@@ -5,9 +5,10 @@
 /**
  * Handles the logic for changing the timeline period.
  * @param {string} selectedPeriod - The new period to display (e.g., '1941').
+ * @param {boolean} force - Whether to force the animation even if the period hasn't changed.
  */
-function handlePeriodChange(selectedPeriod) {
-    if (selectedPeriod === state.currentPeriod) return;
+function handlePeriodChange(selectedPeriod, force) {
+    if (!force && selectedPeriod === state.currentPeriod) return;
 
     const oldPeriod = state.currentPeriod;
     state.currentPeriod = selectedPeriod;

@@ -242,6 +242,8 @@ function addAestheticTileLayer() {
     return aestheticTileLayer;
 }
 
+let storyModeCleanupInterval = null;
+
 function setStoryModeActive(active) {
     storyState.active = active;
     
@@ -262,11 +264,80 @@ function setStoryModeActive(active) {
         forwardBtn.classList.remove('disabled');
         timelineWrapper.classList.add('story-mode-active');
         sliderLabels.classList.add('story-mode-active');
+        // Disable and grey out all event toggles (major, atrocity, minor)
+        setTimeout(() => {
+            ["major", "atrocity", "minor"].forEach(type => {
+                const cb = document.getElementById(`toggle-event-${type}`);
+                if (cb) {
+                    cb.disabled = true;
+                    cb.parentElement.classList.add("legend-toggle-disabled");
+                }
+            });
+            if (window.updateDotsHoverability) window.updateDotsHoverability();
+        }, 0);
+        if (window.hoverState) hoverState.pinned = true;
+        // Start periodic cleanup to remove stray hover boxes/lines
+        if (storyModeCleanupInterval) clearInterval(storyModeCleanupInterval);
+        storyModeCleanupInterval = setInterval(() => {
+            // Only keep the persistent context box/line for the focused event
+            const event = storyState.events && storyState.events[storyState.currentEventIndex];
+            const eventId = event ? (typeof getEventId === 'function' ? getEventId(event) : window.getEventId(event)) : null;
+            document.querySelectorAll('.event-hover-box').forEach(box => {
+                if (!eventId || !box.textContent.includes(event.title)) box.remove();
+            });
+            document.querySelectorAll('.hover-connector-line').forEach(line => {
+                // No reliable way to check, so just keep the first one
+                if (line !== document.querySelector('.hover-connector-line')) line.remove();
+            });
+        }, 200);
     } else {
         backBtn.classList.add('disabled');
         forwardBtn.classList.add('disabled');
         timelineWrapper.classList.remove('story-mode-active');
         sliderLabels.classList.remove('story-mode-active');
+        // Re-enable and un-grey all event toggles
+        setTimeout(() => {
+            ["major", "atrocity", "minor"].forEach(type => {
+                const cb = document.getElementById(`toggle-event-${type}`);
+                if (cb) {
+                    cb.disabled = false;
+                    cb.parentElement.classList.remove("legend-toggle-disabled");
+                }
+            });
+            if (window.updateDotsHoverability) window.updateDotsHoverability();
+        }, 0);
+        if (window.hoverState) hoverState.pinned = false;
+        // Remove any persistent context box and line
+        const box = document.querySelector('.event-hover-box');
+        if (box) box.remove();
+        const line = document.querySelector('.hover-connector-line');
+        if (line) line.remove();
+        document.querySelectorAll('.story-context-box').forEach(box => box.remove());
+        document.querySelectorAll('.story-context-line').forEach(line => line.remove());
+        // Stop the periodic cleanup
+        if (storyModeCleanupInterval) clearInterval(storyModeCleanupInterval);
+        storyModeCleanupInterval = null;
+        // Always call handlePeriodChange for the current period, with force=true, and set state.currentPeriod = null to guarantee animation
+        state.currentPeriod = null;
+        const period = config.periods[state.dom.timelineSlider.value];
+        if (typeof handlePeriodChange === 'function') {
+            handlePeriodChange(period, true);
+        } else if (window.handlePeriodChange) {
+            window.handlePeriodChange(period, true);
+        }
+        // After animation completes, remove any lingering hover box/line
+        setTimeout(() => {
+            const box = document.querySelector('.event-hover-box');
+            if (box) box.remove();
+            const line = document.querySelector('.hover-connector-line');
+            if (line) line.remove();
+        }, 1200); // Wait for animation and event rendering
+        // Reset story mode button to play state
+        const playIcon = document.getElementById('story-play-icon');
+        if (playIcon) {
+            playIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-6.518-3.748A1 1 0 007 8.118v7.764a1 1 0 001.234.97l6.518-1.87A1 1 0 0016 13.882V10.12a1 1 0 00-1.248-.952z" />';
+        }
+        return;
     }
     
     // Change play/pause icon
@@ -327,90 +398,54 @@ function setStoryModeActive(active) {
 
 function showEventInStoryMode(event) {
     if (!event) return;
-    
-    // Add aesthetic tiles during animation
     addAestheticTileLayer();
-    
-    // Fly to event location
     state.map.flyTo([event.lat, event.lng], 6, {
         duration: 2,
         easeLinearity: 0.25
     });
-    
-    // Disable all other event dots and show context box for focused event
-    setTimeout(() => {
-        // Try to find the dot for this event
-        const eventId = typeof getEventId === 'function' ? getEventId(event) : window.getEventId(event);
-        const dot = document.querySelector(`.event-element[data-event-id="${eventId}"]`);
-        
-        if (dot) {
-            // Disable all other dots
-            document.querySelectorAll('.event-element').forEach(otherDot => {
-                if (otherDot !== dot) {
-                    otherDot.style.pointerEvents = 'none';
-                    otherDot.style.opacity = '0.3';
-                }
-            });
-            
-            // Enable the focused dot
-            dot.style.pointerEvents = 'auto';
-            dot.style.opacity = '1';
-            
-            // Show the context box and keep it visible
-            if (typeof showHoverBox === 'function') {
-                showHoverBox(event, dot);
-            } else if (window.showHoverBox) {
-                window.showHoverBox(event, dot);
-            }
-            
-            // Prevent the context box from hiding on mouse leave
-            const hoverBox = document.querySelector('.event-hover-box');
-            if (hoverBox) {
-                hoverBox.style.pointerEvents = 'auto';
-                // Remove the mouseleave event that would hide the box
-                const newHoverBox = hoverBox.cloneNode(true);
-                hoverBox.parentNode.replaceChild(newHoverBox, hoverBox);
-            }
-        } else {
-            // If not found, force re-render events and try again
-            if (typeof renderMapEvents === 'function') {
-                renderMapEvents(storyState.period, true);
-            } else if (window.renderMapEvents) {
-                window.renderMapEvents(storyState.period, true);
-            }
-            setTimeout(() => {
-                const dotRetry = document.querySelector(`.event-element[data-event-id="${eventId}"]`);
-                if (dotRetry) {
-                    // Disable all other dots
-                    document.querySelectorAll('.event-element').forEach(otherDot => {
-                        if (otherDot !== dotRetry) {
-                            otherDot.style.pointerEvents = 'none';
-                            otherDot.style.opacity = '0.3';
-                        }
-                    });
-                    
-                    // Enable the focused dot
-                    dotRetry.style.pointerEvents = 'auto';
-                    dotRetry.style.opacity = '1';
-                    
-                    if (typeof showHoverBox === 'function') {
-                        showHoverBox(event, dotRetry);
-                    } else if (window.showHoverBox) {
-                        window.showHoverBox(event, dotRetry);
+    // After pan, update dot positions and show context box
+    state.map.once('moveend', () => {
+        if (typeof updateDotPositions === 'function') updateDotPositions();
+        setTimeout(() => {
+            // Remove ALL previous hover boxes and lines before creating the persistent one
+            document.querySelectorAll('.event-hover-box').forEach(box => box.remove());
+            document.querySelectorAll('.hover-connector-line').forEach(line => line.remove());
+            // Try to find the dot for this event
+            const eventId = typeof getEventId === 'function' ? getEventId(event) : window.getEventId(event);
+            const dot = document.querySelector(`.event-element[data-event-id="${eventId}"]`);
+            console.log('[StoryMode] Focused dot:', dot);
+            if (dot) {
+                document.querySelectorAll('.event-element').forEach(otherDot => {
+                    if (otherDot !== dot) {
+                        otherDot.style.pointerEvents = 'none';
+                        otherDot.style.opacity = '0.3';
                     }
-                    
-                    // Prevent the context box from hiding on mouse leave
+                });
+                dot.style.pointerEvents = 'auto';
+                dot.style.opacity = '1';
+                if (window.hoverState) hoverState.pinned = true;
+                // Use the persistent context box in story mode
+                if (typeof showPersistentContextBox === 'function') {
+                    showPersistentContextBox(event, dot);
+                } else if (window.showPersistentContextBox) {
+                    window.showPersistentContextBox(event, dot);
+                }
+                setTimeout(() => {
                     const hoverBox = document.querySelector('.event-hover-box');
                     if (hoverBox) {
                         hoverBox.style.pointerEvents = 'auto';
-                        // Remove the mouseleave event that would hide the box
+                        hoverBox.style.display = 'block';
+                        hoverBox.style.opacity = '1';
+                        hoverBox.classList.add('visible');
                         const newHoverBox = hoverBox.cloneNode(true);
                         hoverBox.parentNode.replaceChild(newHoverBox, hoverBox);
                     }
-                }
-            }, 300);
-        }
-    }, 1000); // Wait for fly animation to complete
+                }, 50);
+            } else {
+                console.warn('[StoryMode] No dot found for event', eventId);
+            }
+        }, 100);
+    });
 }
 
 function showEventDialog(event) {

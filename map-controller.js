@@ -278,55 +278,47 @@ function createEventDot(event, id) {
     dot.dataset.eventId = id;
     dot.title = event.title;
     dot.addEventListener('click', () => showModal(event));
-
-    dot.addEventListener('mouseenter', () => showHoverBox(event, dot));
-    dot.addEventListener('mouseleave', hideHoverBox);
-    
+    // Only add hover listeners if not in story mode
+    if (!(window.storyState && storyState.active)) {
+        dot.addEventListener('mouseenter', () => showHoverBox(event, dot));
+        dot.addEventListener('mouseleave', hideHoverBox);
+    }
     return dot;
 }
 
 /**
  * Creates and displays a hover box and its connecting line.
  */
-function showHoverBox(event, dotElement) {
+function showHoverBox(event, dotElement, options = {}) {
+    // Global guard: do not show hover box in story mode unless forced
+    if (window.storyState && storyState.active && !options.force) return;
     clearTimeout(hoverState.timeout);
-
     if (hoverState.activeElements.box) {
         hideHoverBox(true);
     }
-
     const box = document.createElement('div');
     box.className = `event-hover-box ${event.type}`;
     box.innerHTML = `<img src="${event.imageUrl}" alt="${event.title}"><div class="title">${event.title}</div>`;
-    
     const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     line.setAttribute('class', 'hover-connector-line');
-
     box.addEventListener('mouseenter', () => clearTimeout(hoverState.timeout));
     box.addEventListener('mouseleave', hideHoverBox);
-    
     hoverState.activeElements = { box, line };
-
     state.dom.hoverBoxContainer.appendChild(box);
     state.dom.hoverLineCanvas.appendChild(line);
-
     const mapRect = state.dom.mapEl.getBoundingClientRect();
     const dotRect = dotElement.getBoundingClientRect();
     const dotCenter = {
         x: dotRect.left - mapRect.left + (dotRect.width / 2),
         y: dotRect.top - mapRect.top + (dotRect.height / 2)
     };
-
     const boxPosition = findHoverBoxPosition(dotCenter, mapRect);
-
     line.setAttribute('x1', dotCenter.x);
     line.setAttribute('y1', dotCenter.y);
     line.setAttribute('x2', boxPosition.x);
     line.setAttribute('y2', boxPosition.y);
-    
     box.style.left = `${boxPosition.x}px`;
     box.style.top = `${boxPosition.y}px`;
-    
     requestAnimationFrame(() => {
         box.classList.add('visible');
         line.classList.add('visible');
@@ -408,7 +400,70 @@ function renderThematicOverlays() {
     }
 }
 
+// Helper to update all dots' hoverability
+function updateDotsHoverability() {
+    const dots = document.querySelectorAll('.event-element');
+    if (window.storyState && storyState.active) {
+        dots.forEach(dot => {
+            dot.classList.add('story-mode-active-dot-disable');
+            // Remove all event listeners by replacing with a clone
+            const clone = dot.cloneNode(true);
+            clone.classList.add('story-mode-active-dot-disable');
+            dot.replaceWith(clone);
+        });
+    } else {
+        dots.forEach(dot => {
+            dot.classList.remove('story-mode-active-dot-disable');
+            // Re-add listeners if needed
+            const eventId = dot.dataset.eventId;
+            const event = (window.allEventsData && window.allEventsData[state.currentPeriod])
+                ? window.allEventsData[state.currentPeriod].find(e => getEventId(e) === eventId)
+                : null;
+            if (event) {
+                dot.onmouseenter = () => showHoverBox(event, dot);
+                dot.onmouseleave = hideHoverBox;
+            }
+        });
+    }
+}
+
 // Export functions globally for story mode functionality
 window.getEventId = getEventId;
 window.showHoverBox = showHoverBox;
 window.renderMapEvents = renderMapEvents;
+window.updateDotsHoverability = updateDotsHoverability;
+
+function showPersistentContextBox(event, dotElement) {
+    // Remove any previous persistent context box/line
+    document.querySelectorAll('.story-context-box').forEach(box => box.remove());
+    document.querySelectorAll('.story-context-line').forEach(line => line.remove());
+    // Create the persistent box
+    const box = document.createElement('div');
+    box.className = `story-context-box ${event.type}`;
+    box.innerHTML = `<img src="${event.imageUrl}" alt="${event.title}"><div class="title">${event.title}</div>`;
+    // Create the persistent line
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('class', 'story-context-line');
+    // Attach to DOM
+    state.dom.hoverBoxContainer.appendChild(box);
+    state.dom.hoverLineCanvas.appendChild(line);
+    // Positioning logic (same as hover box)
+    const mapRect = state.dom.mapEl.getBoundingClientRect();
+    const dotRect = dotElement.getBoundingClientRect();
+    const dotCenter = {
+        x: dotRect.left - mapRect.left + (dotRect.width / 2),
+        y: dotRect.top - mapRect.top + (dotRect.height / 2)
+    };
+    const boxPosition = findHoverBoxPosition(dotCenter, mapRect);
+    line.setAttribute('x1', dotCenter.x);
+    line.setAttribute('y1', dotCenter.y);
+    line.setAttribute('x2', boxPosition.x);
+    line.setAttribute('y2', boxPosition.y);
+    box.style.left = `${boxPosition.x}px`;
+    box.style.top = `${boxPosition.y}px`;
+    requestAnimationFrame(() => {
+        box.classList.add('visible');
+        line.classList.add('visible');
+    });
+}
+window.showPersistentContextBox = showPersistentContextBox;
