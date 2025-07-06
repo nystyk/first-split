@@ -488,6 +488,9 @@ function navigateToNextEvent() {
     if (existingHoverLine) {
         existingHoverLine.remove();
     }
+    // Also clear any story context boxes/lines immediately
+    document.querySelectorAll('.story-context-box').forEach(box => box.remove());
+    document.querySelectorAll('.story-context-line').forEach(line => line.remove());
     
     storyState.currentEventIndex++;
     
@@ -533,6 +536,9 @@ function navigateToPreviousEvent() {
     if (existingHoverLine) {
         existingHoverLine.remove();
     }
+    // Also clear any story context boxes/lines immediately
+    document.querySelectorAll('.story-context-box').forEach(box => box.remove());
+    document.querySelectorAll('.story-context-line').forEach(line => line.remove());
     
     storyState.currentEventIndex--;
     
