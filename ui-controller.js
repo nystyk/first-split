@@ -220,6 +220,28 @@ function getEventsForPeriod(period) {
     return allEventsData[period].sort((a, b) => a.year - b.year);
 }
 
+/**
+ * Helper function to add aesthetic tile layer during map animations
+ */
+function addAestheticTileLayer() {
+    const aestheticTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '© OpenStreetMap contributors, © CARTO',
+        subdomains: 'abcd',
+        maxZoom: 19
+    });
+    
+    aestheticTileLayer.addTo(state.map);
+    
+    // Remove the aesthetic layer after animation
+    setTimeout(() => {
+        if (aestheticTileLayer._map) {
+            aestheticTileLayer.remove();
+        }
+    }, 2500); // Slightly longer than typical animation duration
+    
+    return aestheticTileLayer;
+}
+
 function setStoryModeActive(active) {
     storyState.active = active;
     
@@ -277,34 +299,77 @@ function setStoryModeActive(active) {
             storyState.memory[storyState.period] = storyState.currentEventIndex;
         }
         
+        // Restore all event dots to normal state
+        document.querySelectorAll('.event-element').forEach(dot => {
+            dot.style.pointerEvents = 'auto';
+            dot.style.opacity = '1';
+        });
+        
+        // Hide any open event dialogs and hover boxes
+        hideEventDialog();
+        const hoverBox = document.querySelector('.event-hover-box');
+        if (hoverBox) {
+            hoverBox.remove();
+        }
+        const hoverLine = document.querySelector('.hover-connector-line');
+        if (hoverLine) {
+            hoverLine.remove();
+        }
+        
         // Return to normal view with smooth animation
+        addAestheticTileLayer(); // Add aesthetic tiles during animation
         state.map.flyTo([20, 0], 2, {
             duration: 1.5,
             easeLinearity: 0.25
         });
-        
-        // Hide any open event dialogs
-        hideEventDialog();
     }
 }
 
 function showEventInStoryMode(event) {
     if (!event) return;
+    
+    // Add aesthetic tiles during animation
+    addAestheticTileLayer();
+    
     // Fly to event location
     state.map.flyTo([event.lat, event.lng], 6, {
         duration: 2,
         easeLinearity: 0.25
     });
-    // Show only the hover context box (not modal)
+    
+    // Disable all other event dots and show context box for focused event
     setTimeout(() => {
         // Try to find the dot for this event
         const eventId = typeof getEventId === 'function' ? getEventId(event) : window.getEventId(event);
         const dot = document.querySelector(`.event-element[data-event-id="${eventId}"]`);
+        
         if (dot) {
+            // Disable all other dots
+            document.querySelectorAll('.event-element').forEach(otherDot => {
+                if (otherDot !== dot) {
+                    otherDot.style.pointerEvents = 'none';
+                    otherDot.style.opacity = '0.3';
+                }
+            });
+            
+            // Enable the focused dot
+            dot.style.pointerEvents = 'auto';
+            dot.style.opacity = '1';
+            
+            // Show the context box and keep it visible
             if (typeof showHoverBox === 'function') {
                 showHoverBox(event, dot);
             } else if (window.showHoverBox) {
                 window.showHoverBox(event, dot);
+            }
+            
+            // Prevent the context box from hiding on mouse leave
+            const hoverBox = document.querySelector('.event-hover-box');
+            if (hoverBox) {
+                hoverBox.style.pointerEvents = 'auto';
+                // Remove the mouseleave event that would hide the box
+                const newHoverBox = hoverBox.cloneNode(true);
+                hoverBox.parentNode.replaceChild(newHoverBox, hoverBox);
             }
         } else {
             // If not found, force re-render events and try again
@@ -316,10 +381,31 @@ function showEventInStoryMode(event) {
             setTimeout(() => {
                 const dotRetry = document.querySelector(`.event-element[data-event-id="${eventId}"]`);
                 if (dotRetry) {
+                    // Disable all other dots
+                    document.querySelectorAll('.event-element').forEach(otherDot => {
+                        if (otherDot !== dotRetry) {
+                            otherDot.style.pointerEvents = 'none';
+                            otherDot.style.opacity = '0.3';
+                        }
+                    });
+                    
+                    // Enable the focused dot
+                    dotRetry.style.pointerEvents = 'auto';
+                    dotRetry.style.opacity = '1';
+                    
                     if (typeof showHoverBox === 'function') {
                         showHoverBox(event, dotRetry);
                     } else if (window.showHoverBox) {
                         window.showHoverBox(event, dotRetry);
+                    }
+                    
+                    // Prevent the context box from hiding on mouse leave
+                    const hoverBox = document.querySelector('.event-hover-box');
+                    if (hoverBox) {
+                        hoverBox.style.pointerEvents = 'auto';
+                        // Remove the mouseleave event that would hide the box
+                        const newHoverBox = hoverBox.cloneNode(true);
+                        hoverBox.parentNode.replaceChild(newHoverBox, hoverBox);
                     }
                 }
             }, 300);
@@ -358,6 +444,16 @@ function hideEventDialog() {
 function navigateToNextEvent() {
     if (!storyState.active || storyState.events.length === 0) return;
     
+    // Clear any existing hover boxes before navigating
+    const existingHoverBox = document.querySelector('.event-hover-box');
+    if (existingHoverBox) {
+        existingHoverBox.remove();
+    }
+    const existingHoverLine = document.querySelector('.hover-connector-line');
+    if (existingHoverLine) {
+        existingHoverLine.remove();
+    }
+    
     storyState.currentEventIndex++;
     
     if (storyState.currentEventIndex >= storyState.events.length) {
@@ -392,6 +488,16 @@ function navigateToNextEvent() {
 
 function navigateToPreviousEvent() {
     if (!storyState.active || storyState.events.length === 0) return;
+    
+    // Clear any existing hover boxes before navigating
+    const existingHoverBox = document.querySelector('.event-hover-box');
+    if (existingHoverBox) {
+        existingHoverBox.remove();
+    }
+    const existingHoverLine = document.querySelector('.hover-connector-line');
+    if (existingHoverLine) {
+        existingHoverLine.remove();
+    }
     
     storyState.currentEventIndex--;
     

@@ -14,23 +14,47 @@ function handlePeriodChange(selectedPeriod) {
     const events = allEventsData[selectedPeriod] || [];
 
     // Clear old elements and render new UI state
-    state.dom.dotsContainer.innerHTML = '';
     state.dom.labelsContainer.innerHTML = '';
     state.dom.lineCanvas.innerHTML = '';
+    
+    // Hide all existing dots before starting animation
+    const existingDots = state.dom.dotsContainer.querySelectorAll('.event-element');
+    existingDots.forEach(dot => {
+        dot.classList.add('hiding');
+        dot.addEventListener('transitionend', () => dot.remove(), { once: true });
+    });
+    
+    // Clear dots container after a short delay to ensure smooth transition
+    setTimeout(() => {
+        state.dom.dotsContainer.innerHTML = '';
+    }, 250);
+    
     renderLegend(selectedPeriod);
     showContextModal(selectedPeriod);
 
     const targetBounds = getBounds(events);
-
-    // Animate map transition
-    state.dom.mapEl.classList.add('is-transitioning');
-    updateMapColors(selectedPeriod, oldPeriod);
 
     const { flyToBounds: flyConfig } = config.map;
     let maxZoom = events.length <= 3 ? flyConfig.maxZoomSmall : (events.length > 10 ? flyConfig.maxZoomLarge : flyConfig.maxZoomMedium);
     let paddingTopLeft = events.length > 10 ? flyConfig.paddingLarge : flyConfig.paddingSmall;
     let paddingBottomRight = events.length > 10 ? flyConfig.paddingBottomLarge : flyConfig.paddingBottomSmall;
 
+    // Calculate target zoom level
+    const targetZoom = Math.min(maxZoom, state.map.getBoundsZoom(targetBounds, false, paddingTopLeft, paddingBottomRight));
+    
+    // Add aesthetic tile layer that matches the current style
+    const aestheticTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '© OpenStreetMap contributors, © CARTO',
+        subdomains: 'abcd',
+        maxZoom: 19
+    });
+    
+    // Add the tile layer to the map
+    aestheticTileLayer.addTo(state.map);
+    
+    // Start the animation immediately
+    updateMapColors(selectedPeriod, oldPeriod);
+    
     state.map.flyToBounds(targetBounds, {
         paddingTopLeft,
         paddingBottomRight,
@@ -38,9 +62,16 @@ function handlePeriodChange(selectedPeriod) {
         duration: flyConfig.duration
     });
 
+    // Wait for animation to complete and tiles to load
     state.map.once('moveend', () => {
-        state.dom.mapEl.classList.remove('is-transitioning');
-        setTimeout(() => renderMapEvents(selectedPeriod), 50);
+        // Wait a bit more for tiles to fully load
+        setTimeout(() => {
+            // Remove the aesthetic tile layer once the main tiles are loaded
+            aestheticTileLayer.remove();
+            
+            // Render events
+            setTimeout(() => renderMapEvents(selectedPeriod), 100);
+        }, 500);
     });
 }
 

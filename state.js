@@ -13,10 +13,11 @@ const state = {
     },
     // NEW: Filters for thematic overlays
     overlayFilters: {
-        atlanticWall: false
+        atlanticWall: true
     },
     // NEW: To hold references to the active overlay layers
     thematicLayers: {},
+
 
     // Cached DOM elements
     dom: {

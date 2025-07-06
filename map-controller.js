@@ -15,8 +15,13 @@ let hoverState = {
  */
 function initializeMap() {
     state.map = L.map('map', {
-        zoomControl: false, scrollWheelZoom: false, doubleClickZoom: false,
-        touchZoom: false, dragging: false, attributionControl: false,
+        zoomControl: false,
+        scrollWheelZoom: false,
+        doubleClickZoom: false,
+        touchZoom: false,
+        dragging: false,
+        attributionControl: false,
+        keyboard: false,
         worldCopyJump: true
     });
     state.map.setView(config.map.initialCenter, config.map.initialZoom);
@@ -49,6 +54,15 @@ function initializeMap() {
             timeout = setTimeout(() => func.apply(this, args), delay);
         };
     };
+    
+
+    
+    // Update dot positions when map moves
+    state.map.on('move', debounce(() => {
+        if (state.currentPeriod) {
+            updateDotPositions();
+        }
+    }, 16)); // ~60fps
     
     // Re-render on resize to ensure positions are correct
     window.addEventListener('resize', debounce(() => {
@@ -137,7 +151,7 @@ function getEventId(event) {
 }
 
 /**
- * Renders events by animating only the affected dots.
+ * Renders events by creating DOM elements positioned absolutely over the map.
  */
 function renderMapEvents(period, forceClear = false) {
     const { dom } = state;
@@ -197,6 +211,32 @@ function renderMapEvents(period, forceClear = false) {
     }
 }
 
+
+
+/**
+ * Updates the positions of all visible dots when the map moves.
+ */
+function updateDotPositions() {
+    const { dom } = state;
+    const events = allEventsData[state.currentPeriod] || [];
+    
+    const visibleEvents = events.filter(e => e.onMap !== false && state.eventFilters[e.type]);
+    const visibleEventIds = new Set(visibleEvents.map(getEventId));
+    
+    // Update positions of all visible dots
+    Array.from(dom.dotsContainer.children).forEach(dot => {
+        const eventId = dot.dataset.eventId;
+        if (visibleEventIds.has(eventId)) {
+            const event = visibleEvents.find(e => getEventId(e) === eventId);
+            if (event) {
+                const point = state.map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
+                dot.style.left = `${point.x}px`;
+                dot.style.top = `${point.y}px`;
+            }
+        }
+    });
+}
+
 /**
  * Adjusts dot positions to avoid overlap.
  */
@@ -227,7 +267,6 @@ function adjustForCollisions(points) {
 
     return adjustedPoints;
 }
-
 
 /**
  * Creates a dot element with direct hover listeners.
