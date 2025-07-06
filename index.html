@@ -38,21 +38,11 @@
             <div id="map"></div>
             <div id="legend-panel"></div>
             
-            <!-- Story Mode Controls - Positioned in top-right corner -->
+            <!-- Reset View Controls - Positioned in top-right corner -->
             <div id="story-controls" class="absolute top-4 right-4 z-[1003] flex items-center gap-1">
-                <button id="story-back" class="story-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </button>
-                <button id="story-play" class="story-btn">
+                <button id="story-play" class="story-btn" title="Reset Map View">
                     <svg id="story-play-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-6.518-3.748A1 1 0 007 8.118v7.764a1 1 0 001.234.97l6.518-1.87A1 1 0 0016 13.882V10.12a1 1 0 00-1.248-.952z" />
-                    </svg>
-                </button>
-                <button id="story-forward" class="story-btn">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                     </svg>
                 </button>
             </div>
@@ -61,6 +51,8 @@
                 <svg id="line-canvas"></svg>
                 <div id="dots-container"></div>
                 <div id="labels-container"></div>
+                <div id="hover-box-container"></div>
+                <svg id="hover-line-canvas"></svg>
             </div>
         </div>
         
@@ -75,13 +67,95 @@
 
     <!-- II.E. FERESTRE MODALE -->
     <div id="modal" class="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center p-4 z-[2001] hidden">
-        <div class="modal-content w-full max-w-3xl max-h-[90vh] overflow-y-auto relative text-gray-300 bg-gray-900 rounded-lg shadow-2xl">
-            <button id="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
-            <img id="modalImage" src="" alt="Event Image" class="w-full h-64 object-cover rounded-t-lg">
+        <div class="modal-content w-full max-w-4xl max-h-[90vh] overflow-y-auto relative text-gray-300 bg-gray-900 rounded-lg shadow-2xl">
+            <button id="closeModal" class="absolute top-4 right-4 text-gray-500 hover:text-white z-10 transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            
+            <!-- Event Header with Image -->
+            <div class="relative">
+                <img id="modalImage" src="" alt="Event Image" class="w-full h-80 object-cover rounded-t-lg">
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-6">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span id="modalEventType" class="px-3 py-1 text-xs font-semibold rounded-full"></span>
+                        <span id="modalYear" class="text-lg font-light text-gray-300"></span>
+                    </div>
+                    <h2 id="modalTitle" class="text-4xl md:text-5xl font-bold text-white font-teko mb-2"></h2>
+                    <div id="modalLocation" class="text-lg text-gray-300 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span id="modalLocationText"></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Event Content -->
             <div class="p-8">
-                <h2 id="modalTitle" class="text-3xl md:text-4xl font-bold mb-2 font-teko text-white"></h2>
-                <p id="modalDescription" class="text-base leading-relaxed"></p>
-                <!-- AI FEATURES REMOVED FROM HERE -->
+                <!-- Main Description -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold mb-4 text-white font-teko">Descriere</h3>
+                    <p id="modalDescription" class="text-lg leading-relaxed text-gray-300"></p>
+                </div>
+                
+                <!-- Historical Context -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold mb-4 text-white font-teko">Context Istoric</h3>
+                    <div id="modalContext" class="text-lg leading-relaxed text-gray-300">
+                        <p>Acest eveniment a avut loc într-o perioadă de tensiuni internaționale crescânde și a contribuit la escaladarea conflictului global.</p>
+                    </div>
+                </div>
+                
+                <!-- Key Figures -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold mb-4 text-white font-teko">Figuri Cheie</h3>
+                    <div id="modalFigures" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Key figures will be populated dynamically -->
+                    </div>
+                </div>
+                
+                <!-- Impact and Consequences -->
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold mb-4 text-white font-teko">Impact și Consecințe</h3>
+                    <div id="modalImpact" class="text-lg leading-relaxed text-gray-300">
+                        <p>Acest eveniment a avut repercusiuni semnificative asupra cursului războiului și a influențat deciziile strategice ale puterilor implicate.</p>
+                    </div>
+                </div>
+                
+                <!-- Interactive Actions -->
+                <div class="flex flex-wrap gap-4 pt-6 border-t border-gray-700">
+                    <button id="viewOnMapBtn" class="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m-6 3l6-3"></path>
+                        </svg>
+                        Vezi pe Hartă
+                    </button>
+                    <button id="prevEventBtn" class="flex items-center gap-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors duration-200">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        Eveniment Anterior
+                    </button>
+                    <button id="nextEventBtn" class="flex items-center gap-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors duration-200">
+                        <span>Eveniment Următor</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Progress Indicator -->
+                <div class="mt-6 text-center">
+                    <div class="text-sm text-gray-400 mb-2">
+                        <span id="modalProgress">1</span> din <span id="modalTotal">10</span> evenimente în această perioadă
+                    </div>
+                    <div class="w-full bg-gray-700 rounded-full h-2">
+                        <div id="modalProgressBar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 10%"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

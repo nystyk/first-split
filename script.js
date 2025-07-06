@@ -105,6 +105,8 @@ document.addEventListener('DOMContentLoaded', () => {
     state.dom.dotsContainer = document.getElementById('dots-container');
     state.dom.labelsContainer = document.getElementById('labels-container');
     state.dom.lineCanvas = document.getElementById('line-canvas');
+    state.dom.hoverBoxContainer = document.getElementById('hover-box-container');
+    state.dom.hoverLineCanvas = document.getElementById('hover-line-canvas');
     state.dom.modal = document.getElementById('modal');
     state.dom.closeModalBtn = document.getElementById('closeModal');
     state.dom.contextModal = document.getElementById('contextModal');
@@ -129,5 +131,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 100);
 });
 
-// Export functions globally for story mode functionality
+// Export functions globally
 window.handlePeriodChange = handlePeriodChange;

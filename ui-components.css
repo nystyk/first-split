@@ -241,6 +241,119 @@
 #modal { transition: opacity 0.3s ease-in-out; }
 .modal-content { animation: slideUp 0.4s ease-out; }
 @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* Enhanced Modal Styles */
+#modalEventType {
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#modalEventType.major {
+    background-color: #4a6d8a;
+    color: white;
+}
+
+#modalEventType.minor {
+    background-color: #f1c40f;
+    color: #2c3e50;
+}
+
+#modalEventType.atrocity {
+    background-color: #e74c3c;
+    color: white;
+}
+
+/* Modal Button Styles */
+#viewOnMapBtn, #prevEventBtn, #nextEventBtn {
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+#viewOnMapBtn:hover, #prevEventBtn:hover, #nextEventBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+#viewOnMapBtn:active, #prevEventBtn:active, #nextEventBtn:active {
+    transform: translateY(0);
+}
+
+#prevEventBtn:disabled, #nextEventBtn:disabled {
+    background-color: #4a5568 !important;
+    color: #a0a0a0 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+#prevEventBtn:disabled:hover, #nextEventBtn:disabled:hover {
+    background-color: #4a5568 !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Progress Bar Animation */
+#modalProgressBar {
+    transition: width 0.5s ease-out;
+}
+
+/* Key Figures Grid */
+#modalFigures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.figure-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
+    transition: all 0.2s ease;
+}
+
+.figure-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-2px);
+}
+
+.figure-name {
+    font-weight: 600;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.figure-role {
+    font-size: 0.9rem;
+    color: #a0a0a0;
+}
+
+/* Responsive Modal */
+@media (max-width: 768px) {
+    .modal-content {
+        margin: 1rem;
+        max-height: calc(100vh - 2rem);
+    }
+    
+    #modalTitle {
+        font-size: 2rem;
+    }
+    
+    #modalImage {
+        height: 200px;
+    }
+    
+    .flex.flex-wrap {
+        flex-direction: column;
+    }
+    
+    #viewOnMapBtn, #prevEventBtn, #nextEventBtn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 .ai-btn { background-color: #4a5568; transition: background-color 0.3s, transform 0.2s; }
 .ai-btn:hover { background-color: #2d3748; transform: translateY(-2px); }
 .ai-btn:disabled { background-color: #2d3748; opacity: 0.5; cursor: not-allowed; }
@@ -268,7 +381,7 @@
 }
 
 /* ----------------------------------------------------------------------- */
-/* 8. Stiluri pentru Controalele Story Mode                               */
+/* 8. Stiluri pentru Controalele Reset View                               */
 /* ----------------------------------------------------------------------- */
 #story-controls {
     display: flex;
@@ -314,83 +427,4 @@
     background-color: rgba(128, 128, 128, 0.3);
     transform: none;
     box-shadow: none;
-}
-
-/* Timeline slider disabled state */
-#timeline-slider:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
-
-#timeline-slider:disabled::-webkit-slider-thumb {
-    background: #999;
-    border-color: #666;
-    cursor: not-allowed;
-}
-
-#timeline-slider:disabled::-moz-range-thumb {
-    background: #999;
-    border-color: #666;
-    cursor: not-allowed;
-}
-
-/* Story mode active state for timeline */
-#timeline-slider-wrapper.story-mode-active {
-    opacity: 0.6;
-    pointer-events: none;
-}
-
-#slider-labels.story-mode-active {
-    opacity: 0.6;
-}
-
-.story-context-box {
-    position: absolute;
-    width: 160px;
-    padding: 8px;
-    background-color: rgba(40, 40, 40, 0.95);
-    backdrop-filter: blur(5px);
-    border-radius: 5px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-    display: flex;
-    align-items: center;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.25s ease-out;
-    transform: translate(-50%, -50%);
-    z-index: 1011;
-}
-.story-context-box.visible {
-    opacity: 1;
-}
-.story-context-box img {
-    width: 40px;
-    height: 40px;
-    border-radius: 3px;
-    margin-right: 8px;
-    object-fit: cover;
-}
-.story-context-box .title {
-    font-size: 13px;
-    color: #f0f0f0;
-    line-height: 1.3;
-}
-.story-context-box.major {
-    border-top: 3px solid #4a6d8a;
-}
-.story-context-box.minor {
-    border-top: 3px solid #f1c40f;
-}
-.story-context-box.atrocity {
-    border-top: 3px solid #e74c3c;
-}
-.story-context-line {
-    stroke-width: 2px;
-    stroke: rgba(220, 220, 220, 0.8);
-    opacity: 0;
-    transition: opacity 0.2s ease-out;
-    z-index: 1010;
-}
-.story-context-line.visible {
-    opacity: 1;
 }

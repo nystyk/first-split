@@ -150,43 +150,53 @@ function getEventId(event) {
     return `${event.year}-${sanitizedTitle}`;
 }
 
-/**
- * Renders events by creating DOM elements positioned absolutely over the map.
- */
+// Create a custom pane for event dots (above tile layer, below popups/modals)
+function ensureEventPane() {
+    if (!state.map.getPane('eventDotsPane')) {
+        state.map.createPane('eventDotsPane');
+        state.map.getPane('eventDotsPane').style.zIndex = 650; // Above tile layer, below popups
+    }
+}
+
+function clearEventMarkers() {
+    if (state.eventMarkers) {
+        state.eventMarkers.forEach(marker => marker.remove());
+    }
+    state.eventMarkers = [];
+}
+
 function renderMapEvents(period, forceClear = false) {
     const { dom } = state;
-    
     if (forceClear) {
         dom.dotsContainer.innerHTML = '';
     }
-    
+    if (state.eventMarkers) {
+        state.eventMarkers.forEach(marker => marker.remove && marker.remove());
+        state.eventMarkers = [];
+    }
     const events = allEventsData[period] || [];
-    
     const visibleEventIds = new Set(
         events
             .filter(e => e.onMap !== false && state.eventFilters[e.type])
             .map(getEventId)
     );
-
     const renderedElements = Array.from(dom.dotsContainer.children);
     const renderedEventIds = new Set(renderedElements.map(el => el.dataset.eventId));
-
-    // Hide elements that are rendered but shouldn't be
     renderedElements.forEach(el => {
         if (!visibleEventIds.has(el.dataset.eventId)) {
             el.classList.add('hiding');
             el.addEventListener('transitionend', () => el.remove(), { once: true });
         }
     });
-
-    // Show elements that should be visible but aren't rendered
     const eventsToAdd = events.filter(event => {
         const id = getEventId(event);
         return visibleEventIds.has(id) && !renderedEventIds.has(id);
     });
-
     if (eventsToAdd.length > 0) {
-        const allVisibleEvents = events.filter(e => visibleEventIds.has(getEventId(e)));
+        const allVisibleEvents = events.filter(e =>
+            visibleEventIds.has(getEventId(e)) &&
+            isValidLatLng(e.lat, e.lng)
+        );
         let dotPoints = allVisibleEvents.map(event => {
             const point = state.map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
             return {
@@ -196,22 +206,21 @@ function renderMapEvents(period, forceClear = false) {
                 event: event
             };
         });
-
         dotPoints = adjustForCollisions(dotPoints);
-
         dotPoints.forEach(dotData => {
             if (!renderedEventIds.has(dotData.id)) {
                 const dot = createEventDot(dotData.event, dotData.id);
                 dot.style.left = `${dotData.x}px`;
                 dot.style.top = `${dotData.y}px`;
+                if (dotData.isOffset) {
+                    dot.classList.add('offset-dot');
+                }
                 dom.dotsContainer.appendChild(dot);
                 requestAnimationFrame(() => dot.classList.add('visible'));
             }
         });
     }
 }
-
-
 
 /**
  * Updates the positions of all visible dots when the map moves.
@@ -223,48 +232,84 @@ function updateDotPositions() {
     const visibleEvents = events.filter(e => e.onMap !== false && state.eventFilters[e.type]);
     const visibleEventIds = new Set(visibleEvents.map(getEventId));
     
+    // Calculate new positions with collision detection
+    let dotPoints = visibleEvents.map(event => {
+        const point = state.map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
+        return {
+            id: getEventId(event),
+            x: point.x,
+            y: point.y,
+            event: event
+        };
+    });
+    
+    // Apply collision detection
+    dotPoints = adjustForCollisions(dotPoints);
+    
     // Update positions of all visible dots
     Array.from(dom.dotsContainer.children).forEach(dot => {
         const eventId = dot.dataset.eventId;
         if (visibleEventIds.has(eventId)) {
-            const event = visibleEvents.find(e => getEventId(e) === eventId);
-            if (event) {
-                const point = state.map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
-                dot.style.left = `${point.x}px`;
-                dot.style.top = `${point.y}px`;
+            const dotData = dotPoints.find(p => p.id === eventId);
+            if (dotData) {
+                dot.style.left = `${dotData.x}px`;
+                dot.style.top = `${dotData.y}px`;
+                
+                // Update offset indicators
+                if (dotData.isOffset) {
+                    dot.classList.add('offset-dot');
+                } else {
+                    dot.classList.remove('offset-dot');
+                }
             }
         }
     });
 }
 
 /**
- * Adjusts dot positions to avoid overlap.
+ * Adjusts dot positions to avoid overlap ONLY if two or more events share the exact pixel.
+ * All other events are placed at their true position. For grouped events, arrange in a small circle.
  */
 function adjustForCollisions(points) {
-    const adjustedPoints = [];
-    const MIN_DISTANCE = 20;
+    if (points.length <= 1) return points;
+    const CIRCLE_RADIUS = 12; // px, for events sharing a pixel
 
-    points.forEach(currentPoint => {
-        let attempts = 0;
-        let collision = true;
-
-        while (collision && attempts < 100) {
-            collision = false;
-            for (const placedPoint of adjustedPoints) {
-                const distance = Math.hypot(currentPoint.x - placedPoint.x, currentPoint.y - placedPoint.y);
-                if (distance < MIN_DISTANCE) {
-                    collision = true;
-                    const angle = Math.atan2(currentPoint.y - placedPoint.y, currentPoint.x - placedPoint.x);
-                    currentPoint.x += Math.cos(angle) * (MIN_DISTANCE - distance);
-                    currentPoint.y += Math.sin(angle) * (MIN_DISTANCE - distance);
-                    break;
-                }
-            }
-            attempts++;
-        }
-        adjustedPoints.push(currentPoint);
+    // Group points by (rounded) original position
+    const groups = {};
+    points.forEach(pt => {
+        const key = `${Math.round(pt.x)},${Math.round(pt.y)}`;
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(pt);
     });
 
+    const adjustedPoints = [];
+    Object.values(groups).forEach(group => {
+        if (group.length === 1) {
+            // No overlap, keep original position
+            adjustedPoints.push({
+                ...group[0],
+                isOffset: false,
+                x: group[0].x,
+                y: group[0].y,
+                originalX: group[0].x,
+                originalY: group[0].y
+            });
+        } else {
+            // Arrange in a small circle around the true position
+            const angleStep = (2 * Math.PI) / group.length;
+            group.forEach((pt, i) => {
+                const angle = i * angleStep;
+                adjustedPoints.push({
+                    ...pt,
+                    x: pt.x + Math.cos(angle) * CIRCLE_RADIUS,
+                    y: pt.y + Math.sin(angle) * CIRCLE_RADIUS,
+                    originalX: pt.x,
+                    originalY: pt.y,
+                    isOffset: true
+                });
+            });
+        }
+    });
     return adjustedPoints;
 }
 
@@ -278,11 +323,8 @@ function createEventDot(event, id) {
     dot.dataset.eventId = id;
     dot.title = event.title;
     dot.addEventListener('click', () => showModal(event));
-    // Only add hover listeners if not in story mode
-    if (!(window.storyState && storyState.active)) {
-        dot.addEventListener('mouseenter', () => showHoverBox(event, dot));
-        dot.addEventListener('mouseleave', hideHoverBox);
-    }
+    dot.addEventListener('mouseenter', () => showHoverBox(event, dot));
+    dot.addEventListener('mouseleave', hideHoverBox);
     return dot;
 }
 
@@ -290,8 +332,6 @@ function createEventDot(event, id) {
  * Creates and displays a hover box and its connecting line.
  */
 function showHoverBox(event, dotElement, options = {}) {
-    // Global guard: do not show hover box in story mode unless forced
-    if (window.storyState && storyState.active && !options.force) return;
     clearTimeout(hoverState.timeout);
     if (hoverState.activeElements.box) {
         hideHoverBox(true);
@@ -403,67 +443,37 @@ function renderThematicOverlays() {
 // Helper to update all dots' hoverability
 function updateDotsHoverability() {
     const dots = document.querySelectorAll('.event-element');
-    if (window.storyState && storyState.active) {
-        dots.forEach(dot => {
-            dot.classList.add('story-mode-active-dot-disable');
-            // Remove all event listeners by replacing with a clone
-            const clone = dot.cloneNode(true);
-            clone.classList.add('story-mode-active-dot-disable');
-            dot.replaceWith(clone);
-        });
-    } else {
-        dots.forEach(dot => {
-            dot.classList.remove('story-mode-active-dot-disable');
-            // Re-add listeners if needed
-            const eventId = dot.dataset.eventId;
-            const event = (window.allEventsData && window.allEventsData[state.currentPeriod])
-                ? window.allEventsData[state.currentPeriod].find(e => getEventId(e) === eventId)
-                : null;
-            if (event) {
-                dot.onmouseenter = () => showHoverBox(event, dot);
-                dot.onmouseleave = hideHoverBox;
-            }
-        });
-    }
+    dots.forEach(dot => {
+        dot.classList.remove('story-mode-active-dot-disable');
+        // Re-add listeners if needed
+        const eventId = dot.dataset.eventId;
+        const event = (window.allEventsData && window.allEventsData[state.currentPeriod])
+            ? window.allEventsData[state.currentPeriod].find(e => getEventId(e) === eventId)
+            : null;
+        if (event) {
+            dot.onmouseenter = () => showHoverBox(event, dot);
+            dot.onmouseleave = hideHoverBox;
+        }
+    });
 }
 
-// Export functions globally for story mode functionality
+// Export functions globally
 window.getEventId = getEventId;
 window.showHoverBox = showHoverBox;
 window.renderMapEvents = renderMapEvents;
 window.updateDotsHoverability = updateDotsHoverability;
 
-function showPersistentContextBox(event, dotElement) {
-    // Remove any previous persistent context box/line
-    document.querySelectorAll('.story-context-box').forEach(box => box.remove());
-    document.querySelectorAll('.story-context-line').forEach(line => line.remove());
-    // Create the persistent box
-    const box = document.createElement('div');
-    box.className = `story-context-box ${event.type}`;
-    box.innerHTML = `<img src="${event.imageUrl}" alt="${event.title}"><div class="title">${event.title}</div>`;
-    // Create the persistent line
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('class', 'story-context-line');
-    // Attach to DOM
-    state.dom.hoverBoxContainer.appendChild(box);
-    state.dom.hoverLineCanvas.appendChild(line);
-    // Positioning logic (same as hover box)
-    const mapRect = state.dom.mapEl.getBoundingClientRect();
-    const dotRect = dotElement.getBoundingClientRect();
-    const dotCenter = {
-        x: dotRect.left - mapRect.left + (dotRect.width / 2),
-        y: dotRect.top - mapRect.top + (dotRect.height / 2)
-    };
-    const boxPosition = findHoverBoxPosition(dotCenter, mapRect);
-    line.setAttribute('x1', dotCenter.x);
-    line.setAttribute('y1', dotCenter.y);
-    line.setAttribute('x2', boxPosition.x);
-    line.setAttribute('y2', boxPosition.y);
-    box.style.left = `${boxPosition.x}px`;
-    box.style.top = `${boxPosition.y}px`;
-    requestAnimationFrame(() => {
-        box.classList.add('visible');
-        line.classList.add('visible');
-    });
+function isValidLatLng(lat, lng) {
+    return (
+        typeof lat === 'number' && typeof lng === 'number' &&
+        !isNaN(lat) && !isNaN(lng) &&
+        lat >= -85 && lat <= 85 &&
+        lng >= -180 && lng <= 180
+    );
 }
-window.showPersistentContextBox = showPersistentContextBox;
+
+// Remove the debug test marker if present
+if (window._debugTestMarker) {
+    window._debugTestMarker.remove();
+    window._debugTestMarker = null;
+}

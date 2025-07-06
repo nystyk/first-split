@@ -17,7 +17,8 @@ const state = {
     },
     // NEW: To hold references to the active overlay layers
     thematicLayers: {},
-
+    // NEW: To hold references to event markers
+    eventMarkers: [],
 
     // Cached DOM elements
     dom: {

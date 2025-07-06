@@ -24,6 +24,9 @@ function renderLegend(period) {
             </label>
         `;
     });
+    
+
+    
     eventTypesHTML += `</div>`;
     
     // --- Thematic Overlays Toggles (Context-Sensitive) ---
@@ -92,7 +95,6 @@ function renderLegend(period) {
         }
     }
 }
-
 
 /**
  * Updates the visual state of the timeline slider and its tooltip.
@@ -180,15 +182,336 @@ window.addEventListener('resize', () => setTimeout(positionSliderLabels, 0));
 function showModal(event) {
     state.currentEvent = event;
     const modal = state.dom.modal;
+    
+    // Basic event information
     document.getElementById('modalTitle').textContent = event.title;
     document.getElementById('modalDescription').textContent = event.description;
     document.getElementById('modalImage').src = event.imageUrl;
+    document.getElementById('modalYear').textContent = event.year;
+    
+    // Event type badge
+    const eventTypeElement = document.getElementById('modalEventType');
+    eventTypeElement.textContent = getEventTypeLabel(event.type);
+    eventTypeElement.className = `px-3 py-1 text-xs font-semibold rounded-full ${event.type}`;
+    
+    // Location information
+    const locationText = getLocationName(event.lat, event.lng);
+    document.getElementById('modalLocationText').textContent = locationText;
+    
+    // Historical context
+    const contextElement = document.getElementById('modalContext');
+    contextElement.innerHTML = generateHistoricalContext(event);
+    
+    // Key figures
+    const figuresElement = document.getElementById('modalFigures');
+    figuresElement.innerHTML = generateKeyFigures(event);
+    
+    // Impact and consequences
+    const impactElement = document.getElementById('modalImpact');
+    impactElement.innerHTML = generateImpactAnalysis(event);
+    
+    // Progress indicator
+    updateModalProgress(event);
+    
+    // Show modal
     modal.classList.remove('hidden');
+    
+    // Add event listeners for interactive buttons
+    setupModalInteractions(event);
+}
+
+function getEventTypeLabel(type) {
+    const labels = {
+        'major': 'Eveniment Major',
+        'minor': 'Eveniment Minor', 
+        'atrocity': 'Atrocitate'
+    };
+    return labels[type] || type;
+}
+
+function getLocationName(lat, lng) {
+    // This is a simplified version - in a real app you'd use a geocoding service
+    const locations = {
+        '48.8049,2.1204': 'Versailles, Franța',
+        '41.9028,12.4964': 'Roma, Italia',
+        '40.7069,-74.0113': 'New York, SUA',
+        '41.8057,123.4315': 'Mukden, China',
+        '52.5117,13.3819': 'Berlin, Germania',
+        '48.2486,11.4322': 'Dachau, Germania',
+        '52.5200,13.4050': 'Berlin, Germania',
+        '8.0667,45.4167': 'Walwal, Etiopia',
+        '49.2333,7.0000': 'Saarland, Germania',
+        '49.4539,11.0775': 'Nürnberg, Germania',
+        '9.0250,38.7469': 'Addis Ababa, Etiopia',
+        '50.9375,6.9603': 'Renania, Germania',
+        '35.2922,-2.9408': 'Spania',
+        '43.3140,-2.6780': 'Guernica, Spania',
+        '39.9042,116.4074': 'Beijing, China',
+        '32.0603,118.7969': 'Nanking, China',
+        '48.2082,16.3738': 'Viena, Austria',
+        '46.4015,6.5909': 'Évian, Elveția',
+        '48.1380,11.5752': 'München, Germania',
+        '50.11,8.68': 'Germania',
+        '50.3115,18.6761': 'Gleiwitz, Polonia',
+        '54.4075,18.6708': 'Gdansk, Polonia',
+        '52.0976,23.7341': 'Polonia',
+        '52.2297,21.0122': 'Varșovia, Polonia',
+        '51.6394,22.4419': 'Polonia',
+        '51.4071,19.6953': 'Piotrków Trybunalski, Polonia',
+        '58.8970,-3.0449': 'Scapa Flow, Scoția',
+        '60.5333,29.9167': 'Finlanda',
+        '-35.0,-56.0': 'Río de la Plata, Uruguay',
+        '59.9139,10.7522': 'Oslo, Norvegia',
+        '49.7020,4.9476': 'Franța',
+        '51.0344,2.3768': 'Dunkerque, Franța',
+        '48.8566,2.3522': 'Paris, Franța',
+        '49.4275,2.8444': 'Compiègne, Franța',
+        '51.3037,-0.0903': 'Anglia',
+        '51.5072,-0.1276': 'Londra, Anglia',
+        '40.4710,17.2398': 'Taranto, Italia',
+        '28.5,27.0': 'Deșertul Libian',
+        '50.0264,19.2094': 'Auschwitz, Polonia',
+        '52.2461,20.9922': 'Varșovia, Polonia',
+        '38.8951,-77.0364': 'Washington D.C., SUA',
+        '44.7866,20.4489': 'Belgrad, Iugoslavia',
+        '32.0763,23.9598': 'Tobruk, Libia',
+        '52.0825,23.6536': 'Belarus',
+        '50.4719,30.4494': 'Kiev, Ucraina',
+        '59.9343,30.3351': 'Leningrad, URSS',
+        '55.7512,37.6184': 'Moscova, URSS',
+        '21.3512,-157.9802': 'Pearl Harbor, Hawaii',
+        '52.4286,13.1594': 'Berlin, Germania',
+        '1.3521,103.8198': 'Singapore',
+        '50.3758,23.4589': 'Bełżec, Polonia',
+        '14.65,120.5': 'Bataan, Filipine',
+        '35.6895,139.6917': 'Tokyo, Japonia',
+        '-15.0,150.0': 'Marea Coralilor',
+        '28.2076,-177.3725': 'Midway',
+        '-9.5843,160.1562': 'Guadalcanal',
+        '49.9229,1.0774': 'Dieppe, Franța',
+        '48.7080,44.5133': 'Stalingrad, URSS',
+        '30.8222,28.9543': 'El Alamein, Egipt',
+        '36.7783,3.0588': 'Algeria',
+        '33.5731,-7.5898': 'Casablanca, Maroc',
+        '37.5,14.5': 'Sicilia, Italia',
+        '37.0696,15.2052': 'Cassibile, Italia',
+        '51.4469,23.5931': 'Sobibór, Polonia',
+        '35.6892,51.3890': 'Teheran, Iran',
+        '41.4906,13.8136': 'Monte Cassino, Italia',
+        '47.4979,19.0402': 'Budapest, Ungaria',
+        '49.3400,-0.5500': 'Normandia, Franța',
+        '53.9000,27.5667': 'Minsk, Belarus',
+        '52.2297,21.0122': 'Varșovia, Polonia',
+        '51.8126,5.8372': 'Arnhem, Olanda',
+        '10.8700,125.4550': 'Golful Leyte, Filipine',
+        '50.17,6.05': 'Ardeni, Belgia',
+        '34.3853,132.4553': 'Hiroshima, Japonia',
+        '32.7642,129.8727': 'Nagasaki, Japonia',
+        '35.5504,139.7845': 'Tokyo, Japonia',
+        '40.7489,-73.9680': 'New York, SUA',
+        '49.4542,11.0475': 'Nürnberg, Germania',
+        '38.8467,-91.9481': 'Fulton, Missouri, SUA',
+        '50.8661,20.6286': 'Kielce, Polonia',
+        '21.0285,105.8542': 'Hanoi, Vietnam',
+        '28.6139,77.2090': 'New Delhi, India',
+        '32.1093,34.8555': 'Tel Aviv, Israel',
+        '39.9042,116.4074': 'Beijing, China'
+    };
+    
+    const key = `${lat},${lng}`;
+    return locations[key] || `Coordonate: ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+}
+
+function generateHistoricalContext(event) {
+    const contexts = {
+        'pre-war': 'În perioada interbelică, Europa se confrunta cu consecințele devastatoare ale Primului Război Mondial. Criza economică, revanșardismul german și ascensiunea regimurilor totalitare au creat condițiile pentru un nou conflict global.',
+        '1939': 'Anul 1939 marchează începutul oficial al celui de-al Doilea Război Mondial. Germania nazistă, condusă de Adolf Hitler, își începe expansiunea teritorială prin invazia Poloniei.',
+        '1940': 'Anul 1940 este marcat de victoriile spectaculoase ale Germaniei în Europa de Vest. Blitzkrieg-ul german copleșește rapid Danemarca, Norvegia, Olanda, Belgia și Franța.',
+        '1941': 'Anul 1941 reprezintă un punct de cotitură major în război. Germania invadează Uniunea Sovietică, iar Japonia atacă Pearl Harbor, determinând intrarea SUA în conflict.',
+        '1942': 'Anul 1942 marchează apogeul expansiunii Axei. Germania ajunge la Stalingrad, iar Japonia controlează o mare parte din Asia de Sud-Est. Totuși, semnele de întoarcere încep să apară.',
+        '1943': 'Anul 1943 reprezintă punctul de cotitură decisiv. Înfrângerea de la Stalingrad și capitularea din Tunisia marchează începutul declinului Germaniei.',
+        '1944': 'Anul 1944 este marcat de contraofensivele majore ale Aliaților. Debarcarea din Normandia și Operațiunea Bagration marchează începutul eliberării Europei.',
+        '1945': 'Anul 1945 marchează sfârșitul războiului în Europa și Asia. Capitularea Germaniei și a Japoniei, precum și folosirea bombelor atomice, încheie cel mai sângeros conflict din istorie.',
+        'post-war': 'Perioada postbelică este marcată de începutul Războiului Rece și reorganizarea politică a Europei. Noi alianțe și organizații internaționale se formează pentru a preveni viitoare conflicte.'
+    };
+    
+    const period = getEventPeriod(event);
+    return `<p>${contexts[period] || 'Acest eveniment a avut loc într-o perioadă de tensiuni internaționale crescânde și a contribuit la escaladarea conflictului global.'}</p>`;
+}
+
+function getEventPeriod(event) {
+    for (const [period, events] of Object.entries(allEventsData)) {
+        if (events.some(e => e.title === event.title)) {
+            return period;
+        }
+    }
+    return 'pre-war';
+}
+
+function generateKeyFigures(event) {
+    // This would be populated with actual historical figures based on the event
+    const figures = {
+        'Tratatul de la Versailles': [
+            { name: 'Woodrow Wilson', role: 'Președintele SUA' },
+            { name: 'Georges Clemenceau', role: 'Prim-ministrul Franței' },
+            { name: 'David Lloyd George', role: 'Prim-ministrul Marii Britanii' }
+        ],
+        'Marșul asupra Romei': [
+            { name: 'Benito Mussolini', role: 'Liderul Partidului Național Fascist' },
+            { name: 'Vittorio Emanuele III', role: 'Regele Italiei' }
+        ],
+        'Hitler devine Cancelar': [
+            { name: 'Adolf Hitler', role: 'Liderul Partidului Nazist' },
+            { name: 'Paul von Hindenburg', role: 'Președintele Germaniei' }
+        ],
+        'Invazia Poloniei (Fall Weiss)': [
+            { name: 'Adolf Hitler', role: 'Führer al Germaniei' },
+            { name: 'Edward Rydz-Śmigły', role: 'Comandantul Armatei Poloneze' },
+            { name: 'Gerd von Rundstedt', role: 'Comandantul Grupului de Armate Sud' }
+        ],
+        'Bătălia Angliei': [
+            { name: 'Hermann Göring', role: 'Comandantul Luftwaffe' },
+            { name: 'Hugh Dowding', role: 'Comandantul RAF Fighter Command' },
+            { name: 'Winston Churchill', role: 'Prim-ministrul Marii Britanii' }
+        ],
+        'Operațiunea Barbarossa': [
+            { name: 'Adolf Hitler', role: 'Führer al Germaniei' },
+            { name: 'Joseph Stalin', role: 'Liderul URSS' },
+            { name: 'Fedor von Bock', role: 'Comandantul Grupului de Armate Centru' }
+        ],
+        'Atacul de la Pearl Harbor': [
+            { name: 'Isoroku Yamamoto', role: 'Comandantul Flotei Combinată Japoneză' },
+            { name: 'Franklin D. Roosevelt', role: 'Președintele SUA' },
+            { name: 'Husband E. Kimmel', role: 'Comandantul Flotei Pacific SUA' }
+        ],
+        'Bătălia de la Stalingrad': [
+            { name: 'Friedrich Paulus', role: 'Comandantul Armatei a 6-a Germane' },
+            { name: 'Vasily Chuikov', role: 'Comandantul Armatei a 62-a Sovietică' },
+            { name: 'Georgy Zhukov', role: 'Comandantul Frontului de Stalingrad' }
+        ],
+        'Ziua Z: Debarcarea din Normandia': [
+            { name: 'Dwight D. Eisenhower', role: 'Comandantul Suprem Aliat' },
+            { name: 'Bernard Montgomery', role: 'Comandantul Forțelor Terestre' },
+            { name: 'Erwin Rommel', role: 'Comandantul Grupului de Armate B' }
+        ],
+        'Bătălia Berlinului': [
+            { name: 'Georgy Zhukov', role: 'Comandantul Frontului 1 Belarus' },
+            { name: 'Helmuth Weidling', role: 'Comandantul Apărării Berlinului' },
+            { name: 'Adolf Hitler', role: 'Führer al Germaniei' }
+        ],
+        'Capitularea Germaniei': [
+            { name: 'Alfred Jodl', role: 'Șeful Statului Major al Wehrmacht' },
+            { name: 'Wilhelm Keitel', role: 'Șeful Comandamentului Suprem al Wehrmacht' },
+            { name: 'Georgy Zhukov', role: 'Reprezentantul URSS' }
+        ],
+        'Bombardamentul Atomic de la Hiroshima': [
+            { name: 'Harry S. Truman', role: 'Președintele SUA' },
+            { name: 'Paul Tibbets', role: 'Pilotul Enola Gay' },
+            { name: 'Hirohito', role: 'Împăratul Japoniei' }
+        ],
+        'Capitularea Japoniei': [
+            { name: 'Douglas MacArthur', role: 'Comandantul Suprem Aliat' },
+            { name: 'Mamoru Shigemitsu', role: 'Ministrul de Externe al Japoniei' },
+            { name: 'Yoshijirō Umezu', role: 'Șeful Statului Major Imperial' }
+        ]
+    };
+    
+    const eventFigures = figures[event.title] || [
+        { name: 'Lideri politici', role: 'Figuri cheie ale perioadei' },
+        { name: 'Comandanți militari', role: 'Strategi ai conflictului' }
+    ];
+    
+    return eventFigures.map(figure => `
+        <div class="figure-card">
+            <div class="figure-name">${figure.name}</div>
+            <div class="figure-role">${figure.role}</div>
+        </div>
+    `).join('');
+}
+
+function generateImpactAnalysis(event) {
+    const impacts = {
+        'major': 'Acest eveniment major a avut repercusiuni profunde asupra cursului războiului, influențând deciziile strategice ale tuturor puterilor implicate și schimbând fundamental echilibrul de forțe.',
+        'minor': 'Deși mai puțin cunoscut, acest eveniment a contribuit la contextul general al conflictului și a avut impact asupra evoluției ulterioare a evenimentelor.',
+        'atrocity': 'Această atrocitate reprezintă una dintre cele mai întunecate pagini ale războiului, demonstrând brutalitatea conflictului și consecințele devastatoare ale ideologiilor extremiste.'
+    };
+    
+    return `<p>${impacts[event.type] || 'Acest eveniment a avut repercusiuni semnificative asupra cursului războiului și a influențat deciziile strategice ale puterilor implicate.'}</p>`;
+}
+
+function updateModalProgress(event) {
+    const currentPeriod = getEventPeriod(event);
+    const eventsInPeriod = allEventsData[currentPeriod] || [];
+    const currentIndex = eventsInPeriod.findIndex(e => e.title === event.title);
+    
+    if (currentIndex !== -1) {
+        const progress = ((currentIndex + 1) / eventsInPeriod.length) * 100;
+        document.getElementById('modalProgress').textContent = currentIndex + 1;
+        document.getElementById('modalTotal').textContent = eventsInPeriod.length;
+        document.getElementById('modalProgressBar').style.width = `${progress}%`;
+    }
+}
+
+function setupModalInteractions(event) {
+    // View on Map button
+    document.getElementById('viewOnMapBtn').onclick = () => {
+        hideModal();
+        state.map.flyTo([event.lat, event.lng], 8, {
+            duration: 2,
+            easeLinearity: 0.25
+        });
+    };
+    
+    // Navigation buttons
+    const currentPeriod = getEventPeriod(event);
+    const eventsInPeriod = allEventsData[currentPeriod] || [];
+    const currentIndex = eventsInPeriod.findIndex(e => e.title === event.title);
+    
+    const prevBtn = document.getElementById('prevEventBtn');
+    const nextBtn = document.getElementById('nextEventBtn');
+    
+    prevBtn.onclick = () => {
+        if (currentIndex > 0) {
+            showModal(eventsInPeriod[currentIndex - 1]);
+        }
+    };
+    
+    nextBtn.onclick = () => {
+        if (currentIndex < eventsInPeriod.length - 1) {
+            showModal(eventsInPeriod[currentIndex + 1]);
+        }
+    };
+    
+    // Update button states
+    prevBtn.disabled = currentIndex <= 0;
+    nextBtn.disabled = currentIndex >= eventsInPeriod.length - 1;
+    
+    // Keyboard navigation
+    const handleKeyPress = (e) => {
+        if (e.key === 'Escape') {
+            hideModal();
+        } else if (e.key === 'ArrowLeft' && !prevBtn.disabled) {
+            prevBtn.click();
+        } else if (e.key === 'ArrowRight' && !nextBtn.disabled) {
+            nextBtn.click();
+        }
+    };
+    
+    document.addEventListener('keydown', handleKeyPress);
+    
+    // Store the handler to remove it later
+    state.currentModalKeyHandler = handleKeyPress;
 }
 
 function hideModal() {
     state.dom.modal.classList.add('hidden');
     state.currentEvent = null;
+    
+    // Remove keyboard event listener
+    if (state.currentModalKeyHandler) {
+        document.removeEventListener('keydown', state.currentModalKeyHandler);
+        state.currentModalKeyHandler = null;
+    }
 }
 
 function showContextModal(key) {
@@ -206,19 +529,7 @@ function hideContextModal() {
     state.dom.contextModal.classList.add('hidden');
 }
 
-// === STORY MODE BUTTONS ===
-const storyState = {
-    active: false,
-    currentEventIndex: 0,
-    events: [],
-    period: null,
-    memory: {} // Stores last event index for each period
-};
-
-function getEventsForPeriod(period) {
-    if (!allEventsData[period]) return [];
-    return allEventsData[period].sort((a, b) => a.year - b.year);
-}
+// === RESET BUTTON FUNCTIONALITY ===
 
 /**
  * Helper function to add aesthetic tile layer during map animations
@@ -242,363 +553,28 @@ function addAestheticTileLayer() {
     return aestheticTileLayer;
 }
 
-let storyModeCleanupInterval = null;
-
-function setStoryModeActive(active) {
-    storyState.active = active;
-    
-    // Update button states
-    const backBtn = document.getElementById('story-back');
-    const forwardBtn = document.getElementById('story-forward');
-    const timelineSlider = document.getElementById('timeline-slider');
-    const timelineWrapper = document.getElementById('timeline-slider-wrapper');
-    const sliderLabels = document.getElementById('slider-labels');
-    
-    backBtn.disabled = !active;
-    forwardBtn.disabled = !active;
-    timelineSlider.disabled = active;
-    
-    // Update visual states
-    if (active) {
-        backBtn.classList.remove('disabled');
-        forwardBtn.classList.remove('disabled');
-        timelineWrapper.classList.add('story-mode-active');
-        sliderLabels.classList.add('story-mode-active');
-        // Disable and grey out all event toggles (major, atrocity, minor)
-        setTimeout(() => {
-            ["major", "atrocity", "minor"].forEach(type => {
-                const cb = document.getElementById(`toggle-event-${type}`);
-                if (cb) {
-                    cb.disabled = true;
-                    cb.parentElement.classList.add("legend-toggle-disabled");
-                }
-            });
-            if (window.updateDotsHoverability) window.updateDotsHoverability();
-        }, 0);
-        if (window.hoverState) hoverState.pinned = true;
-        // Start periodic cleanup to remove stray hover boxes/lines
-        if (storyModeCleanupInterval) clearInterval(storyModeCleanupInterval);
-        storyModeCleanupInterval = setInterval(() => {
-            // Only keep the persistent context box/line for the focused event
-            const event = storyState.events && storyState.events[storyState.currentEventIndex];
-            const eventId = event ? (typeof getEventId === 'function' ? getEventId(event) : window.getEventId(event)) : null;
-            document.querySelectorAll('.event-hover-box').forEach(box => {
-                if (!eventId || !box.textContent.includes(event.title)) box.remove();
-            });
-            document.querySelectorAll('.hover-connector-line').forEach(line => {
-                // No reliable way to check, so just keep the first one
-                if (line !== document.querySelector('.hover-connector-line')) line.remove();
-            });
-        }, 200);
-    } else {
-        backBtn.classList.add('disabled');
-        forwardBtn.classList.add('disabled');
-        timelineWrapper.classList.remove('story-mode-active');
-        sliderLabels.classList.remove('story-mode-active');
-        // Re-enable and un-grey all event toggles
-        setTimeout(() => {
-            ["major", "atrocity", "minor"].forEach(type => {
-                const cb = document.getElementById(`toggle-event-${type}`);
-                if (cb) {
-                    cb.disabled = false;
-                    cb.parentElement.classList.remove("legend-toggle-disabled");
-                }
-            });
-            if (window.updateDotsHoverability) window.updateDotsHoverability();
-        }, 0);
-        if (window.hoverState) hoverState.pinned = false;
-        // Remove any persistent context box and line
-        const box = document.querySelector('.event-hover-box');
-        if (box) box.remove();
-        const line = document.querySelector('.hover-connector-line');
-        if (line) line.remove();
-        document.querySelectorAll('.story-context-box').forEach(box => box.remove());
-        document.querySelectorAll('.story-context-line').forEach(line => line.remove());
-        // Stop the periodic cleanup
-        if (storyModeCleanupInterval) clearInterval(storyModeCleanupInterval);
-        storyModeCleanupInterval = null;
-        // Always call handlePeriodChange for the current period, with force=true, and set state.currentPeriod = null to guarantee animation
-        state.currentPeriod = null;
-        const period = config.periods[state.dom.timelineSlider.value];
-        if (typeof handlePeriodChange === 'function') {
-            handlePeriodChange(period, true);
-        } else if (window.handlePeriodChange) {
-            window.handlePeriodChange(period, true);
-        }
-        // After animation completes, remove any lingering hover box/line
-        setTimeout(() => {
-            const box = document.querySelector('.event-hover-box');
-            if (box) box.remove();
-            const line = document.querySelector('.hover-connector-line');
-            if (line) line.remove();
-        }, 1200); // Wait for animation and event rendering
-        // Reset story mode button to play state
-        const playIcon = document.getElementById('story-play-icon');
-        if (playIcon) {
-            playIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-6.518-3.748A1 1 0 007 8.118v7.764a1 1 0 001.234.97l6.518-1.87A1 1 0 0016 13.882V10.12a1 1 0 00-1.248-.952z" />';
-        }
-        return;
-    }
-    
-    // Change play/pause icon
-    const playIcon = document.getElementById('story-play-icon');
-    if (active) {
-        playIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6" />'; // Pause icon
-    } else {
-        playIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-6.518-3.748A1 1 0 007 8.118v7.764a1 1 0 001.234.97l6.518-1.87A1 1 0 0016 13.882V10.12a1 1 0 00-1.248-.952z" />'; // Play icon
-    }
-    
-    if (active) {
-        // Enter Story Mode
-        const currentPeriod = config.periods[state.dom.timelineSlider.value];
-        storyState.period = currentPeriod;
-        storyState.events = getEventsForPeriod(currentPeriod);
-        
-        // Use memory or start from first event
-        if (storyState.memory[currentPeriod] !== undefined) {
-            storyState.currentEventIndex = storyState.memory[currentPeriod];
-        } else {
-            storyState.currentEventIndex = 0;
-        }
-        
-        if (storyState.events.length > 0) {
-            showEventInStoryMode(storyState.events[storyState.currentEventIndex]);
-        }
-    } else {
-        // Exit Story Mode - save current position to memory
-        if (storyState.period && storyState.events.length > 0) {
-            storyState.memory[storyState.period] = storyState.currentEventIndex;
-        }
-        
-        // Restore all event dots to normal state
-        document.querySelectorAll('.event-element').forEach(dot => {
-            dot.style.pointerEvents = 'auto';
-            dot.style.opacity = '1';
-        });
-        
-        // Hide any open event dialogs and hover boxes
-        hideEventDialog();
-        const hoverBox = document.querySelector('.event-hover-box');
-        if (hoverBox) {
-            hoverBox.remove();
-        }
-        const hoverLine = document.querySelector('.hover-connector-line');
-        if (hoverLine) {
-            hoverLine.remove();
-        }
-        
-        // Return to normal view with smooth animation
-        addAestheticTileLayer(); // Add aesthetic tiles during animation
-        state.map.flyTo([20, 0], 2, {
-            duration: 1.5,
-            easeLinearity: 0.25
-        });
-    }
-}
-
-function showEventInStoryMode(event) {
-    if (!event) return;
-    addAestheticTileLayer();
-    state.map.flyTo([event.lat, event.lng], 6, {
-        duration: 2,
-        easeLinearity: 0.25
-    });
-    // After pan, update dot positions and show context box
-    state.map.once('moveend', () => {
-        if (typeof updateDotPositions === 'function') updateDotPositions();
-        setTimeout(() => {
-            // Remove ALL previous hover boxes and lines before creating the persistent one
-            document.querySelectorAll('.event-hover-box').forEach(box => box.remove());
-            document.querySelectorAll('.hover-connector-line').forEach(line => line.remove());
-            // Try to find the dot for this event
-            const eventId = typeof getEventId === 'function' ? getEventId(event) : window.getEventId(event);
-            const dot = document.querySelector(`.event-element[data-event-id="${eventId}"]`);
-            console.log('[StoryMode] Focused dot:', dot);
-            if (dot) {
-                document.querySelectorAll('.event-element').forEach(otherDot => {
-                    if (otherDot !== dot) {
-                        otherDot.style.pointerEvents = 'none';
-                        otherDot.style.opacity = '0.3';
-                    }
-                });
-                dot.style.pointerEvents = 'auto';
-                dot.style.opacity = '1';
-                if (window.hoverState) hoverState.pinned = true;
-                // Use the persistent context box in story mode
-                if (typeof showPersistentContextBox === 'function') {
-                    showPersistentContextBox(event, dot);
-                } else if (window.showPersistentContextBox) {
-                    window.showPersistentContextBox(event, dot);
-                }
-                setTimeout(() => {
-                    const hoverBox = document.querySelector('.event-hover-box');
-                    if (hoverBox) {
-                        hoverBox.style.pointerEvents = 'auto';
-                        hoverBox.style.display = 'block';
-                        hoverBox.style.opacity = '1';
-                        hoverBox.classList.add('visible');
-                        const newHoverBox = hoverBox.cloneNode(true);
-                        hoverBox.parentNode.replaceChild(newHoverBox, hoverBox);
-                    }
-                }, 50);
-            } else {
-                console.warn('[StoryMode] No dot found for event', eventId);
-            }
-        }, 100);
-    });
-}
-
-function showEventDialog(event) {
-    // Create or update event dialog
-    let dialog = document.getElementById('story-event-dialog');
-    if (!dialog) {
-        dialog = document.createElement('div');
-        dialog.id = 'story-event-dialog';
-        dialog.className = 'fixed top-4 left-4 bg-gray-900 text-white p-4 rounded-lg shadow-lg z-[2000] max-w-md';
-        dialog.innerHTML = `
-            <div class="flex justify-between items-start mb-2">
-                <h3 class="font-bold text-lg"></h3>
-                <button onclick="hideEventDialog()" class="text-gray-400 hover:text-white">×</button>
-            </div>
-            <p class="text-sm"></p>
-        `;
-        document.body.appendChild(dialog);
-    }
-    
-    dialog.querySelector('h3').textContent = `${event.year}: ${event.title}`;
-    dialog.querySelector('p').textContent = event.description;
-}
-
-function hideEventDialog() {
-    const dialog = document.getElementById('story-event-dialog');
-    if (dialog) {
-        dialog.remove();
-    }
-}
-
-function navigateToNextEvent() {
-    if (!storyState.active || storyState.events.length === 0) return;
-    
-    // Clear any existing hover boxes before navigating
-    const existingHoverBox = document.querySelector('.event-hover-box');
-    if (existingHoverBox) {
-        existingHoverBox.remove();
-    }
-    const existingHoverLine = document.querySelector('.hover-connector-line');
-    if (existingHoverLine) {
-        existingHoverLine.remove();
-    }
-    // Also clear any story context boxes/lines immediately
-    document.querySelectorAll('.story-context-box').forEach(box => box.remove());
-    document.querySelectorAll('.story-context-line').forEach(line => line.remove());
-    
-    storyState.currentEventIndex++;
-    
-    if (storyState.currentEventIndex >= storyState.events.length) {
-        // Move to next period
-        const currentPeriodIndex = config.periods.indexOf(storyState.period);
-        if (currentPeriodIndex < config.periods.length - 1) {
-            const nextPeriod = config.periods[currentPeriodIndex + 1];
-            const nextEvents = getEventsForPeriod(nextPeriod);
-            
-            if (nextEvents.length > 0) {
-                // Animate period change
-                handlePeriodChange(nextPeriod);
-                
-                // Update story state for new period
-                setTimeout(() => {
-                    storyState.period = nextPeriod;
-                    storyState.events = nextEvents;
-                    storyState.currentEventIndex = 0;
-                    storyState.memory[nextPeriod] = 0;
-                    showEventInStoryMode(nextEvents[0]);
-                }, 1000); // Wait for period animation
-            }
-        } else {
-            // At the end, loop back to first event of current period
-            storyState.currentEventIndex = 0;
-            showEventInStoryMode(storyState.events[0]);
-        }
-    } else {
-        showEventInStoryMode(storyState.events[storyState.currentEventIndex]);
-    }
-}
-
-function navigateToPreviousEvent() {
-    if (!storyState.active || storyState.events.length === 0) return;
-    
-    // Clear any existing hover boxes before navigating
-    const existingHoverBox = document.querySelector('.event-hover-box');
-    if (existingHoverBox) {
-        existingHoverBox.remove();
-    }
-    const existingHoverLine = document.querySelector('.hover-connector-line');
-    if (existingHoverLine) {
-        existingHoverLine.remove();
-    }
-    // Also clear any story context boxes/lines immediately
-    document.querySelectorAll('.story-context-box').forEach(box => box.remove());
-    document.querySelectorAll('.story-context-line').forEach(line => line.remove());
-    
-    storyState.currentEventIndex--;
-    
-    if (storyState.currentEventIndex < 0) {
-        // Move to previous period
-        const currentPeriodIndex = config.periods.indexOf(storyState.period);
-        if (currentPeriodIndex > 0) {
-            const prevPeriod = config.periods[currentPeriodIndex - 1];
-            const prevEvents = getEventsForPeriod(prevPeriod);
-            
-            if (prevEvents.length > 0) {
-                // Animate period change
-                handlePeriodChange(prevPeriod);
-                
-                // Update story state for new period
-                setTimeout(() => {
-                    storyState.period = prevPeriod;
-                    storyState.events = prevEvents;
-                    storyState.currentEventIndex = prevEvents.length - 1; // Last event
-                    storyState.memory[prevPeriod] = prevEvents.length - 1;
-                    showEventInStoryMode(prevEvents[prevEvents.length - 1]);
-                }, 1000); // Wait for period animation
-            }
-        } else {
-            // At the beginning, loop to last event of current period
-            storyState.currentEventIndex = storyState.events.length - 1;
-            showEventInStoryMode(storyState.events[storyState.events.length - 1]);
-        }
-    } else {
-        showEventInStoryMode(storyState.events[storyState.currentEventIndex]);
+function resetMapView() {
+    // Get the current period from state or slider
+    const currentPeriod = state.currentPeriod || config.periods[state.dom.timelineSlider.value];
+    // Call handlePeriodChange with force=true to trigger the animation and map view logic
+    if (typeof handlePeriodChange === 'function') {
+        handlePeriodChange(currentPeriod, true);
+    } else if (window.handlePeriodChange) {
+        window.handlePeriodChange(currentPeriod, true);
     }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize story mode button states
+    // Attach reset button listener
+    document.getElementById('story-play').addEventListener('click', resetMapView);
+    
+    // Remove story mode navigation buttons functionality
     const backBtn = document.getElementById('story-back');
     const forwardBtn = document.getElementById('story-forward');
     
-    // Initially disable navigation buttons (they're only active in story mode)
+    // Disable navigation buttons permanently
     backBtn.disabled = true;
     forwardBtn.disabled = true;
     backBtn.classList.add('disabled');
     forwardBtn.classList.add('disabled');
-    
-    // Attach story mode button listeners
-    document.getElementById('story-play').addEventListener('click', () => {
-        setStoryModeActive(!storyState.active);
-    });
-    backBtn.addEventListener('click', () => {
-        if (storyState.active) {
-            navigateToPreviousEvent();
-        }
-    });
-    forwardBtn.addEventListener('click', () => {
-        if (storyState.active) {
-            navigateToNextEvent();
-        }
-    });
-    // Reset story mode memory when timeline is changed
-    document.getElementById('timeline-slider').addEventListener('change', () => {
-        storyState.memory = {};
-    });
 });
