@@ -267,50 +267,58 @@ function updateDotPositions() {
 }
 
 /**
- * Adjusts dot positions to avoid overlap ONLY if two or more events share the exact pixel.
- * All other events are placed at their true position. For grouped events, arrange in a small circle.
+ * Adjusts dot positions to avoid overlap. Each dot is nudged outward until no overlap remains.
  */
 function adjustForCollisions(points) {
     if (points.length <= 1) return points;
-    const CIRCLE_RADIUS = 12; // px, for events sharing a pixel
+    const DOT_DIAMETER = 16; // px
+    const MIN_DIST = 14; // px (reduced for denser packing)
+    const MAX_RADIUS = 120; // px (increased for more separation)
+    const ANGLE_STEP = Math.PI / 8; // 22.5 degrees
+    const RADIUS_STEP = 4; // px
 
-    // Group points by (rounded) original position
-    const groups = {};
-    points.forEach(pt => {
-        const key = `${Math.round(pt.x)},${Math.round(pt.y)}`;
-        if (!groups[key]) groups[key] = [];
-        groups[key].push(pt);
-    });
+    function isOverlapping(x, y, placed) {
+        return placed.some(pt => {
+            const dx = x - pt.x;
+            const dy = y - pt.y;
+            return Math.sqrt(dx * dx + dy * dy) < MIN_DIST;
+        });
+    }
 
-    const adjustedPoints = [];
-    Object.values(groups).forEach(group => {
-        if (group.length === 1) {
-            // No overlap, keep original position
-            adjustedPoints.push({
-                ...group[0],
-                isOffset: false,
-                x: group[0].x,
-                y: group[0].y,
-                originalX: group[0].x,
-                originalY: group[0].y
-            });
-        } else {
-            // Arrange in a small circle around the true position
-            const angleStep = (2 * Math.PI) / group.length;
-            group.forEach((pt, i) => {
-                const angle = i * angleStep;
-                adjustedPoints.push({
-                    ...pt,
-                    x: pt.x + Math.cos(angle) * CIRCLE_RADIUS,
-                    y: pt.y + Math.sin(angle) * CIRCLE_RADIUS,
-                    originalX: pt.x,
-                    originalY: pt.y,
-                    isOffset: true
-                });
-            });
+    const placed = [];
+    for (const pt of points) {
+        let { x, y } = pt;
+        let isOffset = false;
+        let found = false;
+        let bestX = x, bestY = y;
+        let tried = new Set();
+        // Nudge until no overlap
+        for (let r = 0; r <= MAX_RADIUS && !found; r += RADIUS_STEP) {
+            for (let angle = 0; angle < 2 * Math.PI; angle += ANGLE_STEP) {
+                const testX = x + r * Math.cos(angle);
+                const testY = y + r * Math.sin(angle);
+                const key = `${Math.round(testX)},${Math.round(testY)}`;
+                if (tried.has(key)) continue;
+                tried.add(key);
+                if (!isOverlapping(testX, testY, placed)) {
+                    bestX = testX;
+                    bestY = testY;
+                    found = true;
+                    isOffset = r > 0;
+                    break;
+                }
+            }
         }
-    });
-    return adjustedPoints;
+        placed.push({
+            ...pt,
+            x: bestX,
+            y: bestY,
+            originalX: x,
+            originalY: y,
+            isOffset
+        });
+    }
+    return placed;
 }
 
 /**

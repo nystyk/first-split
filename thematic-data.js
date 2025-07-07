@@ -38,7 +38,6 @@ const thematicData = {
         label: 'Linia Gotică',
         type: 'polyline',
         relevantYears: ['1944', '1945'],
-        // Coordinates across northern Italy, from near La Spezia to Rimini
         coords: [
             [44.08, 9.95], [44.15, 10.5], [44.0, 11.5], [43.9, 12.0], [44.05, 12.6]
         ],
@@ -63,7 +62,6 @@ const thematicData = {
         label: 'Linia Mannerheim',
         type: 'polyline',
         relevantYears: ['1939', '1940'],
-        // Coordinates across the Karelian Isthmus
         coords: [
             [60.5, 28.5], [60.6, 29.0], [60.4, 29.5], [60.2, 30.0]
         ],
@@ -75,15 +73,10 @@ const thematicData = {
         label: 'Linia Stalin',
         type: 'polyline',
         relevantYears: ['1941'],
-        // Coordinates along the pre-1939 western border of the USSR
         coords: [
-            // Karelian segment
             [60.7, 30.2], [60.2, 30.5],
-            // Pskov segment
             [57.8, 28.3], [57.0, 28.5],
-            // Minsk segment
             [54.0, 27.0], [53.5, 27.5],
-            // Kiev segment
             [50.8, 30.0], [50.4, 30.5], [50.0, 30.6]
         ],
         style: {

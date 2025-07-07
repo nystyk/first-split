@@ -94,6 +94,9 @@ function renderLegend(period) {
              renderThematicOverlays();
         }
     }
+
+    // --- Ensure overlays are rendered immediately when legend is created/updated ---
+    renderThematicOverlays();
 }
 
 /**
