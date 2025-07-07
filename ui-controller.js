@@ -8,9 +8,9 @@ function renderLegend(period) {
     
     // --- Event Toggles ---
     const eventTypes = [
-        { type: 'major', label: 'Eveniment Major', symbolHtml: '<div class="legend-symbol-label"></div>' },
-        { type: 'atrocity', label: 'Locul Atrocității', symbolHtml: '<div class="atrocity-dot visible"></div>' },
-        { type: 'minor', label: 'Eveniment Minor', symbolHtml: '<div class="minor-event-dot visible"></div>' }
+        { type: 'major', label: 'Eveniment Major', symbolHtml: `<svg class="legend-marker-svg major-svg" width="16" height="16" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="10" fill="#4a6d8a" stroke="#000" stroke-width="2"/><polygon points="11,5 12.9,9.1 17.4,9.3 13.8,12.2 15,16.5 11,13.9 7,16.5 8.2,12.2 4.6,9.3 9.1,9.1" fill="#fff"/></svg>` },
+        { type: 'atrocity', label: 'Locul Atrocității', symbolHtml: `<svg class="legend-marker-svg atrocity-svg" width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="16" height="16" rx="3" fill="#e74c3c" stroke="#fff" stroke-width="2"/><text x="10" y="15" text-anchor="middle" font-size="13" fill="#fff" font-family="Arial" font-weight="bold">!</text></svg>` },
+        { type: 'minor', label: 'Eveniment Minor', symbolHtml: `<svg class="legend-marker-svg minor-svg" width="14" height="14" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="8" fill="#f1c40f" stroke="#333" stroke-width="2"/><circle cx="9" cy="9" r="3" fill="#fff"/></svg>` }
     ];
     let eventTypesHTML = `<div class="legend-section"><h4>Legenda Evenimente</h4>`;
     eventTypes.forEach(item => {

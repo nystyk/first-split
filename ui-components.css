@@ -470,8 +470,8 @@
 /* Cluster marker styles */
 .cluster-dot {
   position: absolute;
-  width: 22px;
-  height: 22px;
+  width: 16px;
+  height: 16px;
   background: #333;
   border: 2px solid #fff;
   border-radius: 50%;
@@ -481,11 +481,12 @@
   cursor: pointer;
   z-index: 2;
   box-shadow: 0 2px 6px rgba(0,0,0,0.18);
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.2s, transform 0.2s;
 }
 .cluster-dot:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.28);
+  box-shadow: 0 0 10px #8ec6ff, 0 4px 12px rgba(0,0,0,0.28);
   background: #444;
+  transform: scale(1.25);
 }
 .cluster-badge {
   color: #fff;

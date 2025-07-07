@@ -235,16 +235,40 @@ function renderMapEvents(period, forceClear = false) {
                 markerEl.style.left = `${cluster.x}px`;
                 markerEl.style.top = `${cluster.y}px`;
             } else {
-                // Multiple events: render cluster marker
+                // Multiple events: render cluster marker (old behavior)
                 markerEl = document.createElement('div');
                 markerEl.className = 'event-element cluster-dot';
                 markerEl.style.left = `${cluster.x}px`;
                 markerEl.style.top = `${cluster.y}px`;
                 markerEl.innerHTML = `<span class="cluster-badge">${cluster.events.length}</span>`;
                 markerEl.title = `${cluster.events.length} evenimente aici`;
+                let popupPinned = false;
+                markerEl.addEventListener('mouseenter', (e) => {
+                    e.stopPropagation();
+                    if (!popupPinned) showClusterPopup(cluster.events, cluster.x, cluster.y);
+                });
+                markerEl.addEventListener('mouseleave', (e) => {
+                    if (!popupPinned) {
+                        const popup = document.getElementById('cluster-popup');
+                        if (popup) popup.remove();
+                    }
+                    popupPinned = false;
+                });
                 markerEl.addEventListener('click', (e) => {
                     e.stopPropagation();
+                    popupPinned = true;
                     showClusterPopup(cluster.events, cluster.x, cluster.y);
+                    // Add a one-time document click handler to unpin and close
+                    setTimeout(() => {
+                        document.addEventListener('click', function handler(ev) {
+                            const popup = document.getElementById('cluster-popup');
+                            if (popup && !popup.contains(ev.target)) {
+                                popupPinned = false;
+                                popup.remove();
+                                document.removeEventListener('click', handler);
+                            }
+                        });
+                    }, 0);
                 });
             }
             dom.dotsContainer.appendChild(markerEl);
@@ -295,8 +319,8 @@ function updateDotPositions() {
         const eventId = marker.dataset.eventId;
         if (eventId) {
             // Find the cluster this event belongs to
-            const cluster = clusters.find(c => c.events.length === 1 && getEventId(c.events[0]) === eventId);
-            if (cluster) {
+            const cluster = clusters.find(c => c.events.some(ev => getEventId(ev) === eventId));
+            if (cluster && cluster.events.length === 1) {
                 marker.style.left = `${cluster.x}px`;
                 marker.style.top = `${cluster.y}px`;
             }
@@ -327,10 +351,37 @@ function updateDotPositions() {
  */
 function createEventDot(event, id) {
     const dot = document.createElement('div');
-    const className = event.type === 'major' ? 'event-dot' : (event.type === 'atrocity' ? 'atrocity-dot' : 'minor-event-dot');
+    let svgHtml = '';
+    let className = '';
+    if (event.type === 'major') {
+        className = 'event-dot';
+        svgHtml = `
+            <svg class="marker-svg major-svg" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="10" fill="#4a6d8a" stroke="#000" stroke-width="2"/>
+                <polygon points="11,5 12.9,9.1 17.4,9.3 13.8,12.2 15,16.5 11,13.9 7,16.5 8.2,12.2 4.6,9.3 9.1,9.1" fill="#fff"/>
+            </svg>
+        `;
+    } else if (event.type === 'atrocity') {
+        className = 'atrocity-dot';
+        svgHtml = `
+            <svg class="marker-svg atrocity-svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="2" width="16" height="16" rx="3" fill="#e74c3c" stroke="#fff" stroke-width="2"/>
+                <text x="10" y="15" text-anchor="middle" font-size="13" fill="#fff" font-family="Arial" font-weight="bold">!</text>
+            </svg>
+        `;
+    } else {
+        className = 'minor-event-dot';
+        svgHtml = `
+            <svg class="marker-svg minor-svg" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="9" cy="9" r="8" fill="#f1c40f" stroke="#333" stroke-width="2"/>
+                <circle cx="9" cy="9" r="3" fill="#fff"/>
+            </svg>
+        `;
+    }
     dot.className = `event-element ${className}`;
     dot.dataset.eventId = id;
     dot.title = event.title;
+    dot.innerHTML = `<div class="marker-svg-wrapper">${svgHtml}</div>`;
     dot.addEventListener('click', () => showModal(event));
     dot.addEventListener('mouseenter', () => showHoverBox(event, dot));
     dot.addEventListener('mouseleave', hideHoverBox);
