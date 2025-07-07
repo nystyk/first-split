@@ -80,7 +80,7 @@ function renderLegend(period) {
 
             if (filterType === 'event') {
                 state.eventFilters[type] = isVisible;
-                renderMapEvents(state.currentPeriod); 
+                renderMapEvents(state.currentPeriod, true); 
             } else if (filterType === 'overlay') {
                 state.overlayFilters[type] = isVisible;
                 renderThematicOverlays();
