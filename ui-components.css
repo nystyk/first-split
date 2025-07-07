@@ -466,3 +466,74 @@
     transform: none;
     box-shadow: none;
 }
+
+/* Cluster marker styles */
+.cluster-dot {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: #333;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+  transition: box-shadow 0.2s;
+}
+.cluster-dot:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.28);
+  background: #444;
+}
+.cluster-badge {
+  color: #fff;
+  font-weight: bold;
+  font-size: 13px;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Cluster popup styles */
+.cluster-popup {
+  position: absolute;
+  min-width: 180px;
+  background: #222;
+  color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  padding: 8px 0 4px 0;
+  z-index: 9999;
+  font-size: 15px;
+  animation: fadeIn 0.18s;
+  pointer-events: auto;
+}
+.cluster-popup-title {
+  font-weight: bold;
+  padding: 4px 16px 6px 16px;
+  border-bottom: 1px solid #444;
+  margin-bottom: 4px;
+}
+.cluster-popup-item {
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: background 0.15s, text-decoration 0.15s;
+  outline: none;
+  text-decoration: none;
+  color: #8ec6ff;
+  border-radius: 4px;
+}
+.cluster-popup-item:hover, .cluster-popup-item:focus {
+  background: #444;
+  text-decoration: underline;
+  color: #fff;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+.cluster-dot, .event-element {
+  pointer-events: auto;
+}

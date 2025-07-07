@@ -60,7 +60,7 @@ function initializeMap() {
     // Update dot positions when map moves
     state.map.on('move', debounce(() => {
         if (state.currentPeriod) {
-            updateDotPositions();
+            renderMapEvents(state.currentPeriod, true); // Force a full re-render
         }
     }, 16)); // ~60fps
     
@@ -197,27 +197,58 @@ function renderMapEvents(period, forceClear = false) {
             visibleEventIds.has(getEventId(e)) &&
             isValidLatLng(e.lat, e.lng)
         );
+        // 1. Map events to screen positions
         let dotPoints = allVisibleEvents.map(event => {
             const point = state.map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
             return {
                 id: getEventId(event),
-                x: point.x,
-                y: point.y,
+                x: Math.round(point.x),
+                y: Math.round(point.y),
                 event: event
             };
         });
-        dotPoints = adjustForCollisions(dotPoints);
-        dotPoints.forEach(dotData => {
-            if (!renderedEventIds.has(dotData.id)) {
-                const dot = createEventDot(dotData.event, dotData.id);
-                dot.style.left = `${dotData.x}px`;
-                dot.style.top = `${dotData.y}px`;
-                if (dotData.isOffset) {
-                    dot.classList.add('offset-dot');
+        // 2. Group by screen position (within a small pixel tolerance)
+        const TOLERANCE = 8; // px
+        const clusters = [];
+        dotPoints.forEach(dot => {
+            let found = false;
+            for (const cluster of clusters) {
+                const dx = dot.x - cluster.x;
+                const dy = dot.y - cluster.y;
+                if (Math.sqrt(dx*dx + dy*dy) <= TOLERANCE) {
+                    cluster.events.push(dot.event);
+                    found = true;
+                    break;
                 }
-                dom.dotsContainer.appendChild(dot);
-                requestAnimationFrame(() => dot.classList.add('visible'));
             }
+            if (!found) {
+                clusters.push({ x: dot.x, y: dot.y, events: [dot.event] });
+            }
+        });
+        // 3. Render markers
+        clusters.forEach(cluster => {
+            let markerEl;
+            if (cluster.events.length === 1) {
+                // Single event: render as usual
+                const event = cluster.events[0];
+                markerEl = createEventDot(event, getEventId(event));
+                markerEl.style.left = `${cluster.x}px`;
+                markerEl.style.top = `${cluster.y}px`;
+            } else {
+                // Multiple events: render cluster marker
+                markerEl = document.createElement('div');
+                markerEl.className = 'event-element cluster-dot';
+                markerEl.style.left = `${cluster.x}px`;
+                markerEl.style.top = `${cluster.y}px`;
+                markerEl.innerHTML = `<span class="cluster-badge">${cluster.events.length}</span>`;
+                markerEl.title = `${cluster.events.length} evenimente aici`;
+                markerEl.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showClusterPopup(cluster.events, cluster.x, cluster.y);
+                });
+            }
+            dom.dotsContainer.appendChild(markerEl);
+            requestAnimationFrame(() => markerEl.classList.add('visible'));
         });
     }
 }
@@ -228,97 +259,67 @@ function renderMapEvents(period, forceClear = false) {
 function updateDotPositions() {
     const { dom } = state;
     const events = allEventsData[state.currentPeriod] || [];
-    
     const visibleEvents = events.filter(e => e.onMap !== false && state.eventFilters[e.type]);
-    const visibleEventIds = new Set(visibleEvents.map(getEventId));
-    
-    // Calculate new positions with collision detection
+    // 1. Map events to screen positions
     let dotPoints = visibleEvents.map(event => {
         const point = state.map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
         return {
             id: getEventId(event),
-            x: point.x,
-            y: point.y,
+            x: Math.round(point.x),
+            y: Math.round(point.y),
             event: event
         };
     });
-    
-    // Apply collision detection
-    dotPoints = adjustForCollisions(dotPoints);
-    
-    // Update positions of all visible dots
-    Array.from(dom.dotsContainer.children).forEach(dot => {
-        const eventId = dot.dataset.eventId;
-        if (visibleEventIds.has(eventId)) {
-            const dotData = dotPoints.find(p => p.id === eventId);
-            if (dotData) {
-                dot.style.left = `${dotData.x}px`;
-                dot.style.top = `${dotData.y}px`;
-                
-                // Update offset indicators
-                if (dotData.isOffset) {
-                    dot.classList.add('offset-dot');
-                } else {
-                    dot.classList.remove('offset-dot');
-                }
+    // 2. Group by screen position (within a small pixel tolerance)
+    const TOLERANCE = 8; // px
+    const clusters = [];
+    dotPoints.forEach(dot => {
+        let found = false;
+        for (const cluster of clusters) {
+            const dx = dot.x - cluster.x;
+            const dy = dot.y - cluster.y;
+            if (Math.sqrt(dx*dx + dy*dy) <= TOLERANCE) {
+                cluster.events.push(dot.event);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            clusters.push({ x: dot.x, y: dot.y, events: [dot.event] });
+        }
+    });
+    // 3. Update positions of all visible dots and clusters
+    const allMarkers = Array.from(dom.dotsContainer.children).filter(el => el.classList.contains('event-element'));
+    allMarkers.forEach(marker => {
+        // For single event dots
+        const eventId = marker.dataset.eventId;
+        if (eventId) {
+            // Find the cluster this event belongs to
+            const cluster = clusters.find(c => c.events.length === 1 && getEventId(c.events[0]) === eventId);
+            if (cluster) {
+                marker.style.left = `${cluster.x}px`;
+                marker.style.top = `${cluster.y}px`;
+            }
+        } else if (marker.classList.contains('cluster-dot')) {
+            // For cluster markers
+            // Find the matching cluster by number of events and position
+            const cluster = clusters.find(c => c.events.length > 1 &&
+                Math.abs(parseInt(marker.style.left) - c.x) < TOLERANCE &&
+                Math.abs(parseInt(marker.style.top) - c.y) < TOLERANCE &&
+                parseInt(marker.querySelector('.cluster-badge')?.textContent) === c.events.length
+            );
+            if (cluster) {
+                marker.style.left = `${cluster.x}px`;
+                marker.style.top = `${cluster.y}px`;
             }
         }
     });
-}
-
-/**
- * Adjusts dot positions to avoid overlap. Each dot is nudged outward until no overlap remains.
- */
-function adjustForCollisions(points) {
-    if (points.length <= 1) return points;
-    const DOT_DIAMETER = 16; // px
-    const MIN_DIST = 14; // px (reduced for denser packing)
-    const MAX_RADIUS = 120; // px (increased for more separation)
-    const ANGLE_STEP = Math.PI / 8; // 22.5 degrees
-    const RADIUS_STEP = 4; // px
-
-    function isOverlapping(x, y, placed) {
-        return placed.some(pt => {
-            const dx = x - pt.x;
-            const dy = y - pt.y;
-            return Math.sqrt(dx * dx + dy * dy) < MIN_DIST;
-        });
+    // Also move the cluster popup if open
+    const popup = document.getElementById('cluster-popup');
+    if (popup && popup.dataset.clusterX && popup.dataset.clusterY) {
+        popup.style.left = `${popup.dataset.clusterX}px`;
+        popup.style.top = `${popup.dataset.clusterY}px`;
     }
-
-    const placed = [];
-    for (const pt of points) {
-        let { x, y } = pt;
-        let isOffset = false;
-        let found = false;
-        let bestX = x, bestY = y;
-        let tried = new Set();
-        // Nudge until no overlap
-        for (let r = 0; r <= MAX_RADIUS && !found; r += RADIUS_STEP) {
-            for (let angle = 0; angle < 2 * Math.PI; angle += ANGLE_STEP) {
-                const testX = x + r * Math.cos(angle);
-                const testY = y + r * Math.sin(angle);
-                const key = `${Math.round(testX)},${Math.round(testY)}`;
-                if (tried.has(key)) continue;
-                tried.add(key);
-                if (!isOverlapping(testX, testY, placed)) {
-                    bestX = testX;
-                    bestY = testY;
-                    found = true;
-                    isOffset = r > 0;
-                    break;
-                }
-            }
-        }
-        placed.push({
-            ...pt,
-            x: bestX,
-            y: bestY,
-            originalX: x,
-            originalY: y,
-            isOffset
-        });
-    }
-    return placed;
 }
 
 /**
@@ -484,4 +485,54 @@ function isValidLatLng(lat, lng) {
 if (window._debugTestMarker) {
     window._debugTestMarker.remove();
     window._debugTestMarker = null;
+}
+
+function showClusterPopup(events, x, y) {
+    // Remove any existing cluster popup
+    const oldPopup = document.getElementById('cluster-popup');
+    if (oldPopup) oldPopup.remove();
+    // Create popup
+    const popup = document.createElement('div');
+    popup.id = 'cluster-popup';
+    popup.className = 'cluster-popup';
+    popup.style.left = `${x + 20}px`;
+    popup.style.top = `${y - 10}px`;
+    popup.dataset.clusterX = x + 20;
+    popup.dataset.clusterY = y - 10;
+    popup.innerHTML = `<div class="cluster-popup-title">Evenimente aici:</div>` +
+        events.map(ev => `<div class="cluster-popup-item" data-event-id="${getEventId(ev)}" tabindex="0" role="button">${ev.title}</div>`).join('');
+    // Click/keyboard handler for items
+    popup.addEventListener('click', (e) => {
+        const item = e.target.closest('.cluster-popup-item');
+        if (item) {
+            e.stopPropagation();
+            const eventId = item.getAttribute('data-event-id');
+            const event = events.find(ev => getEventId(ev) === eventId);
+            if (event) {
+                popup.remove(); // Remove popup first
+                showModal(event);
+            }
+        }
+    });
+    popup.addEventListener('keydown', (e) => {
+        if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('cluster-popup-item')) {
+            const eventId = e.target.getAttribute('data-event-id');
+            const event = events.find(ev => getEventId(ev) === eventId);
+            if (event) {
+                popup.remove(); // Remove popup first
+                showModal(event);
+            }
+        }
+    });
+    // Remove popup on outside click
+    setTimeout(() => {
+        document.addEventListener('click', function handler(ev) {
+            const popupEl = document.getElementById('cluster-popup');
+            if (popupEl && !popupEl.contains(ev.target)) {
+                popupEl.remove();
+                document.removeEventListener('click', handler);
+            }
+        });
+    }, 0);
+    state.dom.dotsContainer.appendChild(popup);
 }
