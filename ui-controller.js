@@ -205,6 +205,19 @@ function showModal(event) {
     
     // Add event listeners for interactive buttons
     setupModalInteractions(event);
+
+    // Add document click listener to close on outside click
+    function handleOutsideClick(e) {
+        const content = modal.querySelector('.modal-content');
+        if (content && !content.contains(e.target)) {
+            hideModal();
+        }
+    }
+    state.modalOutsideClickHandler = handleOutsideClick;
+    setTimeout(() => {
+        document.addEventListener('mousedown', handleOutsideClick);
+        document.addEventListener('touchstart', handleOutsideClick);
+    }, 0);
 }
 
 function getEventTypeLabel(type) {
@@ -312,6 +325,12 @@ function hideModal() {
         document.removeEventListener('keydown', state.currentModalKeyHandler);
         state.currentModalKeyHandler = null;
     }
+    // Remove outside click handler if present
+    if (state.modalOutsideClickHandler) {
+        document.removeEventListener('mousedown', state.modalOutsideClickHandler);
+        document.removeEventListener('touchstart', state.modalOutsideClickHandler);
+        state.modalOutsideClickHandler = null;
+    }
 }
 
 function showContextModal(key) {
@@ -323,10 +342,30 @@ function showContextModal(key) {
     state.dom.contextModal.querySelector('#contextModalTitle').textContent = data.title;
     state.dom.contextModal.querySelector('#contextModalDescription').textContent = data.description;
     state.dom.contextModal.classList.remove('hidden');
+
+    // Add document click listener to close on outside click
+    function handleOutsideClick(e) {
+        const content = state.dom.contextModal.querySelector('.context-modal-content');
+        if (content && !content.contains(e.target)) {
+            hideContextModal();
+        }
+    }
+    // Store handler so it can be removed later
+    state.contextModalOutsideClickHandler = handleOutsideClick;
+    setTimeout(() => {
+        document.addEventListener('mousedown', handleOutsideClick);
+        document.addEventListener('touchstart', handleOutsideClick);
+    }, 0);
 }
 
 function hideContextModal() {
     state.dom.contextModal.classList.add('hidden');
+    // Remove outside click handler if present
+    if (state.contextModalOutsideClickHandler) {
+        document.removeEventListener('mousedown', state.contextModalOutsideClickHandler);
+        document.removeEventListener('touchstart', state.contextModalOutsideClickHandler);
+        state.contextModalOutsideClickHandler = null;
+    }
 }
 
 // === RESET BUTTON FUNCTIONALITY ===
