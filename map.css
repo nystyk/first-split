@@ -27,6 +27,7 @@
 
 .leaflet-tile {
     transition: opacity 0.3s ease-in-out;
+    background-color: #3d3d3d; /* Match tile background to map/image color */
 }
 
 .leaflet-tile-pane {
