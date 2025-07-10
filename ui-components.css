@@ -233,6 +233,8 @@
     position: absolute;
     top: 0;
     white-space: nowrap;
+    font-size: 0.8rem;
+    color: #aaa;
 }
 
 /* ----------------------------------------------------------------------- */

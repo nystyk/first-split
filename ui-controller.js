@@ -123,7 +123,23 @@ function updateSliderVisuals(periodIndex) {
 /**
  * Positions the year labels beneath the timeline slider.
  */
-function positionSliderLabels() {}
+function positionSliderLabels() {
+    const labelsContainer = document.getElementById('slider-labels');
+    if (!labelsContainer || !state.dom.timelineSlider) return;
+    
+    // Position labels to match slider stops more precisely
+    Array.from(labelsContainer.children).forEach((label, index) => {
+        // Calculate position based on slider step
+        const slider = state.dom.timelineSlider;
+        const sliderWidth = slider.clientWidth;
+        const thumbWidth = 25;
+        const travelDistance = sliderWidth - thumbWidth;
+        const stepPosition = (index / (config.periods.length - 1)) * travelDistance + (thumbWidth / 2);
+        const percentage = (stepPosition / sliderWidth) * 100;
+        
+        label.style.left = `${percentage}%`;
+    });
+}
 
 /**
  * Sets up the timeline slider with labels and event listeners.
@@ -132,24 +148,32 @@ function renderFilterBar() {
     const labelsContainer = document.getElementById('slider-labels');
     state.dom.timelineSlider.max = config.periods.length - 1;
     labelsContainer.innerHTML = config.periods.map(p => `<span class='slider-label'>${p === 'pre-war' ? 'Pre' : (p === 'post-war' ? 'Post' : p)}</span>`).join('');
-    labelsContainer.style.display = 'flex';
-    labelsContainer.style.justifyContent = 'space-between';
-    labelsContainer.style.alignItems = 'center';
+    labelsContainer.style.display = 'block';
+    labelsContainer.style.position = 'relative';
     labelsContainer.style.width = '100%';
-    labelsContainer.style.position = 'static';
     labelsContainer.style.marginTop = '4px';
     labelsContainer.style.pointerEvents = 'none';
-    Array.from(labelsContainer.children).forEach(label => {
+    labelsContainer.style.height = '20px';
+    
+    // Position labels to match slider stops more precisely
+    Array.from(labelsContainer.children).forEach((label, index) => {
         label.className = 'slider-label';
-        label.style.flex = '0 0 auto';
+        label.style.position = 'absolute';
         label.style.textAlign = 'center';
-        label.style.width = '40px';
         label.style.pointerEvents = 'none';
-        label.style.position = 'static';
-        label.style.left = '';
-        label.style.transform = '';
-        label.style.top = '';
         label.style.whiteSpace = 'nowrap';
+        label.style.transform = 'translateX(-50%)';
+        label.style.top = '0';
+        
+        // Calculate position based on slider step
+        const slider = state.dom.timelineSlider;
+        const sliderWidth = slider.clientWidth;
+        const thumbWidth = 25;
+        const travelDistance = sliderWidth - thumbWidth;
+        const stepPosition = (index / (config.periods.length - 1)) * travelDistance + (thumbWidth / 2);
+        const percentage = (stepPosition / sliderWidth) * 100;
+        
+        label.style.left = `${percentage}%`;
     });
 
     state.dom.timelineSlider.addEventListener('input', () => updateSliderVisuals(state.dom.timelineSlider.value));
