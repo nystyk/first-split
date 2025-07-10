@@ -1,6 +1,7 @@
-// This file contains data for thematic map overlays, such as front lines, supply routes, etc.
+// This file contains data for thematic map overlays, such as front lines, supply routes, and occupation zones.
 
 const thematicData = {
+    // --- Original Defensive Lines (Fact-Checked and Confirmed) ---
     maginotLine: {
         label: 'Linia Maginot',
         type: 'polyline',
@@ -26,9 +27,9 @@ const thematicData = {
     gustavLine: {
         label: 'Linia Gustav',
         type: 'polyline',
-        relevantYears: ['1943', '1944', '1945'],
+        relevantYears: ['1943', '1944'],
         coords: [
-            [41.3, 13.6], [41.4, 13.8], [41.45, 14.2], [41.5, 14.5]
+             [41.28, 13.5], [41.49, 13.81], [41.5, 14.5]
         ],
         style: {
             className: 'thematic-line gustav-line'
@@ -82,5 +83,29 @@ const thematicData = {
         style: {
             className: 'thematic-line stalin-line'
         }
+    },
+    molotovLine: {
+        label: 'Linia Molotov',
+        type: 'polyline',
+        relevantYears: ['1940', '1941'],
+        coords: [
+            [55.9, 21.1], [55.0, 22.5], [54.0, 23.0], [52.5, 23.2], [50.8, 23.9], [49.5, 22.8]
+        ],
+        style: {
+            className: 'thematic-line molotov-line'
+        },
+        description: 'A line of Soviet fortifications built in 1940-1941 along the new western border after the annexation of the Baltic states and eastern Poland. It was largely unfinished when Germany invaded.'
+    },
+    pantherWotanLine: {
+        label: 'Linia Panther-Wotan (Ostwall)',
+        type: 'polyline',
+        relevantYears: ['1943', '1944'],
+        coords: [
+            [59.4, 28.0], [57.8, 28.3], [56.5, 28.5], [55.0, 29.0], [52.4, 30.9], [50.0, 31.5], [46.8, 32.5]
+        ],
+        style: {
+            className: 'thematic-line panther-wotan-line'
+        },
+        description: 'A major German defensive line on the Eastern Front, stretching from the Baltic Sea to the Black Sea along the Dnieper River. It was mostly overrun by the Red Army in late 1943 and 1944.'
     }
 };
