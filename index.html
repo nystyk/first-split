@@ -27,38 +27,26 @@
 <body>
 
     <!-- INTRODUCTION OVERLAY -->
-    <div id="intro-overlay" style="position:fixed;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;background:rgba(20,20,30,0.96);transition:opacity 0.7s;">
-        <div style="position:absolute;inset:0;z-index:0;opacity:0.18;background:url('https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1200&q=80') center center/cover no-repeat;"></div>
-        <h1 id="intro-title" class="font-teko" style="top:8.5rem;left:8vw;transform:none;">Al Doilea Război Mondial</h1>
-        <blockquote class="intro-quote" style="position:absolute;left:3vw;top:18vh;max-width:320px;z-index:2;">
-            "Războiul nu este o aventură. Este o boală. Ca tifosul."<br>
-            <cite>— Antoine de Saint-Exupéry (traducere românească)</cite>
-        </blockquote>
-        <blockquote class="intro-quote" style="position:absolute;right:3vw;top:38vh;max-width:320px;z-index:2;">
-            "Nimeni nu câștigă un război, ci toți pierd."<br>
-            <cite>— Neville Chamberlain (trad. ro)</cite>
-        </blockquote>
-        <blockquote class="intro-quote" style="position:absolute;left:8vw;bottom:18vh;max-width:340px;z-index:2;">
-            "Cei care nu-și cunosc istoria sunt condamnați să o repete."<br>
-            <cite>— George Santayana (trad. ro)</cite>
-        </blockquote>
-        <blockquote class="intro-quote" style="position:absolute;right:7vw;top:8vh;max-width:340px;z-index:2;">
-            "Istoria este martorul vremurilor, lumina adevărului, viața memoriei, învățătoarea vieții, vestitoarea trecutului."<br>
-            <cite>— Nicolae Iorga</cite>
-        </blockquote>
-        <blockquote class="intro-quote" style="position:absolute;left:4vw;top:60vh;max-width:340px;z-index:2;">
-            "Am făcut tot ce a fost omenește posibil pentru a salva vieți omenești."<br>
-            <cite>— Regele Mihai I al României</cite>
-        </blockquote>
-        <blockquote class="intro-quote" style="position:absolute;right:10vw;bottom:12vh;max-width:340px;z-index:2;">
-            "Războiul este o rană deschisă în trupul umanității."<br>
-            <cite>— Mircea Eliade</cite>
-        </blockquote>
-        <button id="intro-start-btn" class="intro-btn">
-            <span>Începe</span>
-            <span class="btn-icon-row"><span class="btn-icon-circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12h14M13 6l6 6-6 6" stroke="#bfa14a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
-        </button>
-        <div style="position:absolute;bottom:1.5rem;right:2vw;font-size:1rem;color:#b0b8c0;opacity:0.7;z-index:2;letter-spacing:0.01em;">Realizat de Vișan David Ștefan de la C.N. "Ion Neculce" București.</div>
+    <div id="intro-overlay">
+        <div class="intro-bg"></div>
+        <div class="intro-quotes-left">
+            <blockquote class="intro-quote">"Războiul nu este o aventură. Este o boală. Ca tifosul."<br><cite>— Antoine de Saint-Exupéry (traducere românească)</cite></blockquote>
+            <blockquote class="intro-quote">"Cei care nu-și cunosc istoria sunt condamnați să o repete."<br><cite>— George Santayana (trad. ro)</cite></blockquote>
+            <blockquote class="intro-quote">"Am făcut tot ce a fost omenește posibil pentru a salva vieți omenești."<br><cite>— Regele Mihai I al României</cite></blockquote>
+        </div>
+        <div class="intro-center">
+            <h1 id="intro-title" class="font-teko">AL DOILEA<br>RĂZBOI<br>MONDIAL</h1>
+            <button id="intro-start-btn" class="intro-btn">
+                <span>Începe</span>
+                <span class="btn-icon-row"><span class="btn-icon-circle"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;"><path d="M5 12h14M13 6l6 6-6 6" stroke="#bfa14a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
+            </button>
+        </div>
+        <div class="intro-quotes-right">
+            <blockquote class="intro-quote">"Nimeni nu câștigă un război, ci toți pierd."<br><cite>— Neville Chamberlain (trad. ro)</cite></blockquote>
+            <blockquote class="intro-quote">"Istoria este martorul vremurilor, lumina adevărului, viața memoriei, învățătoarea vieții, vestitoarea trecutului."<br><cite>— Nicolae Iorga</cite></blockquote>
+            <blockquote class="intro-quote">"Războiul este o rană deschisă în trupul umanității."<br><cite>— Mircea Eliade</cite></blockquote>
+        </div>
+        <div class="credit">Realizat de Vișan David Ștefan de la C.N. "Ion Neculce" București.</div>
     </div>
 
     <!-- ======================================================================= -->

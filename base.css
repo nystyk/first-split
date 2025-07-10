@@ -42,13 +42,104 @@ h1, h2, .font-teko { font-family: 'Teko', sans-serif; }
 
 /* --- Cinematic Intro Enhancements --- */
 #intro-overlay {
-    opacity: 1;
-    pointer-events: all;
-    backdrop-filter: blur(2px);
     position: fixed;
     inset: 0;
-    overflow: hidden;
-    background: #181c22 !important;
+    z-index: 3000;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background: url('images/intro.jpeg') center center/cover no-repeat;
+    transition: opacity 0.7s;
+    width: 100vw;
+    height: 100vh;
+}
+.intro-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 0%;
+    z-index: 2;
+}
+#intro-title {
+    position: static !important;
+    top: unset !important;
+    left: unset !important;
+    transform: none !important;
+    margin-bottom: 2.5rem;
+    font-size: 6vw !important;
+    line-height: 1.05 !important;
+}
+#intro-start-btn {
+    font-size: 2.2rem !important;
+    padding: 1.3rem 4rem !important;
+    border-radius: 0.7rem !important;
+    margin-top: 0;
+}
+.intro-quotes-left, .intro-quotes-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 70vh;
+    min-width: 340px;
+    max-width: 380px;
+    z-index: 2;
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+}
+.intro-quotes-left {
+    align-items: flex-end;
+    margin-left: 4vw;
+}
+.intro-quotes-right {
+    align-items: flex-start;
+    margin-right: 4vw;
+}
+.intro-quotes-left .intro-quote:first-child {
+    margin-bottom: 2.5rem;
+    margin-top: 2.5rem;
+    transform: translateX(30%) rotate(12deg);
+}
+.intro-quotes-left .intro-quote:nth-child(2) {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+    transform: translateX(12%) scale(1.08);
+}
+.intro-quotes-left .intro-quote:last-child {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+    transform: translateX(18%) rotate(-10deg);
+}
+
+.intro-quotes-right .intro-quote:first-child {
+    margin-bottom: 2.5rem;
+    margin-top: 2.5rem;
+    transform: translateX(-30%) rotate(-12deg);
+}
+.intro-quotes-right .intro-quote:nth-child(2) {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+    transform: translateX(-12%) scale(1.08);
+}
+.intro-quotes-right .intro-quote:last-child {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+    transform: translateX(-18%) rotate(10deg);
+}
+.credit {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 2vw;
+    font-size: 1rem;
+    color: #b0b8c0;
+    opacity: 0.7;
+    z-index: 2;
+    letter-spacing: 0.01em;
+}
+
+#intro-overlay::before, #intro-overlay::after {
+    z-index: 0;
 }
 #intro-overlay::before {
     content: '';
@@ -56,18 +147,16 @@ h1, h2, .font-teko { font-family: 'Teko', sans-serif; }
     inset: 0;
     z-index: 1;
     pointer-events: none;
-    background: radial-gradient(ellipse at center, rgba(0,0,0,0) 60%, rgba(20,20,30,0.85) 100%), url('https://www.transparenttextures.com/patterns/old-wall.png');
-    opacity: 0.7;
-    mix-blend-mode: multiply;
+    background: rgba(10, 20, 40, 0.88); /* even darker blue, slightly more opaque */
 }
 #intro-overlay::after {
     content: '';
     position: absolute;
     inset: 0;
-    z-index: 2;
+    z-index: 0;
     pointer-events: none;
     background: url('https://www.transparenttextures.com/patterns/foggy-birds.png');
-    opacity: 0.18;
+    opacity: 0.40;
     animation: fogmove 24s linear infinite;
 }
 @keyframes fogmove {
@@ -83,9 +172,6 @@ h1, h2, .font-teko { font-family: 'Teko', sans-serif; }
     -webkit-background-clip: initial !important;
     -webkit-text-fill-color: initial !important;
     background-clip: initial !important;
-    text-fill-color: initial !important;
-    -webkit-text-stroke: 2px #1a140a;
-    text-stroke: 2px #1a140a;
     text-shadow:
         0 4px 24px #000a,
         0 1px 0 #2228,
@@ -196,29 +282,15 @@ h1, h2, .font-teko { font-family: 'Teko', sans-serif; }
     transition: all 0.7s cubic-bezier(.77,0,.18,1);
 }
 
-#intro-title {
-    font-family: 'Cinzel', serif !important;
-    font-size: 3rem !important;
+#intro-title, #intro-overlay h1 {
     color: #fff !important;
-    text-align: center !important;
-    text-transform: uppercase !important;
-    letter-spacing: 0.1em !important;
-    position: absolute !important;
-    top: 8.5rem !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    z-index: 3 !important;
-    background: none !important;
+    text-shadow: none !important;
+    filter: none !important;
     border: none !important;
     box-shadow: none !important;
-    text-shadow: none !important;
+    background: none !important;
+    outline: none !important;
     -webkit-text-stroke: 0 !important;
-    text-stroke: 0 !important;
-    -webkit-background-clip: initial !important;
-    -webkit-text-fill-color: initial !important;
-    background-clip: initial !important;
-    text-fill-color: initial !important;
-    filter: none !important;
 }
 .intro-btn {
     font-size: 1.5rem;
@@ -244,29 +316,34 @@ h1, h2, .font-teko { font-family: 'Teko', sans-serif; }
     box-shadow: 0 2px 24px #e6c77e99, 0 0 24px 4px #ffe9a355;
 }
 .btn-icon {
-    width: 2.2em;
-    height: 2.2em;
+    width: 2.8em !important;
+    height: 2.8em !important;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     position: relative;
     margin-left: 0;
     top: 0;
+    filter: none !important;
 }
 .btn-icon-circle {
     background: radial-gradient(circle at 60% 40%, #ffe9a3 60%, #bfa14a 100%);
     border-radius: 50%;
-    box-shadow: 0 0 16px 4px #ffe9a3cc, 0 0 32px 8px #e6c77e55;
+    /* Remove box-shadow and filter for no glow */
+    box-shadow: none !important;
+    filter: none !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 2.2em;
-    height: 2.2em;
+    width: 2.8em !important;
+    height: 2.8em !important;
 }
 .btn-icon svg {
-    width: 1.2em;
-    height: 1.2em;
+    width: 2.4em !important;
+    height: 2.4em !important;
     display: block;
+    margin: 0 auto;
+    padding: 0;
 }
 .btn-icon-down {
     margin-top: 0.4em;
@@ -281,4 +358,8 @@ h1, h2, .font-teko { font-family: 'Teko', sans-serif; }
     #intro-title { top: 3.2rem !important; left: 50% !important; transform: translateX(-50%) !important; font-size: 2.3rem; }
     .intro-btn { font-size: 1.1rem; padding: 0.7rem 1.5rem; }
     .btn-icon, .btn-icon-circle { width: 1.5em; height: 1.5em; }
+}
+
+.intro-center, .intro-btn, .btn-icon-circle {
+    z-index: 2;
 }
