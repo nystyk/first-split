@@ -153,7 +153,7 @@ h1, h2, .font-teko { font-family: 'Teko', sans-serif; }
     content: '';
     position: absolute;
     inset: 0;
-    z-index: 0;
+    z-index: 1;
     pointer-events: none;
     background: url('https://www.transparenttextures.com/patterns/foggy-birds.png');
     opacity: 0.40;
