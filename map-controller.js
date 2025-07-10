@@ -522,6 +522,7 @@ window.getEventId = getEventId;
 window.showHoverBox = showHoverBox;
 window.renderMapEvents = renderMapEvents;
 window.updateDotsHoverability = updateDotsHoverability;
+window.getBounds = getBounds;
 
 function isValidLatLng(lat, lng) {
     return (

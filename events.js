@@ -2004,3 +2004,6 @@ const allEventsData = {
     }
 ]
 };
+
+// Add allEventsData to the window object
+window.allEventsData = allEventsData;
