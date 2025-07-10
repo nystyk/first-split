@@ -48,6 +48,7 @@ h1, h2, .font-teko { font-family: 'Teko', sans-serif; }
     position: fixed;
     inset: 0;
     overflow: hidden;
+    background: #181c22 !important;
 }
 #intro-overlay::before {
     content: '';
@@ -196,22 +197,28 @@ h1, h2, .font-teko { font-family: 'Teko', sans-serif; }
 }
 
 #intro-title {
+    font-family: 'Cinzel', serif !important;
+    font-size: 3rem !important;
+    color: #fff !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    position: absolute !important;
     top: 8.5rem !important;
-    left: 52vw !important;
-    transform: none !important;
-    text-align: left;
-    font-size: 4.2rem;
-    color: #f8f8e8;
-    /* Glowing effect */
-    text-shadow:
-        0 0 16px #ffe9a3,
-        0 0 32px #e6c77e88,
-        0 4px 24px #000a,
-        0 1px 0 #2228,
-        0 0 32px #000c;
-    filter: drop-shadow(0 2px 16px #e6c77e88);
-    z-index: 3;
-    position: absolute;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    z-index: 3 !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    -webkit-text-stroke: 0 !important;
+    text-stroke: 0 !important;
+    -webkit-background-clip: initial !important;
+    -webkit-text-fill-color: initial !important;
+    background-clip: initial !important;
+    text-fill-color: initial !important;
+    filter: none !important;
 }
 .intro-btn {
     font-size: 1.5rem;
@@ -271,7 +278,7 @@ h1, h2, .font-teko { font-family: 'Teko', sans-serif; }
     margin-left: 0;
 }
 @media (max-width: 700px) {
-    #intro-title { top: 3.2rem !important; left: 16vw !important; font-size: 2.3rem; }
+    #intro-title { top: 3.2rem !important; left: 50% !important; transform: translateX(-50%) !important; font-size: 2.3rem; }
     .intro-btn { font-size: 1.1rem; padding: 0.7rem 1.5rem; }
     .btn-icon, .btn-icon-circle { width: 1.5em; height: 1.5em; }
 }
