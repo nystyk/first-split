@@ -51,9 +51,9 @@ h1, h2, .font-teko { font-family: 'Teko', sans-serif; }
 }
 
 #app-header.morph h1 {
-    font-size: 1.5rem;
-    letter-spacing: 0.05em;
-    transform: translateY(-20px);
-    text-shadow: none;
-    transition: all 0.8s cubic-bezier(.77,0,.18,1);
+    font-size: 2.2rem;
+    letter-spacing: 0.08em;
+    transform: translateY(-8px);
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+    transition: all 0.7s cubic-bezier(.77,0,.18,1);
 }

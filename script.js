@@ -83,16 +83,16 @@ function initialLoad() {
     const activePeriod = config.periods[state.dom.timelineSlider.value];
     state.currentPeriod = activePeriod;
     const events = allEventsData[activePeriod] || [];
-    
-    const initialBounds = getBounds(events);
-    state.map.fitBounds(initialBounds, config.map.initialFitBounds);
-
+    // Set a wide initial view (no fitBounds)
+    state.map.setView(config.map.initialCenter, config.map.initialZoom, { animate: false });
     updateMapColors(activePeriod, null);
     renderLegend(activePeriod);
-    showContextModal(activePeriod);
+    if (activePeriod !== 'pre-war') {
+        showContextModal(activePeriod);
+    } else {
+        state.dom.contextModal.classList.add('hidden');
+    }
     updateSliderVisuals(state.dom.timelineSlider.value);
-    
-    // Correctly reference state.map
     state.map.whenReady(() => {
         renderMapEvents(activePeriod);
     });
@@ -117,13 +117,7 @@ function unlockInteractions() {
         state.dom.timelineSlider.disabled = false;
         state.dom.timelineSlider.style.opacity = '';
     }
-    if (state.map) {
-        state.map.scrollWheelZoom.enable();
-        state.map.doubleClickZoom.enable();
-        state.map.touchZoom.enable();
-        state.map.dragging.enable();
-        state.map.keyboard.enable();
-    }
+    // Do NOT enable map interactions (keep map static)
 }
 window.lockInteractions = lockInteractions;
 window.unlockInteractions = unlockInteractions;
@@ -221,11 +215,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         maxZoom,
                         duration: flyConfig.duration
                     });
-                    // Enable interactions after animation
-                    state.map.once('moveend', () => {
-                        console.log('Map moveend, unlocking interactions');
-                        unlockInteractions();
-                    });
+                    // Show context box for pre-war after animation
+                    if (activePeriod === 'pre-war') {
+                        state.map.once('moveend', () => {
+                            showContextModal('pre-war');
+                            unlockInteractions();
+                        });
+                    } else {
+                        state.map.once('moveend', () => {
+                            unlockInteractions();
+                        });
+                    }
                 } catch (err) {
                     console.error('Error during intro animation:', err);
                 }
