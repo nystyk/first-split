@@ -18,14 +18,12 @@ function handlePeriodChange(selectedPeriod, force) {
     state.dom.labelsContainer.innerHTML = '';
     state.dom.lineCanvas.innerHTML = '';
     
-    // Hide all existing dots before starting animation
     const existingDots = state.dom.dotsContainer.querySelectorAll('.event-element');
     existingDots.forEach(dot => {
         dot.classList.add('hiding');
         dot.addEventListener('transitionend', () => dot.remove(), { once: true });
     });
     
-    // Clear dots container after a short delay to ensure smooth transition
     setTimeout(() => {
         state.dom.dotsContainer.innerHTML = '';
     }, 250);
@@ -40,26 +38,29 @@ function handlePeriodChange(selectedPeriod, force) {
     let paddingTopLeft = events.length > 10 ? flyConfig.paddingLarge : flyConfig.paddingSmall;
     let paddingBottomRight = events.length > 10 ? flyConfig.paddingBottomLarge : flyConfig.paddingBottomSmall;
 
-    // Calculate target zoom level
-    const targetZoom = Math.min(maxZoom, state.map.getBoundsZoom(targetBounds, false, paddingTopLeft, paddingBottomRight));
-    
-    // MODIFICARE: Logica pentru stratul temporar ('aestheticTileLayer') a fost eliminată.
-    // Acum, actualizăm culorile direct pe stratul GeoJSON permanent.
+    // 1. Actualizează culorile hărții.
     updateMapColors(selectedPeriod, oldPeriod);
-    
-    // Animația va rula acum peste harta deja colorată corect.
-    state.map.flyToBounds(targetBounds, {
-        paddingTopLeft,
-        paddingBottomRight,
-        maxZoom,
-        duration: flyConfig.duration
+
+    // 2. MODIFICARE CHEIE: Folosim o tehnică de dublă animație pentru a forța
+    // browserul să randeze noile culori ÎNAINTE de a porni animația de zbor.
+    // Acest lucru garantează că stratul colorat este vizibil pe parcursul mișcării.
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            // 3. Pornește animația de zbor.
+            state.map.flyToBounds(targetBounds, {
+                paddingTopLeft,
+                paddingBottomRight,
+                maxZoom,
+                duration: flyConfig.duration
+            });
+        });
     });
 
     // După terminarea animației, randăm evenimentele (punctele).
     state.map.once('moveend', () => {
         setTimeout(() => {
             renderMapEvents(selectedPeriod);
-        }, 100); // Delay redus pentru o apariție mai rapidă
+        }, 100);
     });
 }
 

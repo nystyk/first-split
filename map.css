@@ -35,8 +35,6 @@
     background: #1a2747;
 }
 
-/* MODIFICAT: S-a eliminat complet blocul .leaflet-interactive care era gol. */
-
 #map-background-fake {
     position: absolute;
     top: 0; left: 0;

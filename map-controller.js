@@ -26,9 +26,8 @@ function initializeMap() {
     });
     state.map.setView(config.map.initialCenter, config.map.initialZoom);
 
-    // MODIFICARE CHEIE: S-a eliminat complet stratul de hărți (tile layer).
-    // Fundalul albastru este acum gestionat de fișierul CSS (map.css),
-    // asigurând că este mereu prezent, fără întârzieri de încărcare.
+    // S-a eliminat complet stratul de hărți (tile layer).
+    // Fundalul este acum gestionat de fișierul CSS (map.css).
     
     // Create and append hover containers to the main map container
     const mapContainer = document.getElementById('map-container');
