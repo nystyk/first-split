@@ -30,9 +30,9 @@
     <div id="intro-overlay">
         <div class="intro-bg"></div>
         <div class="intro-quotes-left">
-            <blockquote class="intro-quote">"Războiul nu este o aventură. Este o boală. Ca tifosul."<br><cite>— Antoine de Saint-Exupéry (traducere românească)</cite></blockquote>
-            <blockquote class="intro-quote">"Cei care nu-și cunosc istoria sunt condamnați să o repete."<br><cite>— George Santayana (trad. ro)</cite></blockquote>
-            <blockquote class="intro-quote">"Am făcut tot ce a fost omenește posibil pentru a salva vieți omenești."<br><cite>— Regele Mihai I al României</cite></blockquote>
+            <blockquote class="intro-quote">"Războiul este doar un joc al celor puternici în care mor cei slabi."<br><cite>— Nicolae Iorga</cite></blockquote>
+            <blockquote class="intro-quote">"Războiul este o rană deschisă în trupul omenirii."<br><cite>— Mihail Sadoveanu</cite></blockquote>
+            <blockquote class="intro-quote">"Cauza războiului constă în lepădarea oamenilor de Dumnezeu și de legea lui. Lepădarea de Dumnezeu și netrebnicia din timp de pace a oamenilor provoacă războiul."<br><cite>— Sfântul Nicolae Velimirovici</cite></blockquote>
         </div>
         <div class="intro-center">
             <h1 id="intro-title" class="font-teko">AL DOILEA<br>RĂZBOI<br>MONDIAL</h1>
@@ -42,9 +42,9 @@
             </button>
         </div>
         <div class="intro-quotes-right">
-            <blockquote class="intro-quote">"Nimeni nu câștigă un război, ci toți pierd."<br><cite>— Neville Chamberlain (trad. ro)</cite></blockquote>
-            <blockquote class="intro-quote">"Istoria este martorul vremurilor, lumina adevărului, viața memoriei, învățătoarea vieții, vestitoarea trecutului."<br><cite>— Nicolae Iorga</cite></blockquote>
-            <blockquote class="intro-quote">"Războiul este o rană deschisă în trupul umanității."<br><cite>— Mircea Eliade</cite></blockquote>
+            <blockquote class="intro-quote">"Nu știu cu ce arme va fi luptat cel de‑al treilea război mondial, dar cu siguranță cel de‑al patrulea va fi luptat cu bețe și pietre."<br><cite>— Albert Einstein</cite></blockquote>
+            <blockquote class="intro-quote">"Nu există nicio cale onorabilă de a ucide, nicio modalitate blândă de a distruge. Nu este nimic bun într‑un război, excepție făcând sfârșitul său."<br><cite>— Isaac Asimov</cite></blockquote>
+            <blockquote class="intro-quote">"Nu este suficient să se câștige un război; este mai important să se organizeze pacea."<br><cite>— Aristotel</cite></blockquote>
         </div>
         <div class="credit">Realizat de Vișan David Ștefan de la C.N. "Ion Neculce" București.</div>
     </div>
@@ -61,11 +61,26 @@
             <div id="map"></div>
             <div id="legend-panel"></div>
             
-            <!-- Reset View Controls - Positioned in top-right corner -->
+            <!-- Control Buttons - Positioned in top-right corner -->
             <div id="story-controls" class="absolute top-4 right-4 z-[1003] flex items-center gap-1">
-                <button id="story-play" class="story-btn" title="Reset Map View">
+                <button id="start-btn" class="control-btn" title="Start/Refresh Page">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </button>
+                <button id="story-play" class="control-btn" title="Reset Map View">
                     <svg id="story-play-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                </button>
+                <button id="help-btn" class="control-btn" title="Help">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </button>
+                <button id="credits-btn" class="control-btn" title="Credits">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                 </button>
             </div>
@@ -106,7 +121,7 @@
                 <div class="absolute bottom-0 left-0 right-0 p-6">
                     <div class="flex items-center gap-3 mb-2">
                         <span id="modalEventType" class="px-3 py-1 text-xs font-semibold rounded-full"></span>
-                        <span id="modalYear" class="text-lg font-light text-gray-300"></span>
+                        <span id="modalYear" class="px-3 py-1 text-lg font-bold rounded-lg shadow-lg backdrop-blur-sm"></span>
                     </div>
                     <h2 id="modalTitle" class="text-4xl md:text-5xl font-bold text-white font-teko mb-2"></h2>
                     <div id="modalLocation" class="text-lg text-gray-300 flex items-center gap-2">
@@ -190,6 +205,219 @@
             <button id="closeContextModal" class="absolute top-3 right-3 text-gray-400 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
             <h2 id="contextModalTitle" class="text-4xl font-bold mb-4 font-teko text-white"></h2>
             <p id="contextModalDescription" class="text-lg leading-relaxed"></p>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div id="helpModal" class="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center p-4 z-[2003]">
+        <div class="help-modal-content w-full max-w-4xl max-h-[90vh] overflow-y-auto relative text-gray-300 bg-gray-900 rounded-lg shadow-2xl">
+            <button id="closeHelpModal" class="absolute top-4 right-4 text-gray-500 hover:text-white z-10 transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            
+            <div class="p-8">
+                <h2 class="text-4xl font-bold mb-6 text-white font-teko">Cum să folosești site-ul</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Navigation Section -->
+                    <div class="help-section">
+                        <h3 class="text-2xl font-bold mb-4 text-white font-teko flex items-center gap-3">
+                            <div class="control-btn w-8 h-8 flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            Navigare
+                        </h3>
+                        <ul class="space-y-3 text-lg">
+                            <li>• <strong>Butonul Start:</strong> Reîncarcă pagina și începe din nou</li>
+                            <li>• <strong>Butonul Reset:</strong> Resetează vizualizarea hărții la perioada curentă</li>
+                            <li>• <strong>Slider-ul de timp:</strong> Navighează între perioadele istorice</li>
+                        </ul>
+                    </div>
+
+                    <!-- Event Modal Section -->
+                    <div class="help-section">
+                        <h3 class="text-2xl font-bold mb-4 text-white font-teko flex items-center gap-3">
+                            <div class="control-btn w-8 h-8 flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-1.447-.894L15 4m0 13V4m-6 3l6-3"></path>
+                                </svg>
+                            </div>
+                            Fereastra de Detalii Evenimente
+                        </h3>
+                        <ul class="space-y-3 text-lg">
+                            <li>• <strong>Click pe evenimente:</strong> Deschide fereastra cu detalii complete</li>
+                            <li>• <strong>Imaginea evenimentului:</strong> Afișează o imagine istorică relevantă</li>
+                            <li>• <strong>Anul evenimentului:</strong> Badge tematic colorat (albastru pentru major, galben pentru minor, roșu pentru atrocitate)</li>
+                            <li>• <strong>Tipul evenimentului:</strong> Etichetă colorată (Major/Minor/Atrocitate)</li>
+                            <li>• <strong>Locația:</strong> Coordonatele geografice exacte</li>
+                        </ul>
+                    </div>
+
+                    <!-- Event Types Section -->
+                    <div class="help-section">
+                        <h3 class="text-2xl font-bold mb-4 text-white font-teko flex items-center gap-3">
+                            <div class="control-btn w-8 h-8 flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            Tipuri de Evenimente
+                        </h3>
+                        <div class="space-y-3 text-lg">
+                            <div class="flex items-center gap-3">
+                                <div class="w-4 h-4 bg-blue-600 rounded-full"></div>
+                                <span><strong>Evenimente Majore:</strong> Bătălii, capitulări, declarații de război</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-4 h-4 bg-yellow-500 rounded-full"></div>
+                                <span><strong>Evenimente Minore:</strong> Operațiuni, raiduri, incidente</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-4 h-4 bg-red-600 rounded-full"></div>
+                                <span><strong>Atrocități:</strong> Masacre, deportări, crime de război</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event Modal Content Section -->
+                    <div class="help-section">
+                        <h3 class="text-2xl font-bold mb-4 text-white font-teko flex items-center gap-3">
+                            <div class="control-btn w-8 h-8 flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                </svg>
+                            </div>
+                            Conținutul Fereastrei
+                        </h3>
+                        <ul class="space-y-3 text-lg">
+                            <li>• <strong>Descriere:</strong> Detalii complete despre eveniment</li>
+                            <li>• <strong>Context Istoric:</strong> Situația din perioada respectivă</li>
+                            <li>• <strong>Figuri Cheie:</strong> Personalități importante implicate</li>
+                            <li>• <strong>Impact și Consecințe:</strong> Efectele evenimentului</li>
+                            <li>• <strong>Indicator de progres:</strong> Poziția în secvența evenimentelor</li>
+                        </ul>
+                    </div>
+
+                    <!-- Event Modal Buttons Section -->
+                    <div class="help-section">
+                        <h3 class="text-2xl font-bold mb-4 text-white font-teko flex items-center gap-3">
+                            <div class="control-btn w-8 h-8 flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                                </svg>
+                            </div>
+                            Butoane de Acțiune
+                        </h3>
+                        <ul class="space-y-3 text-lg">
+                            <li>• <strong>Vezi pe Hartă:</strong> Zoom la locația exactă a evenimentului</li>
+                            <li>• <strong>Eveniment Anterior:</strong> Navighează la evenimentul dinainte</li>
+                            <li>• <strong>Eveniment Următor:</strong> Navighează la următorul eveniment</li>
+                            <li>• <strong>Săgețile tastaturii:</strong> Navigare rapidă între evenimente</li>
+                            <li>• <strong>ESC:</strong> Închide fereastra de detalii</li>
+                        </ul>
+                    </div>
+
+                    <!-- Legend Section -->
+                    <div class="help-section">
+                        <h3 class="text-2xl font-bold mb-4 text-white font-teko flex items-center gap-3">
+                            <div class="control-btn w-8 h-8 flex-shrink-0">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                </svg>
+                            </div>
+                            Legendă și Filtre
+                        </h3>
+                        <ul class="space-y-3 text-lg">
+                            <li>• <strong>Panoul de legendă:</strong> Filtrează evenimentele după tip</li>
+                            <li>• <strong>Culorile hărții:</strong> Indică alianțele și statutul teritoriilor</li>
+                            <li>• <strong>Toggle-uri:</strong> Activează/dezactivează tipuri de evenimente</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-8 p-6 bg-gray-800 rounded-lg">
+                    <h4 class="text-xl font-bold mb-3 text-white font-teko">Sfaturi de utilizare</h4>
+                    <ul class="space-y-2 text-lg">
+                        <li>• Folosește slider-ul pentru a explora cronologic evenimentele</li>
+                        <li>• Click pe evenimente pentru detalii complete cu imagini istorice</li>
+                        <li>• Navighează între evenimente folosind butoanele sau săgețile tastaturii</li>
+                        <li>• Folosește "Vezi pe Hartă" pentru a localiza exact evenimentul</li>
+                        <li>• Verifică anul evenimentului în badge-ul tematic colorat (albastru/galben/roșu)</li>
+                        <li>• Folosește legendă pentru a filtra evenimentele după importanță</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Credits Modal -->
+    <div id="creditsModal" class="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center p-2 sm:p-4 z-[2004]">
+        <div class="credits-modal-content w-full max-w-2xl sm:max-w-3xl p-4 sm:p-6 rounded-lg text-gray-300 bg-gray-900 relative max-h-[90vh] overflow-y-auto">
+            <button id="closeCreditsModal" class="absolute top-2 right-2 sm:top-4 sm:right-4 text-gray-500 hover:text-white z-10 transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            
+            <div class="text-center">
+                <h2 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-white font-teko">Credite</h2>
+                <div class="space-y-4 sm:space-y-6">
+                    <div>
+                        <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-white font-teko">Dezvoltator</h3>
+                        <p class="text-base sm:text-lg">Vișan David Ștefan</p>
+                        <p class="text-sm sm:text-base text-gray-400">C.N. "Ion Neculce" București</p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-white font-teko">Tehnologii utilizate</h3>
+                        <ul class="space-y-1 sm:space-y-2 text-sm sm:text-base">
+                            <li>• Leaflet.js pentru hartă interactivă</li>
+                            <li>• Tailwind CSS pentru design</li>
+                            <li>• JavaScript vanilla pentru funcționalitate</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-lg sm:text-xl font-bold mb-2 sm:mb-3 text-white font-teko">Surse</h3>
+                        <div class="space-y-3 sm:space-y-4">
+                            <div class="bg-gray-800 rounded-lg p-3 sm:p-4">
+                                <h4 class="text-base sm:text-lg font-semibold mb-2 text-white flex items-center gap-2">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    Surse de Imagini
+                                </h4>
+                                <p class="text-xs sm:text-sm text-gray-300 mb-1 sm:mb-2">Imagini provenite din:</p>
+                                <div class="text-xs text-gray-400">
+                                    <p>Wikimedia Commons, All That's Interesting, Fanatik.ro, Getty Images, National WWII Museum, Wikipedia România, Historia Scripta, History.com, Britannica.com, și alte surse publice.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-800 rounded-lg p-3 sm:p-4">
+                                <h4 class="text-base sm:text-lg font-semibold mb-2 text-white flex items-center gap-2">
+                                    <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                    </svg>
+                                    Surse Bibliografice
+                                </h4>
+                                <p class="text-xs sm:text-sm text-gray-300 mb-1 sm:mb-2">Informații bazate pe:</p>
+                                <div class="text-xs text-gray-400 space-y-1">
+                                    <p><strong>Surse Online:</strong> Wikipedia, Holocaust Encyclopedia, Taylor & Francis Online, ENRS, Britannica, și alte surse academice.</p>
+                                    <p><strong>Cărți:</strong> "România și al Doilea Război Mondial" (Florin Constantiniu), "Istoria României în timpul celui de-al Doilea Război Mondial" (Ioan Scurtu), "Participarea României la cel de-al Doilea Război Mondial" (Gheorghe Buzatu), și alte lucrări academice.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 sm:mt-8 p-3 sm:p-4 bg-gray-800 rounded-lg">
+                        <p class="text-sm sm:text-base">Această aplicație este destinată în scop educațional pentru înțelegerea istoriei celui de-al Doilea Război Mondial.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

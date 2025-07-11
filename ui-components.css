@@ -1,4 +1,46 @@
 /* ----------------------------------------------------------------------- */
+/* 5. Stiluri pentru Butoanele de Control                                */
+/* ----------------------------------------------------------------------- */
+.control-btn {
+    width: 40px;
+    height: 40px;
+    background: rgba(40, 40, 40, 0.85);
+    backdrop-filter: blur(5px);
+    border: 1px solid #666;
+    border-radius: 8px;
+    color: #e0e0e0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.control-btn:hover {
+    background: rgba(60, 60, 60, 0.9);
+    border-color: #888;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.control-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.control-btn svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.control-btn:hover svg {
+    transform: scale(1.1);
+}
+
+/* ----------------------------------------------------------------------- */
 /* 6. Stiluri pentru Panoul Legendei                                     */
 /* ----------------------------------------------------------------------- */
 #legend-panel {
@@ -248,13 +290,13 @@
 /* ----------------------------------------------------------------------- */
 /* 8. Stiluri pentru Modale și Animații                                  */
 /* ----------------------------------------------------------------------- */
-#modal, #contextModal { 
+#modal, #contextModal, #helpModal, #creditsModal { 
     opacity: 0;
     pointer-events: none;
     visibility: hidden;
     transition: opacity 0.3s ease-in-out, visibility 0s 0.3s;
 }
-#modal.visible, #contextModal.visible {
+#modal.visible, #contextModal.visible, #helpModal.visible, #creditsModal.visible {
     opacity: 1;
     pointer-events: all;
     visibility: visible;
@@ -267,7 +309,9 @@
 }
 
 #modal.visible .modal-content,
-#contextModal.visible .context-modal-content {
+#contextModal.visible .context-modal-content,
+#helpModal.visible .help-modal-content,
+#creditsModal.visible .credits-modal-content {
     animation: slideUp 0.4s ease-out;
 }
 
@@ -279,7 +323,7 @@
 }
 
 /* Close Button Styles - Matching Page Design */
-#closeModal, #closeContextModal {
+#closeModal, #closeContextModal, #closeHelpModal, #closeCreditsModal {
     background-color: rgba(40, 40, 40, 0.9);
     border: 1px solid #666;
     border-radius: 6px;
@@ -292,13 +336,13 @@
     justify-content: center;
 }
 
-#closeModal:hover, #closeContextModal:hover {
+#closeModal:hover, #closeContextModal:hover, #closeHelpModal:hover, #closeCreditsModal:hover {
     background-color: rgba(60, 60, 60, 0.9);
     border-color: #888;
     transform: scale(1.05);
 }
 
-#closeModal svg, #closeContextModal svg {
+#closeModal svg, #closeContextModal svg, #closeHelpModal svg, #closeCreditsModal svg {
     stroke: #ccc !important;
     stroke-width: 2;
     width: 16px;
@@ -385,6 +429,92 @@
     color: #a0a0a0;
 }
 
+/* Enhanced Event Modal Year Badge - Themed by Event Type */
+#modalYear {
+    color: white;
+    font-family: 'Teko', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Major Event Year Styling */
+#modalYear.major {
+    background: linear-gradient(135deg, #4a6d8a, #3a5a7a);
+    border-color: rgba(74, 109, 138, 0.8);
+    box-shadow: 
+        0 4px 15px rgba(74, 109, 138, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+#modalYear.major:hover {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 
+        0 6px 20px rgba(74, 109, 138, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Minor Event Year Styling */
+#modalYear.minor {
+    background: linear-gradient(135deg, #f1c40f, #f39c12);
+    border-color: rgba(241, 196, 15, 0.8);
+    box-shadow: 
+        0 4px 15px rgba(241, 196, 15, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+#modalYear.minor:hover {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 
+        0 6px 20px rgba(241, 196, 15, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Atrocity Event Year Styling */
+#modalYear.atrocity {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    border-color: rgba(231, 76, 60, 0.8);
+    box-shadow: 
+        0 4px 15px rgba(231, 76, 60, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+#modalYear.atrocity:hover {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 
+        0 6px 20px rgba(231, 76, 60, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Shimmer effect for all year badges */
+#modalYear::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
+}
+
+#modalYear:hover::before {
+    left: 100%;
+}
+
+
+
 
 
 /* Responsive Modal */
@@ -412,11 +542,15 @@
     }
 }
 
-.context-modal-content {
+.context-modal-content,
+.help-modal-content,
+.credits-modal-content {
     background-color: rgba(40,40,40,0.7);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,0.2);
 }
+
+
 
 /* Custom scrollbar for modal */
 .modal-content {

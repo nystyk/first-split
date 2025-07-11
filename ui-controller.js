@@ -206,6 +206,10 @@ function showModal(event) {
     eventTypeElement.textContent = getEventTypeLabel(event.type);
     eventTypeElement.className = `px-3 py-1 text-xs font-semibold rounded-full ${event.type}`;
     
+    // Apply event type styling to year badge
+    const yearElement = document.getElementById('modalYear');
+    yearElement.className = `px-3 py-1 text-lg font-bold rounded-lg shadow-lg backdrop-blur-sm ${event.type}`;
+    
     // Update modal image overlay color based on event type
     const modalImageOverlay = document.getElementById('modalImageOverlay');
     const overlayColors = {
@@ -384,6 +388,24 @@ function hideContextModal() {
     }
 }
 
+// === HELP MODAL FUNCTIONS ===
+function showHelpModal() {
+    document.getElementById('helpModal').classList.add('visible');
+}
+
+function hideHelpModal() {
+    document.getElementById('helpModal').classList.remove('visible');
+}
+
+// === CREDITS MODAL FUNCTIONS ===
+function showCreditsModal() {
+    document.getElementById('creditsModal').classList.add('visible');
+}
+
+function hideCreditsModal() {
+    document.getElementById('creditsModal').classList.remove('visible');
+}
+
 // === RESET BUTTON FUNCTIONALITY ===
 function resetMapView() {
     const currentPeriod = state.currentPeriod || config.periods[state.dom.timelineSlider.value];
@@ -396,6 +418,38 @@ function resetMapView() {
 
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('story-play').addEventListener('click', resetMapView);
+    
+    // Start button functionality
+    document.getElementById('start-btn').addEventListener('click', function() {
+        location.reload();
+    });
+    
+    // Help button functionality
+    document.getElementById('help-btn').addEventListener('click', function() {
+        showHelpModal();
+    });
+    
+    // Credits button functionality
+    document.getElementById('credits-btn').addEventListener('click', function() {
+        showCreditsModal();
+    });
+    
+    // Close button event listeners
+    document.getElementById('closeHelpModal').addEventListener('click', hideHelpModal);
+    document.getElementById('closeCreditsModal').addEventListener('click', hideCreditsModal);
+    
+    // Close modals when clicking outside
+    document.getElementById('helpModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            hideHelpModal();
+        }
+    });
+    
+    document.getElementById('creditsModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            hideCreditsModal();
+        }
+    });
     
     const backBtn = document.getElementById('story-back');
     const forwardBtn = document.getElementById('story-forward');
