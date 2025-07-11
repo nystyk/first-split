@@ -1,13 +1,13 @@
 // --- EVENT DATA (Fact-Checked and Expanded) ---
 const allEventsData = {
-    'pre-war': [
+'pre-war': [
     {
         type: 'major',
         year: 1919,
         title: 'Tratatul de la Versailles',
         lat: 48.8049,
         lng: 2.1204,
-        imageUrl: 'https://images.unsplash.com/photo-1562095398-e7bf9fcf6292?q=80&w=800&auto=format&fit=crop',
+        imageUrl: 'images/pre-war/Versailles.jpg',
         description: 'Tratatul care a încheiat oficial Primul Război Mondial, impunând condiţii extrem de dure Germaniei şi redesenând harta Europei. Semnat in Sala Oglinzilor, același loc unde fusese proclamat Imperiul German, tratatul a fost perceput ca un "Diktat" (pace dictată) de către germani, care au fost excluşi de la negocieri.',
         context: 'Lumea ieşea din cel mai devastator conflict de până atunci, iar puterile victorioase, în special Franța, doreau garanții că Germania nu va mai putea niciodată să amenințe pacea europeană. Atmosfera era încărcată de dorința de răzbunare, dar şi de idealurile wilsoniene de autodeterminare şi securitate colectivă, care s-au ciocnit în timpul negocierilor tensionate.',
         figures: [
@@ -23,7 +23,7 @@ const allEventsData = {
         title: 'Marșul asupra Romei',
         lat: 41.9028,
         lng: 12.4964,
-        imageUrl: 'https://images.unsplash.com/photo-1629631614981-d4b8f5835694?q=80&w=800&auto=format&fit=crop',
+        imageUrl: 'images/pre-war/Marșul asupra Romei.jpg',
         description: 'O manevră politică de intimidare prin care Benito Mussolini şi Partidul sâu Naţional Fascist au preluat puterea în Italia. A fost mai mult o demonstrație de forță decât o cucerire militară, exploatând frica de un război civil.',
         context: 'Italia postbelică era marcată de criză economică, şomaj şi o profundă nemulțumire faţă de rezultatele Conferinţei de Pace de la Paris, numită "victoria mutilată". Această instabilitate, combinată cu teama de o revoluție comunistă, a creat condițiile perfecte pentru ca mişcarea fascistă a lui Mussolini să câștige sprijinul elitelor.',
         figures: [
@@ -38,7 +38,7 @@ const allEventsData = {
         title: 'Promulgarea Constituţiei Unirii',
         lat: 44.4268,
         lng: 26.1025,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/4/44/Constitu%C5%A3ia_Rom%C3%A2niei_din_1923_-_Monitorul_Oficial.jpg',
+        imageUrl: 'images/pre-war/Promulgarea Constituţiei Unirii.jpg',
         description: 'Promulgarea unei noi constituții menite să unifice cadrul legislativ şi administrativ al României Mari după unirea din 1918. Cunoscută drept "Constituţia Unirii", aceasta a fost una dintre cele mai democratice din Europa contemporană, dar a conţinut vicii structurale care au contribuit ulterior la subminarea democrației.',
         context: 'După Marea Unire din 1918, România se confrunta cu provocarea majoră de a integra noile provincii - Transilvania, Basarabia şi Bucovina - care aveau tradiţii juridice şi administrative diferite. Elaborarea unei noi legi fundamentale a devenit o prioritate națională pentru a consolida statul unitar.',
         figures: [
@@ -51,9 +51,9 @@ const allEventsData = {
         type: 'minor',
         year: 1927,
         title: 'Înfiinţarea Legiunii Arhanghelului Mihail',
-        lat: 47.1585,
-        lng: 27.6014,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/c/c9/Corneliu_Zelea_Codreanu_propaganda.jpg',
+        lat: 44.4268,
+        lng: 26.1025,
+        imageUrl: 'images/pre-war/Înfiinţarea Legiunii Arhanghelului Mihail.jpg',
         description: 'Corneliu Zelea Codreanu înființează la Iași Legiunea Arhanghelului Mihail, o mişcare ultranaționalistă, fascistă şi antisemită, care va deveni cunoscută sub numele de Garda de Fier.',
         context: 'Societatea românească de după Primul Război Mondial era marcată de instabilitate economică, corupție politică endemică și un sentiment de criză spirituală. Legiunea s-a prezentat ca o alternativă pură, o mişcare de "renaştere naţională şi creștină", atrăgând în special tineretul frustrat.',
         figures: [
@@ -67,7 +67,7 @@ const allEventsData = {
         title: 'Crahul de pe Wall Street',
         lat: 40.7069,
         lng: -74.0113,
-        imageUrl: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=800&auto=format&fit=crop',
+        imageUrl: 'images/pre-war/Crahul de pe Wall Street.jpg',
         description: 'O prăbuşire catastrofală a bursei de valori din New York, care a şters miliarde de dolari din valoarea acțiunilor şi a aruncat Statele Unite și lumea într-o criză economică fără precedent, cunoscută ca Marea Depresiune.',
         context: 'Anii \'20, cunoscuți ca "Roaring Twenties", au fost o perioadă de speculații financiare intense şi necontrolate, alimentate de credit ieftin. Această bulă speculativă a dus prețurile acțiunilor la niveluri nesustenabile, pregătind terenul pentru un colaps inevitabil.',
         figures: [
@@ -81,7 +81,7 @@ const allEventsData = {
         title: 'Incidentul Mukden',
         lat: 41.8057,
         lng: 123.4315,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Mukden_incident_aftermath.jpg/800px-Mukden_incident_aftermath.jpg',
+        imageUrl: 'images/pre-war/Incidentul Mukden.jpg',
         description: 'O operaţiune sub steag fals orchestrată de ofiţeri ai armatei japoneze, care au detonat o mică încărcătură explozibilă lângă o cale ferată japoneză din Manciuria. Incidentul minor a fost folosit ca pretext pentru a invada şi ocupa întreaga regiune.',
         context: 'Japonia imperialistă, în plină expansiune industrială și militaristă, căuta cu disperare resurse naturale (cărbune, fier) şi pieţe de desfacere, considerând Manciuria, bogată în resurse, esențială pentru interesele sale strategice și economice.',
         figures: [
@@ -94,9 +94,9 @@ const allEventsData = {
         type: 'major',
         year: 1933,
         title: 'Hitler devine Cancelar',
-        lat: 52.5163,
-        lng: 13.3777,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Hitler_und_Hindenburg_am_Tag_von_Potsdam_21._M%C3%A4rz_1933.jpg/800px-Hitler_und_Hindenburg_am_Tag_von_Potsdam_21._M%C3%A4rz_1933.jpg',
+        lat: 52.5200,
+        lng: 13.4050,
+        imageUrl: 'images/pre-war/Hitler devine Cancelar.jpg',
         description: 'Adolf Hitler, liderul Partidului Nazist, este numit legal Cancelar al Germaniei de către Preşedintele Paul von Hindenburg. Numirea a fost rezultatul unui compromis politic al elitelor conservatoare, care credeau în mod eronat că îl pot controla.',
         context: 'Republica de la Weimar era profund slăbită de instabilitatea politică cronică şi de efectele devastatoare ale Marii Crize Economice. Exploatând furia populară și nemulțumirea față de Tratatul de la Versailles, Partidul Nazist a devenit cea mai mare forță politică din Reichstag.',
         figures: [
@@ -110,9 +110,9 @@ const allEventsData = {
         type: 'atrocity',
         year: 1933,
         title: 'Deschiderea Lagărului Dachau',
-        lat: 48.2700,
-        lng: 11.4675,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Dachau_gate.jpg/800px-Dachau_gate.jpg',
+        lat: 48.2672,
+        lng: 11.4340,
+        imageUrl: 'images/pre-war/Deschiderea Lagărului Dachau.jpg',
         description: 'Primul lagăr de concentrare nazist este deschis lângă München, inițial pentru a încarcera oponenţii politici ai regimului (comuniști, social-democrați). A devenit prototipul pentru întregul sistem de lagăre naziste.',
         context: 'După numirea sa ca şi cancelar, Hitler a avut nevoie de un instrument pentru a teroriza şi elimina orice opoziție politică. Lagărele au fost create ca spații extrajudiciare unde inamicii regimului puteau fi închişi pe termen nelimitat, fără proces, și supuși muncii forțate și torturii.',
         figures: [
@@ -125,9 +125,9 @@ const allEventsData = {
         type: 'atrocity',
         year: 1934,
         title: 'Noaptea Cuțitelor Lungi',
-        lat: 52.5163,
-        lng: 13.3777,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Bundesarchiv_Bild_102-16196%2C_Berlin%2C_Leibstandarte_SS_Adolf_Hitler.jpg/800px-Bundesarchiv_Bild_102-16196%2C_Berlin%2C_Leibstandarte_SS_Adolf_Hitler.jpg',
+        lat: 52.5200,
+        lng: 13.4050,
+        imageUrl: 'images/pre-war/Noaptea Cuțitelor Lungi.jpg',
         description: 'O epurare politică sângeroasă în care Hitler a ordonat SS-ului să execute sute de oponenți politici și rivali interni pentru a-şi consolida puterea. Principala ţintă a fost conducerea SA (Batalioanele de Asalt) şi liderul acesteia, Ernst Röhm.',
         context: 'Ernst Röhm şi facţiunea radicală a SA, care număra milioane de membri, doreau o "a doua revoluţie" care să preia controlul asupra armatei (Reichswehr), amenințând astfel atât elita militară tradițională, cât și puterea absolută a lui Hitler.',
         figures: [
@@ -143,7 +143,7 @@ const allEventsData = {
         title: 'Incidentul de la Walwal',
         lat: 8.0667,
         lng: 45.4167,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e0/Italo-Ethiopian_War_map_1935.svg',
+        imageUrl: 'images/pre-war/Incidentul de la Walwal.jpg',
         description: 'O ciocnire la un punct de frontieră disputat între trupele italiene și etiopiene în Ogaden. Italia a folosit acest incident ca pretext pentru a cere scuze și compensații, escaladând tensiunile și pregătind invazia din anul următor.',
         context: 'Italia fascistă, sub conducerea lui Mussolini, căuta să-și extindă imperiul colonial și să răzbune înfrângerea de la Adwa din 1896. Orice incident de frontieră putea fi exploatat pentru a justifica o agresiune.',
         figures: [
@@ -158,7 +158,7 @@ const allEventsData = {
         title: 'Plebiscitul din Saarland',
         lat: 49.3833,
         lng: 6.9667,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Saar_Plebiscite_Propaganda_Poster_1934.jpg/800px-Saar_Plebiscite_Propaganda_Poster_1934.jpg',
+        imageUrl: 'images/pre-war/Plebiscitul din Saarland.jpg',
         description: 'Locuitorii din regiunea Saar, administrată de Liga Națiunilor după WWI, votează cu o majoritate de peste 90% pentru reunificarea cu Germania. Acesta a fost un succes uriaș de propagandă pentru regimul nazist.',
         context: 'Conform Tratatului de la Versailles, regiunea bogată în cărbune Saar a fost plasată sub administrarea Ligii Națiunilor pentru 15 ani, după care locuitorii săi puteau decide viitorul prin plebiscit. Regimul nazist a desfășurat o campanie intensă de propagandă pentru a asigura rezultatul.',
         figures: [
@@ -171,9 +171,9 @@ const allEventsData = {
         type: 'atrocity',
         year: 1935,
         title: 'Legile de la Nürnberg',
-        lat: 49.4539,
-        lng: 11.0775,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Nuremberg_laws_chart.jpg/800px-Nuremberg_laws_chart.jpg',
+        lat: 49.4521,
+        lng: 11.0767,
+        imageUrl: 'images/pre-war/Legile de la Nürnberg.jpg',
         description: 'La mitingul anual al Partidului Nazist de la Nürnberg, sunt adoptate două legi antisemite care instituționalizează persecuția evreilor, privându-i de cetățenie germană și interzicând căsătoriile sau relațiile între evrei și "arieni".',
         context: 'Aceste legi au fost punctul culminant al unei politici antisemite tot mai agresive de la preluarea puterii de către naziști. Ele au transformat ideologia rasială nazistă într-o realitate juridică, definind cine este evreu pe baza arborelui genealogic.',
         figures: [
@@ -186,9 +186,9 @@ const allEventsData = {
         type: 'major',
         year: 1935,
         title: 'Invazia Italiană a Etiopiei',
-        lat: 9.0250,
-        lng: 38.7469,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Ethiopian_soldiers%2C_ca._1935.jpg/800px-Ethiopian_soldiers%2C_ca._1935.jpg',
+        lat: 9.1450,
+        lng: 40.4897,
+        imageUrl: 'images/pre-war/Invazia Italiană a Etiopiei.jpg',
         description: 'Forțele italiene invadează Etiopia (cunoscută și ca Abisinia), într-un act de agresiune colonială care a expus încă o dată slăbiciunea Ligii Națiunilor.',
         context: 'Benito Mussolini dorea să creeze un nou Imperiu Roman și să răzbune înfrângerea umilitoare a Italiei în Etiopia la Adwa în 1896. Incidentul de la Walwal din 1934 a fost folosit ca pretext pentru a justifica invazia.',
         figures: [
@@ -201,9 +201,9 @@ const allEventsData = {
         type: 'major',
         year: 1936,
         title: 'Remilitarizarea Renaniei',
-        lat: 50.9375,
-        lng: 6.9603,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/German_troops_march_into_the_Rhineland_-_1936.jpg/800px-German_troops_march_into_the_Rhineland_-_1936.jpg',
+        lat: 50.7374,
+        lng: 7.0982,
+        imageUrl: 'images/pre-war/Remilitarizarea Renaniei.jpg',
         description: 'Trupele germane intră în zona demilitarizată a Renaniei, încălcând în mod direct şi flagrant Tratatul de la Versailles şi Tratatele de la Locarno. A fost primul pariu major al lui Hitler pe scena internaţională.',
         context: 'Hitler a folosit ratificarea pactului franco-sovietic ca pretext, susţinând că acesta amenință securitatea Germaniei. El a mizat corect pe faptul că Franța și Marea Britanie, paralizate de opinia publică pacifistă și de probleme interne, nu vor risca un război.',
         figures: [
@@ -217,7 +217,7 @@ const allEventsData = {
         title: 'Începutul Războiului Civil Spaniol',
         lat: 40.4168,
         lng: -3.7038,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Spanish_Civil_War_montage.jpg/800px-Spanish_Civil_War_montage.jpg',
+        imageUrl: 'images/pre-war/Începutul Războiului Civil Spaniol.jpg',
         description: 'O lovitură de stat militară a naționaliștilor conduși de Generalul Francisco Franco împotriva Republicii Spaniole declanșează un conflict sângeros ce va dura aproape trei ani și va deveni un teren de testare pentru armele și tacticile Axei și ale Uniunii Sovietice.',
         context: 'Spania era profund divizată între forțele de stânga (republicani, socialiști, comuniști, anarhiști) și cele de dreapta (naționaliști, monarhiști, fasciști). Alegerea unui guvern de Front Popular în 1936 a polarizat și mai mult societatea, ducând la lovitura de stat.',
         figures: [
@@ -232,7 +232,7 @@ const allEventsData = {
         title: 'Pactul Anti-Comintern',
         lat: 52.5200,
         lng: 13.4050,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Bundesarchiv_Bild_183-H28598%2C_Berlin%2C_Unterzeichnung_des_Antikominternpaktes.jpg/800px-Bundesarchiv_Bild_183-H28598%2C_Berlin%2C_Unterzeichnung_des_Antikominternpaktes.jpg',
+        imageUrl: 'images/pre-war/Pactul Anti-Comintern.jpg',
         description: 'Germania Nazistă și Japonia Imperială semnează un pact direcționat împotriva Internaționalei Comuniste (Comintern), formând nucleul viitoarei alianțe a Axei. Italia se va alătura în 1937.',
         context: 'Atât Germania, cât și Japonia, vedeau Uniunea Sovietică și comunismul ca pe o amenințare ideologică și geopolitică majoră. Pactul a fost o formalizare a ostilității lor comune și un prim pas spre o alianță militară mai largă.',
         figures: [
@@ -247,7 +247,7 @@ const allEventsData = {
         title: 'Bombardarea Guernicăi',
         lat: 43.3174,
         lng: -2.6725,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Bundesarchiv_Bild_183-H25224%2C_Guernica%2C_zerst%C3%B6rte_H%C3%A4user.jpg/800px-Bundesarchiv_Bild_183-H25224%2C_Guernica%2C_zerst%C3%B6rte_H%C3%A4user.jpg',
+        imageUrl: 'images/pre-war/Bombardarea Guernicăi.jpg',
         description: 'Un bombardament aerian devastator asupra orașului basc Guernica de către Legiunea Condor a Germaniei naziste, la cererea naționaliștilor spanioli. A fost unul dintre primele bombardamente de teroare împotriva unei populații civile lipsite de apărare.',
         context: 'În timpul Războiului Civil Spaniol, Legiunea Condor a oferit sprijin aerian forțelor lui Franco. Atacul asupra Guernicăi, un centru cultural basc, a avut loc într-o zi de târg, pentru a maximiza victimele civile și a teroriza populația.',
         figures: [
@@ -262,7 +262,7 @@ const allEventsData = {
         title: 'Al Doilea Război Sino-Japonez',
         lat: 39.9042,
         lng: 116.4074,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Second_Sino-Japanese_War_montage.jpg/800px-Second_Sino-Japanese_War_montage.jpg',
+        imageUrl: 'images/pre-war/Al Doilea Război Sino-Japonez.jpg',
         description: 'O ciocnire între trupele japoneze și chineze la Podul Marco Polo, lângă Beijing, duce la o invazie pe scară largă a Chinei de către Japonia, marcând începutul războiului în Asia, considerat de mulți istorici adevăratul început al WWII.',
         context: 'După ocuparea Manciuriei în 1931, Japonia a continuat să-și extindă influența în nordul Chinei. Incidentul de la Podul Marco Polo a fost pretextul folosit de armata japoneză pentru a lansa o campanie de cucerire totală.',
         figures: [
@@ -277,7 +277,7 @@ const allEventsData = {
         title: 'Masacrul de la Nanking',
         lat: 32.0603,
         lng: 118.7969,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Nanking_refugees_in_1937.jpg/800px-Nanking_refugees_in_1937.jpg',
+        imageUrl: 'images/pre-war/Masacrul de la Nanking.jpg',
         description: 'O perioadă de șase săptămâni de atrocități în masă comise de trupele japoneze după capturarea orașului Nanking, capitala de atunci a Chinei. Evenimentele includ execuții în masă, violuri pe scară largă, jafuri și incendieri.',
         context: 'După o luptă acerbă pentru Shanghai, trupele japoneze au avansat spre Nanking. Disciplina s-a prăbușit, iar soldații, încurajați de comandanți, au dezlănțuit o campanie de teroare împotriva prizonierilor de război și a populației civile.',
         figures: [
@@ -290,9 +290,9 @@ const allEventsData = {
         type: 'major',
         year: 1938,
         title: 'Instaurarea dictaturii regale a lui Carol al II-lea',
-        lat: 44.4396,
-        lng: 26.0963,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/8/83/Regele_Carol_al_II-lea.jpg',
+        lat: 44.4268,
+        lng: 26.1025,
+        imageUrl: 'images/pre-war/Instaurarea dictaturii regale a lui Carol al II-lea.jpg',
         description: 'Printr-o lovitură de stat, Regele Carol al II-lea suspendă Constituția din 1923, dizolvă partidele politice şi instaurează un regim de autoritate personală, punând capăt democraţiei parlamentare interbelice din România.',
         context: 'Scena politică românească la sfârşitul anilor \'30 era extrem de fragmentată și violentă. Ascensiunea Gărzii de Fier, care a obținut un scor mare în alegeri, reprezenta o amenințare directă. Ambițios şi autoritar, Carol al II-lea a exploatat această criză pentru a-şi atinge un obiectiv mai vechi: concentrarea puterii în propriile mâini.',
         figures: [
@@ -308,7 +308,7 @@ const allEventsData = {
         title: 'Anschluss (Anexarea Austriei)',
         lat: 48.2082,
         lng: 16.3738,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Bundesarchiv_Bild_183-1987-0922-500%2C_Wien%2C_Einmarsch_deutscher_Truppen.jpg/800px-Bundesarchiv_Bild_183-1987-0922-500%2C_Wien%2C_Einmarsch_deutscher_Truppen.jpg',
+        imageUrl: 'images/pre-war/Anschluss.jpg',
         description: 'Germania Nazistă anexează Austria într-o uniune politică (Anschluss), realizând visul lui Hitler de a uni toate popoarele germanofone. Anexarea a fost realizată prin presiune politică, amenințarea cu invazia militară și a fost primită cu entuziasm de mulți austrieci.',
         context: 'Hitler, austriac de origine, considera unirea celor două naţiuni un pas esențial în crearea unei "Germanii Mari". Exploatând mişcarea nazistă locală, el l-a forțat pe cancelarul austriac Kurt Schuschnigg să demisioneze și să anuleze un referendum privind independența.',
         figures: [
@@ -324,7 +324,7 @@ const allEventsData = {
         title: 'Conferința de la Évian',
         lat: 46.4015,
         lng: 6.5909,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/%C3%89vian_Conference.jpg/800px-%C3%89vian_Conference.jpg',
+        imageUrl: 'images/pre-war/Conferința de la Évian.jpg',
         description: 'O conferință internațională convocată de președintele american Franklin D. Roosevelt pentru a discuta criza refugiaților evrei din Germania și Austria. Eșecul majorității țărilor de a-și deschide granițele a avut consecințe tragice.',
         context: 'După Anschluss, persecuția evreilor s-a intensificat, creând un număr mare de refugiați. Roosevelt a convocat conferința pentru a găsi o soluție colectivă, dar majoritatea delegaților și-au exprimat simpatia, invocând apoi criza economică pentru a refuza primirea refugiaților.',
         figures: [
@@ -337,9 +337,9 @@ const allEventsData = {
         type: 'major',
         year: 1938,
         title: 'Acordul de la München',
-        lat: 48.1371,
-        lng: 11.5754,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Bundesarchiv_Bild_183-R69173%2C_M%C3%BCnchener_Abkommen%2C_Unterzeichnung.jpg/800px-Bundesarchiv_Bild_183-R69173%2C_M%C3%BCnchener_Abkommen%2C_Unterzeichnung.jpg',
+        lat: 48.1351,
+        lng: 11.5820,
+        imageUrl: 'images/pre-war/Acordul de la München.jpg',
         description: 'Un acord încheiat între Germania, Marea Britanie, Franţa şi Italia, care a permis Germaniei să anexeze Regiunea Sudetă a Cehoslovaciei, locuită majoritar de germani. Acordul este considerat apogeul politicii de conciliere ("appeasement").',
         context: 'Hitler a fabricat o criză, pretinzând că etnicii germani din Sudeți sunt persecutați și ameninţând cu războiul. Liderii britanici şi francezi, disperați să evite un conflict pentru care nu erau pregătiți, au sacrificat integritatea teritorială a Cehoslovaciei, care nu a fost invitată la conferință.',
         figures: [
@@ -354,9 +354,9 @@ const allEventsData = {
         type: 'minor',
         year: 1938,
         title: 'Primul Dictat de la Viena',
-        lat: 48.2082,
-        lng: 16.3738,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/First_Vienna_Award_ethnic_map.svg/800px-First_Vienna_Award_ethnic_map.svg.png',
+        lat: 47.4980,
+        lng: 19.0399,
+        imageUrl: 'images/pre-war/Primul Dictat de la Viena.jpg',
         description: 'Un arbitraj teritorial condus de Germania și Italia, care a forțat Cehoslovacia, deja slăbită după Acordul de la München, să cedeze Ungariei sudul Slovaciei și Rutenia Subcarpatică, teritorii locuite majoritar de maghiari.',
         context: 'După succesul de la München, Ungaria, condusă de regentul Miklós Horthy, a revendicat teritorii de la Cehoslovacia. Germania și Italia au mediat pentru a recompensa Ungaria pentru alinierea sa la Axă și pentru a continua dezmembrarea Cehoslovaciei.',
         figures: [
@@ -372,7 +372,7 @@ const allEventsData = {
         title: 'Kristallnacht (Noaptea de Cristal)',
         lat: 50.1109,
         lng: 8.6821,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Synagogue_of_Siegen_burned_down_on_Kristallnacht_-_1938.jpg/800px-Synagogue_of_Siegen_burned_down_on_Kristallnacht_-_1938.jpg',
+        imageUrl: 'images/pre-war/Kristallnacht (Noaptea de Cristal).jpg',
         description: 'Un pogrom masiv și organizat împotriva evreilor din Germania Nazistă și Austria. În noaptea de 9-10 noiembrie, sinagogi, afaceri și case au fost arse și distruse, iar aproximativ 30.000 de bărbați evrei au fost arestați și trimiși în lagăre de concentrare.',
         context: 'Pretextul oficial a fost asasinarea diplomatului german Ernst vom Rath la Paris de către Herschel Grynszpan, un tânăr evreu polonez. În realitate, a fost o explozie de violență orchestrată de ministrul propagandei, Joseph Goebbels, și executată de trupele SA și Tineretul Hitlerist.',
         figures: [
@@ -390,7 +390,7 @@ const allEventsData = {
         title: 'Pactul de Oțel',
         lat: 52.5200,
         lng: 13.4050,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e1/Pact_of_Steel_signing.jpg',
+        imageUrl: 'images/1939/Pactul de Oțel.jpg',
         description: 'Pe 22 mai, Germania Nazistă și Italia Fascistă semnează la Berlin "Pactul de Oțel", o alianță militară și politică care formalizează legăturile dintre cele două regimuri totalitare. Pactul obliga oricare dintre părți să o ajute pe cealaltă în cazul unui război.',
         context: 'După ce ambele țări au încălcat în mod repetat ordinea internațională, această alianță a fost menită să intimideze democrațiile occidentale. Mussolini a fost inițial reticent, dar a fost convins de succesele diplomatice ale lui Hitler, creând o axă formală Berlin-Roma.',
         figures: [
@@ -405,7 +405,7 @@ const allEventsData = {
         title: 'Operațiunea Himmler - Gleiwitz',
         lat: 50.3115,
         lng: 18.6761,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Bundesarchiv_Bild_183-S55480%2C_Gleiwitz%2C_Sender.jpg/800px-Bundesarchiv_Bild_183-S55480%2C_Gleiwitz%2C_Sender.jpg',
+        imageUrl: 'images/1939/Operațiunea Himmler - Gleiwitz.jpg',
         description: 'Pe 31 august, o serie de incidente sub steag fals înscenate de SS pentru a crea un pretext de agresiune poloneză. Cel mai faimos a fost atacul simulat asupra postului de radio din Gleiwitz, folosit de Hitler pentru a justifica invazia Poloniei.',
         context: 'Hitler avea nevoie de o justificare publică pentru a lansa invazia Poloniei. Operațiunea, planificată de Reinhard Heydrich, a fost concepută pentru a prezenta Germania ca victimă, nu ca agresor, în fața poporului german și a comunității internaționale.',
         figures: [
@@ -420,7 +420,7 @@ const allEventsData = {
         title: 'Invazia Poloniei (Fall Weiss)',
         lat: 54.4075,
         lng: 18.6708,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Bundesarchiv_Bild_183-52033-0016%2C_Polen%2C_K%C3%A4mpfe_in_Gdingen.jpg/800px-Bundesarchiv_Bild_183-52033-0016%2C_Polen%2C_K%C3%A4mpfe_in_Gdingen.jpg',
+        imageUrl: 'images/1939/Fall Weiss.jpg',
         description: 'Pe 1 septembrie, Germania lansează o invazie masivă a Poloniei fără o declarație de război, folosind tactica "Blitzkrieg" (război fulger). Acest act de agresiune a marcat începutul celui de-al Doilea Război Mondial în Europa.',
         context: 'Asigurându-şi flancul estic prin Pactul Molotov-Ribbentrop, Hitler a putut să atace fără teama unui război pe două fronturi. A folosit incidentul înscenat de la Gleiwitz ca pretext public pentru invazie.',
         figures: [
@@ -436,7 +436,7 @@ const allEventsData = {
         title: 'Ofensiva din Saar',
         lat: 49.2333,
         lng: 7.0000,
-        imageUrl: 'images/Ofensiva din Saar.png',
+        imageUrl: 'images/1939/Ofensiva din Saar.png',
         description: 'Între 7-16 septembrie, într-o încercare simbolică de a ajuta Polonia, armata franceză avansează aproximativ 8 km în teritoriul german Saarland. Ofensiva este oprită rapid, iar forțele se retrag în spatele Liniei Maginot.',
         context: 'Conform alianței militare franco-poloneze, Franța era obligată să lanseze o ofensivă majoră la 15 zile după mobilizare. Ofensiva din Saar a fost o acțiune limitată și lipsită de convingere, reflectând strategia defensivă a Comandamentului Francez.',
         figures: [
@@ -450,7 +450,7 @@ const allEventsData = {
         title: 'Invazia Sovietică a Poloniei',
         lat: 52.0976,
         lng: 23.7341,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Soviet_and_German_soldiers_in_Poland_1939.jpg/800px-Soviet_and_German_soldiers_in_Poland_1939.jpg',
+        imageUrl: 'images/1939/Invazia Sovietică a Poloniei.jpg',
         description: 'Pe 17 septembrie, conform protocolului secret al Pactului Molotov-Ribbentrop, Armata Roșie invadează Polonia dinspre est, întâmpinând o rezistență redusă și pecetluind soarta națiunii poloneze.',
         context: 'Guvernul sovietic a pretins că statul polonez a încetat să mai existe și că intervenția era necesară pentru a proteja populațiile ucrainene și belaruse. În realitate, a fost o agresiune coordonată cu Germania Nazistă.',
         figures: [
@@ -465,7 +465,7 @@ const allEventsData = {
         title: 'Asasinarea lui Armand Călinescu',
         lat: 44.4410,
         lng: 26.0881,
-        imageUrl: 'images/Asasinarea lui Armand Călinescu.jpg',
+        imageUrl: 'images/1939/Asasinarea lui Armand Călinescu.jpg',
         description: 'Pe 21 septembrie, prim-ministrul României, Armand Călinescu, este asasinat la București de un comando al Gărzii de Fier. Călinescu era un adversar ferm al Germaniei Naziste și al mișcării legionare, susținând o politică de neutralitate pro-aliată.',
         context: 'Asasinatul a fost un act de răzbunare pentru executarea liderului legionar Corneliu Zelea Codreanu în 1938 și o încercare de a destabiliza statul. Acțiunea a fost susținută de serviciile secrete germane, care doreau înlăturarea unui obstacol din calea influenței lor în România.',
         figures: [
@@ -480,7 +480,7 @@ const allEventsData = {
         title: 'Capitularea Varșoviei',
         lat: 52.2297,
         lng: 21.0122,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Varsovie_bombardement_1939.jpg/800px-Varsovie_bombardement_1939.jpg',
+        imageUrl: 'images/1939/Capitularea Varșoviei.jpg',
         description: 'Pe 27 septembrie, după aproape trei săptămâni de asediu și bombardamente aeriene și de artilerie devastatoare, care au ucis zeci de mii de civili, garnizoana Varșoviei se predă forțelor germane.',
         context: 'Varșovia a fost apărată cu înverșunare de armata poloneză și de voluntari civili. Luftwaffe a efectuat bombardamente de teroare pentru a frânge voința de a lupta a apărătorilor și a populației.',
         figures: [
@@ -495,7 +495,7 @@ const allEventsData = {
         title: 'Sfârșitul Campaniei din Polonia',
         lat: 51.6394,
         lng: 22.4419,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Polish_soldiers_in_1939.jpg/800px-Polish_soldiers_in_1939.jpg',
+        imageUrl: 'images/1939/Sfârșitul Campaniei din Polonia.jpg',
         description: 'Pe 6 octombrie, după Bătălia de la Kock, ultimele unități operaționale poloneze capitulează. Polonia este complet ocupată și împărțită între Germania și Uniunea Sovietică, conform prevederilor Pactului Molotov-Ribbentrop.',
         context: 'Deși campania organizată s-a încheiat, rezistența a continuat prin mișcări de partizani și prin formarea unui guvern în exil și a unei armate poloneze care a luptat alături de Aliați pe tot parcursul războiului.',
         figures: [
@@ -509,7 +509,7 @@ const allEventsData = {
         title: 'Înființarea primului ghetou',
         lat: 51.4071,
         lng: 19.6953,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Piotrkow_Trybunalski_ghetto_memorial.jpg/800px-Piotrkow_Trybunalski_ghetto_memorial.jpg',
+        imageUrl: 'images/1939/Înființarea primului ghetou.jpeg',
         description: 'Pe 8 octombrie, la Piotrków Trybunalski, autoritățile germane de ocupație stabilesc primul ghetou evreiesc din Polonia, inițiind politica de segregare forțată a populației evreiești.',
         context: 'Ghetourile erau parte a politicii naziste de a izola, controla și exploata evreii. Ele serveau ca zone de concentrare, unde evreii erau înghesuiți în condiții inumane, înfometați și folosiți pentru muncă forțată, înainte de deportarea finală spre lagărele de exterminare.',
         figures: [
@@ -523,7 +523,7 @@ const allEventsData = {
         title: 'Scufundarea HMS Royal Oak',
         lat: 58.9850,
         lng: -2.9340,
-        imageUrl: 'images/Scufundarea HMS Royal Oak.png',
+        imageUrl: 'images/1939/Scufundarea HMS Royal Oak.png',
         description: 'Pe 14 octombrie, submarinul german U-47, comandat de Günther Prien, pătrunde în baza navală britanică de la Scapa Flow și scufundă cuirasatul HMS Royal Oak, ucigând peste 800 de membri ai echipajului.',
         context: 'Scapa Flow era considerată cea mai sigură bază a Marinei Regale Britanice. Prien a reușit să navigheze printr-un canal îngust și să evite plasele anti-submarin pentru a lansa un atac surpriză în inima flotei britanice.',
         figures: [
@@ -538,7 +538,7 @@ const allEventsData = {
         title: 'Războiul Ciudat (Phoney War)',
         lat: 49.4,
         lng: 6.3,
-        imageUrl: 'images/Phoney War.jpg',
+        imageUrl: 'images/1939/Phoney War.jpg',
         description: 'O perioadă de aproape opt luni (septembrie 1939 - mai 1940) de inactivitate militară pe Frontul de Vest, după declarațiile de război ale Franței și Marii Britanii. În ciuda stării de război, au avut loc doar lupte minore și sporadice.',
         context: 'După invazia Poloniei, Aliații au adoptat o strategie defensivă, bazându-se pe Linia Maginot și pe o blocadă economică a Germaniei. Această pasivitate a permis Germaniei să-și consolideze forțele și să se pregătească pentru ofensiva din 1940.',
         figures: [
@@ -553,7 +553,7 @@ const allEventsData = {
         title: 'Începutul Războiului de Iarnă',
         lat: 60.5333,
         lng: 29.9167,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Antti_Vorho_ja_tuntematon_sotilas_t%C3%A4hyilev%C3%A4t_vihollista_korsusta_konekiv%C3%A4%C3%A4rin_kanssa_Summassa_1939-12-21.jpg/800px-Antti_Vorho_ja_tuntematon_sotilas_t%C3%A4hyilev%C3%A4t_vihollista_korsusta_konekiv%C3%A4%C3%A4rin_kanssa_Summassa_1939-12-21.jpg',
+        imageUrl: 'images/1939/Războiului de Iarnă.jpg',
         description: 'Pe 30 noiembrie, Uniunea Sovietică invadează Finlanda după ce aceasta a refuzat să cedeze teritorii strategice. Deși mult inferioară numeric, armata finlandeză opune o rezistență neașteptat de eficientă, profitând de teren și de condițiile de iarnă.',
         context: 'După anexarea estului Poloniei, Stalin a dorit să-și îmbunătățească poziția strategică în jurul Leningradului, cerând Finlandei baze militare și teritorii în Istmul Karelia. Refuzul finlandez a dus la invazie.',
         figures: [
