@@ -89,7 +89,8 @@
     </div>
 
     <!-- II.E. FERESTRE MODALE -->
-    <div id="modal" class="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center p-4 z-[2001] hidden">
+    <!-- ANIMATION: Removed the 'hidden' class. Visibility is now controlled by CSS (opacity) and JS (.visible class). -->
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center p-4 z-[2001]">
         <div class="modal-content w-full max-w-4xl max-h-[90vh] overflow-y-auto relative text-gray-300 bg-gray-900 rounded-lg shadow-2xl">
             <button id="closeModal" class="absolute top-4 right-4 text-gray-500 hover:text-white z-10 transition-colors duration-200">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -182,7 +183,8 @@
             </div>
         </div>
     </div>
-    <div id="contextModal" class="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center p-4 z-[2002] hidden">
+    <!-- ANIMATION: Removed the 'hidden' class. Visibility is now controlled by CSS (opacity) and JS (.visible class). -->
+    <div id="contextModal" class="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center p-4 z-[2002]">
         <div class="context-modal-content w-full max-w-2xl p-8 rounded-lg text-gray-300 relative">
             <button id="closeContextModal" class="absolute top-3 right-3 text-gray-400 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
             <h2 id="contextModalTitle" class="text-4xl font-bold mb-4 font-teko text-white"></h2>

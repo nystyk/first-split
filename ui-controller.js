@@ -2,6 +2,7 @@
 
 /**
  * REVISED: Renders the legend, handles default states, and cleans up irrelevant overlays.
+ * Now triggers slide-in animation.
  */
 function renderLegend(period) {
     const legendPanel = state.dom.legendPanel;
@@ -64,7 +65,8 @@ function renderLegend(period) {
     }
 
     legendPanel.innerHTML = eventTypesHTML + thematicHTML + allegianceHTML;
-    legendPanel.classList.remove('hidden');
+    // --- ANIMATION: Make the legend panel visible, triggering the slide-up animation ---
+    legendPanel.classList.add('visible');
 
     // --- Add Event Listeners ---
     document.querySelectorAll('.legend-toggle input[type="checkbox"]').forEach(checkbox => {
@@ -196,7 +198,7 @@ function renderFilterBar() {
 
 window.addEventListener('resize', () => setTimeout(positionSliderLabels, 0));
 
-// --- MODAL MANAGEMENT ---
+// --- MODAL MANAGEMENT (REVISED for animations) ---
 function showModal(event) {
     state.currentEvent = event;
     const modal = state.dom.modal;
@@ -224,8 +226,8 @@ function showModal(event) {
     // Progress indicator
     updateModalProgress(event);
     
-    // Show modal
-    modal.classList.remove('hidden');
+    // --- ANIMATION: Show modal by adding .visible class ---
+    modal.classList.add('visible');
     
     // Add event listeners for interactive buttons
     setupModalInteractions(event);
@@ -341,7 +343,8 @@ function setupModalInteractions(event) {
 }
 
 function hideModal() {
-    state.dom.modal.classList.add('hidden');
+    // --- ANIMATION: Hide modal by removing .visible class ---
+    state.dom.modal.classList.remove('visible');
     state.currentEvent = null;
     
     // Remove keyboard event listener
@@ -360,12 +363,13 @@ function hideModal() {
 function showContextModal(key) {
     const data = contextData[key];
     if (!data) {
-        state.dom.contextModal.classList.add('hidden');
+        hideContextModal();
         return;
     }
     state.dom.contextModal.querySelector('#contextModalTitle').textContent = data.title;
     state.dom.contextModal.querySelector('#contextModalDescription').textContent = data.description;
-    state.dom.contextModal.classList.remove('hidden');
+    // --- ANIMATION: Show context modal by adding .visible class ---
+    state.dom.contextModal.classList.add('visible');
 
     // Add document click listener to close on outside click
     function handleOutsideClick(e) {
@@ -383,7 +387,8 @@ function showContextModal(key) {
 }
 
 function hideContextModal() {
-    state.dom.contextModal.classList.add('hidden');
+    // --- ANIMATION: Hide context modal by removing .visible class ---
+    state.dom.contextModal.classList.remove('visible');
     // Remove outside click handler if present
     if (state.contextModalOutsideClickHandler) {
         document.removeEventListener('mousedown', state.contextModalOutsideClickHandler);

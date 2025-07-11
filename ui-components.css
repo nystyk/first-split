@@ -13,7 +13,17 @@
     border: 1px solid #666;
     pointer-events: all;
     width: 280px;
+    /* --- ANIMATION: Start off-screen and invisible --- */
+    transform: translateY(calc(100% + 2rem));
+    opacity: 0;
+    transition: transform 0.4s ease-out, opacity 0.4s ease-out;
 }
+/* --- ANIMATION: Class to slide the legend into view --- */
+#legend-panel.visible {
+    transform: translateY(0);
+    opacity: 1;
+}
+
 .legend-section {
     margin-top: 1rem;
 }
@@ -141,6 +151,7 @@
     padding: 35px 12.5px 0 12.5px; /* Spațiu adăugat pentru tooltip */
 }
 
+/* --- ANIMATION: Slider tooltip fade in/out is already implemented here --- */
 #slider-tooltip {
     position: absolute;
     top: -20px;
@@ -240,9 +251,31 @@
 /* ----------------------------------------------------------------------- */
 /* 8. Stiluri pentru Modale și Animații                                  */
 /* ----------------------------------------------------------------------- */
-#modal { transition: opacity 0.3s ease-in-out; }
-.modal-content { animation: slideUp 0.4s ease-out; }
-@keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* --- ANIMATION: Modal fade in/out --- */
+#modal, #contextModal {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0s 0.3s;
+}
+#modal.visible, #contextModal.visible {
+    opacity: 1;
+    pointer-events: all;
+    visibility: visible;
+    transition: opacity 0.3s ease-in-out, visibility 0s 0s;
+}
+
+/* --- ANIMATION: Modal content slide-up --- */
+@keyframes slideUp { 
+    from { transform: translateY(30px); opacity: 0; } 
+    to { transform: translateY(0); opacity: 1; } 
+}
+
+#modal.visible .modal-content,
+#contextModal.visible .context-modal-content {
+    animation: slideUp 0.4s ease-out;
+}
 
 /* Enhanced Modal Styles */
 #modalEventType {

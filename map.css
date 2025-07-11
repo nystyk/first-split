@@ -24,26 +24,12 @@
     z-index: 1002;
     pointer-events: none;
     background: url('https://www.transparenttextures.com/patterns/diamond-upholstery.png') repeat;
-    /* --- MODIFICARE --- Am redus opacitatea de la 0.13 pentru a face textura mai subtilă */
     opacity: 0.05; 
     mix-blend-mode: lighten;
 }
 
-/* MODIFICARE CHEIE: Fundalul containerului principal Leaflet este setat la
-   culoarea albastră dorită. Acesta va fi vizibil mereu, deoarece nu mai
-   există un strat de hărți (tile layer) care să-l acopere. */
 .leaflet-container {
     background: #1a2747;
-}
-
-#map-background-fake {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 0;
-    background: url('images/background.png') center center / cover no-repeat;
-    pointer-events: none;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -61,32 +47,19 @@
 .event-element {
     position: absolute;
     opacity: 0;
-    transition: opacity 0.3s ease-out;
-}
-.event-element.visible {
-    opacity: 1;
-}
-.event-element.hiding {
-    opacity: 0;
-    transition: opacity 0.2s ease-in;
-}
-
-/* All dots are now interactive */
-.event-dot, .atrocity-dot, .minor-event-dot {
+    transform: translate(-50%, -50%) scale(0.5); /* Start small and invisible */
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
     pointer-events: all;
     cursor: pointer;
 }
-
-/* Ensure Leaflet div icons are visible */
-.leaflet-marker-icon.event-element {
-    background: transparent !important;
-    border: none !important;
+.event-element.visible {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1); /* Animate to full size and visible */
 }
-
-/* Hover effects for the div icons */
-.leaflet-marker-icon.event-element:hover div {
-    transform: translate(-50%, -50%) scale(1.8) !important;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.7) !important;
+.event-element.hiding {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+    transition: opacity 0.2s ease-in, transform 0.2s ease-in;
 }
 
 .marker-svg-wrapper {
@@ -103,61 +76,56 @@
 }
 .marker-svg {
     display: block;
-    width: 16px;
-    height: 16px;
+    width: 100%;
+    height: 100%;
     filter: drop-shadow(0 2px 6px rgba(0,0,0,0.18));
     pointer-events: none;
+    transition: transform 0.2s ease-out;
 }
-.event-dot, .atrocity-dot, .minor-event-dot {
-    background: none !important;
-    border: none !important;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    box-shadow: 0 0 0 2px rgba(0,0,0,0.12);
-    transition: box-shadow 0.2s, transform 0.2s;
-    z-index: 999;
-    padding: 0;
-}
-.event-dot:hover .marker-svg,
-.atrocity-dot:hover .marker-svg,
-.minor-event-dot:hover .marker-svg {
-    filter: drop-shadow(0 0 10px #fff) drop-shadow(0 2px 6px rgba(0,0,0,0.18));
+.event-element:hover .marker-svg {
     transform: scale(1.25);
 }
 
-/* Simple offset dot styles - dots moved to avoid overlap */
-.offset-dot {
-    position: relative;
+.event-dot, .atrocity-dot, .minor-event-dot {
+    width: 22px;
+    height: 22px;
+}
+.cluster-dot {
+    width: 18px;
+    height: 18px;
+    background: #333;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.18);
+    transition: box-shadow 0.2s, background-color 0.2s;
+}
+.cluster-dot:hover {
+  box-shadow: 0 0 10px #8ec6ff, 0 4px 12px rgba(0,0,0,0.28);
+  background: #444;
+}
+.cluster-badge {
+  color: #fff;
+  font-weight: bold;
+  font-size: 13px;
+  pointer-events: none;
+  user-select: none;
 }
 
-@keyframes pulse {
-    0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    50% { opacity: 0.5; transform: translate(-50%, -50%) scale(1.5); }
-    100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-}
 
 /* ----------------------------------------------------------------------- */
 /* REVISED: Hover Box and Line Styles                                    */
 /* ----------------------------------------------------------------------- */
-#hover-box-container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* Container is passthrough */
-    z-index: 1010;
-}
-
-#hover-line-canvas {
+#hover-box-container, #hover-line-canvas {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 1009; /* Below boxes, above dots */
+    z-index: 1010;
 }
 
 .hover-connector-line {
@@ -204,25 +172,6 @@
     line-height: 1.3;
 }
 
-/* Style variants for different event types */
-.event-hover-box.major {
-    border-top: 3px solid #4a6d8a;
-}
-.event-hover-box.minor {
-    border-top: 3px solid #f1c40f;
-}
-.event-hover-box.atrocity {
-    border-top: 3px solid #e74c3c;
-}
-
-.offset-dot::after, .offset-dot::before {
-    pointer-events: none;
-}
-
-.event-dot, .atrocity-dot, .minor-event-dot {
-    z-index: 1001;
-}
-
 #dots-container {
     position: absolute;
     top: 0;
@@ -231,22 +180,55 @@
     height: 100%;
     pointer-events: none;
     z-index: 1002;
+    transition: opacity 0.3s ease-out;
 }
 
-.event-element {
-    pointer-events: all;
+#dots-container.map-is-moving {
+    opacity: 0;
+    transition: opacity 0.1s ease-in;
 }
 
-.legend-marker-svg {
-    display: inline-block;
-    vertical-align: middle;
-    width: 10px !important;
-    height: 10px !important;
-    margin-right: 2px;
-    filter: none !important;
-    box-shadow: none !important;
-    pointer-events: none;
-    background: none !important;
+/* Cluster popup styles */
+.cluster-popup {
+  position: absolute;
+  min-width: 180px;
+  background: #222;
+  color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  padding: 8px 0 4px 0;
+  z-index: 9999;
+  font-size: 15px;
+  pointer-events: auto;
+  /* Start invisible and slightly offset */
+  opacity: 0;
+  transform: translate(-50%, calc(-100% - 20px));
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
+}
+.cluster-popup.visible {
+    /* Animate to visible and correct position */
+    opacity: 1;
+    transform: translate(-50%, calc(-100% - 15px));
+}
+.cluster-popup-title {
+  font-weight: bold;
+  padding: 4px 16px 6px 16px;
+  border-bottom: 1px solid #444;
+  margin-bottom: 4px;
+}
+.cluster-popup-item {
+  padding: 6px 16px;
+  cursor: pointer;
+  transition: background 0.15s;
+  outline: none;
+  text-decoration: none;
+  color: #8ec6ff;
+  border-radius: 4px;
+}
+.cluster-popup-item:hover, .cluster-popup-item:focus {
+  background: #444;
+  text-decoration: underline;
+  color: #fff;
 }
 
 .leaflet-overlay-pane svg,

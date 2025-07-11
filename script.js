@@ -18,15 +18,20 @@ function handlePeriodChange(selectedPeriod, force) {
     state.dom.labelsContainer.innerHTML = '';
     state.dom.lineCanvas.innerHTML = '';
     
+    // --- MODIFICATION: Use a class to animate out all dots ---
     const existingDots = state.dom.dotsContainer.querySelectorAll('.event-element');
     existingDots.forEach(dot => {
         dot.classList.add('hiding');
+        // Remove after animation. The duration should match the CSS animation.
         dot.addEventListener('transitionend', () => dot.remove(), { once: true });
     });
     
+    // A fallback to clear any stragglers after the transition.
     setTimeout(() => {
-        state.dom.dotsContainer.innerHTML = '';
-    }, 250);
+        if (state.dom.dotsContainer.children.length > 0) {
+           // state.dom.dotsContainer.innerHTML = '';
+        }
+    }, 500); // Should be slightly longer than the transition duration
     
     renderLegend(selectedPeriod);
     showContextModal(selectedPeriod);
@@ -131,8 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Disable interactions until intro animation is finished
     lockInteractions();
 
-    // Show overlays and context box immediately (they are loaded in initialLoad)
-
     // Attach global event listeners
     state.dom.closeModalBtn.addEventListener('click', hideModal);
     state.dom.contextModal.addEventListener('click', (e) => (e.target === state.dom.contextModal) && hideContextModal());
@@ -141,6 +144,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Start the application
     initializeMap();
+
+    // --- FIX: Hide dots during map movement ---
+    if (state.map) {
+        state.map.on('movestart', () => {
+            state.dom.dotsContainer.classList.add('map-is-moving');
+        });
+        state.map.on('moveend', () => {
+            state.dom.dotsContainer.classList.remove('map-is-moving');
+        });
+    }
+
     renderFilterBar();
     setTimeout(() => {
         positionSliderLabels();
@@ -152,20 +166,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const introStartBtn = document.getElementById('intro-start-btn');
     introOverlay.style.display = 'flex';
 
-    // Helper: enable/disable button
     function setIntroBtnEnabled(enabled) {
         if (introStartBtn) {
             introStartBtn.disabled = !enabled;
             introStartBtn.style.opacity = enabled ? '1' : '0.5';
             introStartBtn.style.cursor = enabled ? 'pointer' : 'not-allowed';
-            console.log('Intro button enabled:', enabled);
         }
     }
     setIntroBtnEnabled(false);
 
-    // Wait for map and overlays to be ready
     function checkMapReadyAndEnableBtn() {
-        console.log('Checking map ready:', state.map, state.geoJsonLayer);
         if (state.map && state.geoJsonLayer) {
             setIntroBtnEnabled(true);
         } else {
@@ -176,24 +186,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (introStartBtn) {
         introStartBtn.addEventListener('click', () => {
-            console.log('Intro button clicked');
             if (!state.map || !state.geoJsonLayer) {
-                console.error('Map or geoJsonLayer not ready', state.map, state.geoJsonLayer);
                 return;
             }
-            // Morph the main title
             document.getElementById('app-header').classList.add('morph');
-            // Fade out the overlay
             introOverlay.classList.add('hidden');
-            // After fade, trigger zoom-in animation
             setTimeout(() => {
                 try {
-                    // Clean zoom-in to current period
                     const activePeriod = config.periods[state.dom.timelineSlider.value];
                     const events = allEventsData[activePeriod] || [];
-                    console.log('Zooming to period:', activePeriod, events);
                     const targetBounds = getBounds(events);
-                    console.log('Target bounds:', targetBounds);
                     const { flyToBounds: flyConfig } = config.map;
                     let maxZoom = events.length <= 3 ? flyConfig.maxZoomSmall : (events.length > 10 ? flyConfig.maxZoomLarge : flyConfig.maxZoomMedium);
                     let paddingTopLeft = events.length > 10 ? flyConfig.paddingLarge : flyConfig.paddingSmall;
@@ -204,21 +206,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         maxZoom,
                         duration: flyConfig.duration
                     });
-                    // Show context box for pre-war after animation
-                    if (activePeriod === 'pre-war') {
-                        state.map.once('moveend', () => {
+                    state.map.once('moveend', () => {
+                        if (activePeriod === 'pre-war') {
                             showContextModal('pre-war');
-                            unlockInteractions();
-                        });
-                    } else {
-                        state.map.once('moveend', () => {
-                            unlockInteractions();
-                        });
-                    }
+                        }
+                        unlockInteractions();
+                    });
                 } catch (err) {
                     console.error('Error during intro animation:', err);
                 }
-            }, 700); // match overlay fade duration
+            }, 700);
         });
     }
 });

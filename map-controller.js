@@ -26,10 +26,6 @@ function initializeMap() {
     });
     state.map.setView(config.map.initialCenter, config.map.initialZoom);
 
-    // S-a eliminat complet stratul de hărți (tile layer).
-    // Fundalul este acum gestionat de fișierul CSS (map.css).
-    
-    // Create and append hover containers to the main map container
     const mapContainer = document.getElementById('map-container');
 
     const hoverBoxContainer = document.createElement('div');
@@ -58,19 +54,17 @@ function initializeMap() {
         };
     };
     
-
-    
     // Update dot positions when map moves
     state.map.on('move', debounce(() => {
         if (state.currentPeriod) {
-            renderMapEvents(state.currentPeriod, true); // Force a full re-render
+            renderMapEvents(state.currentPeriod);
         }
-    }, 16)); // ~60fps
+    }, 16));
     
     // Re-render on resize to ensure positions are correct
     window.addEventListener('resize', debounce(() => {
         if (state.currentPeriod) {
-            renderMapEvents(state.currentPeriod, true); // Force a full re-render
+            renderMapEvents(state.currentPeriod);
         }
         positionSliderLabels();
     }, 100));
@@ -140,143 +134,23 @@ function getEventId(event) {
     return `${event.year}-${sanitizedTitle}`;
 }
 
-// Create a custom pane for event dots (above tile layer, below popups/modals)
-function ensureEventPane() {
-    if (!state.map.getPane('eventDotsPane')) {
-        state.map.createPane('eventDotsPane');
-        state.map.getPane('eventDotsPane').style.zIndex = 650; // Above tile layer, below popups
-    }
-}
-
-function clearEventMarkers() {
-    if (state.eventMarkers) {
-        state.eventMarkers.forEach(marker => marker.remove());
-    }
-    state.eventMarkers = [];
-}
-
-function renderMapEvents(period, forceClear = false) {
-    const { dom } = state;
-    if (forceClear) {
-        dom.dotsContainer.innerHTML = '';
-    }
-    if (state.eventMarkers) {
-        state.eventMarkers.forEach(marker => marker.remove && marker.remove());
-        state.eventMarkers = [];
-    }
-    const events = allEventsData[period] || [];
-    const visibleEventIds = new Set(
-        events
-            .filter(e => e.onMap !== false && state.eventFilters[e.type])
-            .map(getEventId)
-    );
-    const renderedElements = Array.from(dom.dotsContainer.children);
-    const renderedEventIds = new Set(renderedElements.map(el => el.dataset.eventId));
-    renderedElements.forEach(el => {
-        if (!visibleEventIds.has(el.dataset.eventId)) {
-            el.classList.add('hiding');
-            el.addEventListener('transitionend', () => el.remove(), { once: true });
-        }
-    });
-    const eventsToAdd = events.filter(event => {
-        const id = getEventId(event);
-        return visibleEventIds.has(id) && !renderedEventIds.has(id);
-    });
-    if (eventsToAdd.length > 0) {
-        const allVisibleEvents = events.filter(e =>
-            visibleEventIds.has(getEventId(e)) &&
-            isValidLatLng(e.lat, e.lng)
-        );
-        // 1. Map events to screen positions
-        let dotPoints = allVisibleEvents.map(event => {
-            const point = state.map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
-            return {
-                id: getEventId(event),
-                x: Math.round(point.x),
-                y: Math.round(point.y),
-                event: event
-            };
-        });
-        // 2. Group by screen position (within a small pixel tolerance)
-        const TOLERANCE = 8; // px
-        const clusters = [];
-        dotPoints.forEach(dot => {
-            let found = false;
-            for (const cluster of clusters) {
-                const dx = dot.x - cluster.x;
-                const dy = dot.y - cluster.y;
-                if (Math.sqrt(dx*dx + dy*dy) <= TOLERANCE) {
-                    cluster.events.push(dot.event);
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                clusters.push({ x: dot.x, y: dot.y, events: [dot.event] });
-            }
-        });
-        // 3. Render markers
-        clusters.forEach(cluster => {
-            let markerEl;
-            if (cluster.events.length === 1) {
-                // Single event: render as usual
-                const event = cluster.events[0];
-                markerEl = createEventDot(event, getEventId(event));
-                markerEl.style.left = `${cluster.x}px`;
-                markerEl.style.top = `${cluster.y}px`;
-            } else {
-                // Multiple events: render cluster marker (old behavior)
-                markerEl = document.createElement('div');
-                markerEl.className = 'event-element cluster-dot';
-                markerEl.style.left = `${cluster.x}px`;
-                markerEl.style.top = `${cluster.y}px`;
-                markerEl.innerHTML = `<span class="cluster-badge">${cluster.events.length}</span>`;
-                markerEl.title = `${cluster.events.length} evenimente aici`;
-                let popupPinned = false;
-                markerEl.addEventListener('mouseenter', (e) => {
-                    e.stopPropagation();
-                    if (!popupPinned) showClusterPopup(cluster.events, cluster.x, cluster.y);
-                });
-                markerEl.addEventListener('mouseleave', (e) => {
-                    if (!popupPinned) {
-                        const popup = document.getElementById('cluster-popup');
-                        if (popup) popup.remove();
-                    }
-                    popupPinned = false;
-                });
-                markerEl.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    popupPinned = true;
-                    showClusterPopup(cluster.events, cluster.x, cluster.y);
-                    // Add a one-time document click handler to unpin and close
-                    setTimeout(() => {
-                        document.addEventListener('click', function handler(ev) {
-                            const popup = document.getElementById('cluster-popup');
-                            if (popup && !popup.contains(ev.target)) {
-                                popupPinned = false;
-                                popup.remove();
-                                document.removeEventListener('click', handler);
-                            }
-                        });
-                    }, 0);
-                });
-            }
-            dom.dotsContainer.appendChild(markerEl);
-            requestAnimationFrame(() => markerEl.classList.add('visible'));
-        });
-    }
-}
-
 /**
- * Updates the positions of all visible dots when the map moves.
+ * REWRITTEN (AGAIN) FOR STABILITY AND PERFORMANCE
+ * This version uses a "clear and redraw" method that is more robust against visual glitches.
  */
-function updateDotPositions() {
-    const { dom } = state;
-    const events = allEventsData[state.currentPeriod] || [];
-    const visibleEvents = events.filter(e => e.onMap !== false && state.eventFilters[e.type]);
-    // 1. Map events to screen positions
-    let dotPoints = visibleEvents.map(event => {
-        const point = state.map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
+function renderMapEvents(period) {
+    const { dom, map } = state;
+    if (!map) return;
+
+    // Clear existing dots immediately to prevent artifacts
+    dom.dotsContainer.innerHTML = '';
+
+    const events = allEventsData[period] || [];
+    const visibleEvents = events.filter(e => e.onMap !== false && state.eventFilters[e.type] && isValidLatLng(e.lat, e.lng));
+
+    // 1. Calculate screen positions for all visible events
+    const dotPoints = visibleEvents.map(event => {
+        const point = map.latLngToContainerPoint(L.latLng(event.lat, event.lng));
         return {
             id: getEventId(event),
             x: Math.round(point.x),
@@ -284,89 +158,78 @@ function updateDotPositions() {
             event: event
         };
     });
-    // 2. Group by screen position (within a small pixel tolerance)
-    const TOLERANCE = 8; // px
+
+    // 2. Group points into clusters
+    const TOLERANCE = 15; // Pixel distance to be considered a cluster
     const clusters = [];
-    dotPoints.forEach(dot => {
-        let found = false;
-        for (const cluster of clusters) {
-            const dx = dot.x - cluster.x;
-            const dy = dot.y - cluster.y;
-            if (Math.sqrt(dx*dx + dy*dy) <= TOLERANCE) {
-                cluster.events.push(dot.event);
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            clusters.push({ x: dot.x, y: dot.y, events: [dot.event] });
-        }
+    const processedEventIds = new Set();
+
+    dotPoints.forEach(point => {
+        if (processedEventIds.has(point.id)) return;
+
+        const nearbyPoints = dotPoints.filter(otherPoint => {
+             if (processedEventIds.has(otherPoint.id)) return false;
+             const dx = point.x - otherPoint.x;
+             const dy = point.y - otherPoint.y;
+             return Math.sqrt(dx * dx + dy * dy) <= TOLERANCE;
+        });
+
+        clusters.push({
+            events: nearbyPoints.map(p => p.event),
+            x: point.x,
+            y: point.y,
+        });
+        
+        nearbyPoints.forEach(p => processedEventIds.add(p.id));
     });
-    // 3. Update positions of all visible dots and clusters
-    const allMarkers = Array.from(dom.dotsContainer.children).filter(el => el.classList.contains('event-element'));
-    allMarkers.forEach(marker => {
-        // For single event dots
-        const eventId = marker.dataset.eventId;
-        if (eventId) {
-            // Find the cluster this event belongs to
-            const cluster = clusters.find(c => c.events.some(ev => getEventId(ev) === eventId));
-            if (cluster && cluster.events.length === 1) {
-                marker.style.left = `${cluster.x}px`;
-                marker.style.top = `${cluster.y}px`;
-            }
-        } else if (marker.classList.contains('cluster-dot')) {
-            // For cluster markers
-            // Find the matching cluster by number of events and position
-            const cluster = clusters.find(c => c.events.length > 1 &&
-                Math.abs(parseInt(marker.style.left) - c.x) < TOLERANCE &&
-                Math.abs(parseInt(marker.style.top) - c.y) < TOLERANCE &&
-                parseInt(marker.querySelector('.cluster-badge')?.textContent) === c.events.length
-            );
-            if (cluster) {
-                marker.style.left = `${cluster.x}px`;
-                marker.style.top = `${cluster.y}px`;
-            }
+
+    // 3. Create all elements in a DocumentFragment to minimize DOM manipulation
+    const fragment = document.createDocumentFragment();
+
+    clusters.forEach(cluster => {
+        let element;
+        if (cluster.events.length > 1) {
+            element = createClusterDot(cluster);
+        } else {
+            element = createEventDot(cluster.events[0]);
         }
+        
+        // IMPORTANT: Set position BEFORE adding to DOM to prevent animation from (0,0)
+        element.style.left = `${cluster.x}px`;
+        element.style.top = `${cluster.y}px`;
+        
+        fragment.appendChild(element);
     });
-    // Also move the cluster popup if open
-    const popup = document.getElementById('cluster-popup');
-    if (popup && popup.dataset.clusterX && popup.dataset.clusterY) {
-        popup.style.left = `${popup.dataset.clusterX}px`;
-        popup.style.top = `${popup.dataset.clusterY}px`;
-    }
+
+    // 4. Add all new elements to the DOM in a single operation
+    dom.dotsContainer.appendChild(fragment);
+
+    // 5. Trigger the appear animation on the next frame
+    requestAnimationFrame(() => {
+        const newElements = dom.dotsContainer.children;
+        Array.from(newElements).forEach(el => {
+            el.classList.add('visible');
+        });
+    });
 }
 
 /**
- * Creates a dot element with direct hover listeners.
+ * Creates a single event dot element.
  */
-function createEventDot(event, id) {
+function createEventDot(event) {
     const dot = document.createElement('div');
+    const id = getEventId(event);
     let svgHtml = '';
     let className = '';
     if (event.type === 'major') {
         className = 'event-dot';
-        svgHtml = `
-            <svg class="marker-svg major-svg" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="11" cy="11" r="10" fill="#4a6d8a" stroke="#000" stroke-width="2"/>
-                <polygon points="11,5 12.9,9.1 17.4,9.3 13.8,12.2 15,16.5 11,13.9 7,16.5 8.2,12.2 4.6,9.3 9.1,9.1" fill="#fff"/>
-            </svg>
-        `;
+        svgHtml = `<svg class="marker-svg" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="10" fill="#4a6d8a" stroke="#000" stroke-width="2"/><polygon points="11,5 12.9,9.1 17.4,9.3 13.8,12.2 15,16.5 11,13.9 7,16.5 8.2,12.2 4.6,9.3 9.1,9.1" fill="#fff"/></svg>`;
     } else if (event.type === 'atrocity') {
         className = 'atrocity-dot';
-        svgHtml = `
-            <svg class="marker-svg atrocity-svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="2" y="2" width="16" height="16" rx="3" fill="#e74c3c" stroke="#fff" stroke-width="2"/>
-                <text x="10" y="15" text-anchor="middle" font-size="13" fill="#fff" font-family="Arial" font-weight="bold">!</text>
-            </svg>
-        `;
+        svgHtml = `<svg class="marker-svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="16" height="16" rx="3" fill="#e74c3c" stroke="#fff" stroke-width="2"/><text x="10" y="15" text-anchor="middle" font-size="13" fill="#fff" font-family="Arial" font-weight="bold">!</text></svg>`;
     } else {
         className = 'minor-event-dot';
-        svgHtml = `
-            <svg class="marker-svg minor-svg" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="9" cy="9" r="8" fill="#f1c40f" stroke="#333" stroke-width="2"/>
-                <circle cx="9" cy="9" r="3" fill="#fff"/>
-            </svg>
-        `;
+        svgHtml = `<svg class="marker-svg" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="8" fill="#f1c40f" stroke="#333" stroke-width="2"/><circle cx="9" cy="9" r="3" fill="#fff"/></svg>`;
     }
     dot.className = `event-element ${className}`;
     dot.dataset.eventId = id;
@@ -379,9 +242,49 @@ function createEventDot(event, id) {
 }
 
 /**
+ * Creates a cluster dot element.
+ */
+function createClusterDot(clusterData) {
+    const markerEl = document.createElement('div');
+    markerEl.className = 'event-element cluster-dot';
+    markerEl.innerHTML = `<span class="cluster-badge">${clusterData.events.length}</span>`;
+    markerEl.title = `${clusterData.events.length} evenimente aici`;
+    
+    let popupPinned = false;
+    
+    markerEl.addEventListener('mouseenter', e => {
+        e.stopPropagation();
+        if (!popupPinned) showClusterPopup(clusterData.events, clusterData.x, clusterData.y);
+    });
+    markerEl.addEventListener('mouseleave', () => {
+        if (!popupPinned) {
+            const popup = document.getElementById('cluster-popup');
+            if (popup) popup.remove();
+        }
+    });
+    markerEl.addEventListener('click', e => {
+        e.stopPropagation();
+        popupPinned = true;
+        showClusterPopup(clusterData.events, clusterData.x, clusterData.y);
+        
+        const clickOutsideHandler = (ev) => {
+            const popup = document.getElementById('cluster-popup');
+            if (popup && !popup.contains(ev.target) && !markerEl.contains(ev.target)) {
+                popupPinned = false;
+                popup.remove();
+                document.removeEventListener('click', clickOutsideHandler);
+            }
+        };
+        setTimeout(() => document.addEventListener('click', clickOutsideHandler), 0);
+    });
+    return markerEl;
+}
+
+
+/**
  * Creates and displays a hover box and its connecting line.
  */
-function showHoverBox(event, dotElement, options = {}) {
+function showHoverBox(event, dotElement) {
     clearTimeout(hoverState.timeout);
     if (hoverState.activeElements.box) {
         hideHoverBox(true);
@@ -465,23 +368,20 @@ function findHoverBoxPosition(dotData, mapRect) {
 }
 
 /**
- * REVISED: Renders thematic overlays based on the current filter state and year.
+ * Renders thematic overlays based on the current filter state and year.
  */
 function renderThematicOverlays() {
     for (const key in thematicData) {
-        // Check if the overlay is toggled ON AND is relevant for the current year
         const isRelevant = thematicData[key].relevantYears.includes(state.currentPeriod);
         const shouldBeVisible = state.overlayFilters[key] && isRelevant;
         const layerExists = state.thematicLayers[key];
 
         if (shouldBeVisible && !layerExists) {
-            // Add the layer to the map
             const overlay = thematicData[key];
             if (overlay.type === 'polyline') {
                 const polyline = L.polyline(overlay.coords, overlay.style);
                 polyline.addTo(state.map);
                 state.thematicLayers[key] = polyline;
-                // Force pointer-events: none on overlay SVG
                 setTimeout(() => {
                     const pane = state.map.getPane('overlayPane');
                     if (pane) {
@@ -491,36 +391,11 @@ function renderThematicOverlays() {
                 }, 0);
             }
         } else if (!shouldBeVisible && layerExists) {
-            // Remove the layer from the map
             state.thematicLayers[key].remove();
             delete state.thematicLayers[key];
         }
     }
 }
-
-// Helper to update all dots' hoverability
-function updateDotsHoverability() {
-    const dots = document.querySelectorAll('.event-element');
-    dots.forEach(dot => {
-        dot.classList.remove('story-mode-active-dot-disable');
-        // Re-add listeners if needed
-        const eventId = dot.dataset.eventId;
-        const event = (window.allEventsData && window.allEventsData[state.currentPeriod])
-            ? window.allEventsData[state.currentPeriod].find(e => getEventId(e) === eventId)
-            : null;
-        if (event) {
-            dot.onmouseenter = () => showHoverBox(event, dot);
-            dot.onmouseleave = hideHoverBox;
-        }
-    });
-}
-
-// Export functions globally
-window.getEventId = getEventId;
-window.showHoverBox = showHoverBox;
-window.renderMapEvents = renderMapEvents;
-window.updateDotsHoverability = updateDotsHoverability;
-window.getBounds = getBounds;
 
 function isValidLatLng(lat, lng) {
     return (
@@ -531,27 +406,23 @@ function isValidLatLng(lat, lng) {
     );
 }
 
-// Remove the debug test marker if present
-if (window._debugTestMarker) {
-    window._debugTestMarker.remove();
-    window._debugTestMarker = null;
-}
-
+/**
+ * FIX: Creates and displays a cluster popup with corrected positioning.
+ */
 function showClusterPopup(events, x, y) {
-    // Remove any existing cluster popup
     const oldPopup = document.getElementById('cluster-popup');
     if (oldPopup) oldPopup.remove();
-    // Create popup
+    
     const popup = document.createElement('div');
     popup.id = 'cluster-popup';
     popup.className = 'cluster-popup';
-    popup.style.left = `${x + 20}px`;
-    popup.style.top = `${y - 10}px`;
-    popup.dataset.clusterX = x + 20;
-    popup.dataset.clusterY = y - 10;
     popup.innerHTML = `<div class="cluster-popup-title">Evenimente aici:</div>` +
         events.map(ev => `<div class="cluster-popup-item" data-event-id="${getEventId(ev)}" tabindex="0" role="button">${ev.title}</div>`).join('');
-    // Click/keyboard handler for items
+    
+    // Position the popup using transforms for better performance and centering
+    popup.style.left = `${x}px`;
+    popup.style.top = `${y}px`;
+    
     popup.addEventListener('click', (e) => {
         const item = e.target.closest('.cluster-popup-item');
         if (item) {
@@ -559,7 +430,7 @@ function showClusterPopup(events, x, y) {
             const eventId = item.getAttribute('data-event-id');
             const event = events.find(ev => getEventId(ev) === eventId);
             if (event) {
-                popup.remove(); // Remove popup first
+                popup.remove();
                 showModal(event);
             }
         }
@@ -569,20 +440,16 @@ function showClusterPopup(events, x, y) {
             const eventId = e.target.getAttribute('data-event-id');
             const event = events.find(ev => getEventId(ev) === eventId);
             if (event) {
-                popup.remove(); // Remove popup first
+                popup.remove();
                 showModal(event);
             }
         }
     });
-    // Remove popup on outside click
-    setTimeout(() => {
-        document.addEventListener('click', function handler(ev) {
-            const popupEl = document.getElementById('cluster-popup');
-            if (popupEl && !popupEl.contains(ev.target)) {
-                popupEl.remove();
-                document.removeEventListener('click', handler);
-            }
-        });
-    }, 0);
+
     state.dom.dotsContainer.appendChild(popup);
+    
+    // Use requestAnimationFrame to make it visible and trigger the transition
+    requestAnimationFrame(() => {
+        popup.classList.add('visible');
+    });
 }
