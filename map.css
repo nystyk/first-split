@@ -118,14 +118,26 @@
 /* ----------------------------------------------------------------------- */
 /* REVISED: Hover Box and Line Styles                                    */
 /* ----------------------------------------------------------------------- */
-#hover-box-container, #hover-line-canvas {
+#hover-box-container {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
+    /* FIX: Ensure hover box is on top */
     z-index: 1010;
+}
+
+/* FIX: Ensure connector line is underneath dots and boxes */
+#hover-line-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1001; /* Below dots */
 }
 
 .hover-connector-line {
@@ -151,7 +163,7 @@
     pointer-events: all;
     opacity: 0;
     transition: opacity 0.25s ease-out;
-    transform: translate(-50%, -50%); /* Center the box on its position */
+    transform: translate(-50%, -50%);
 }
 
 .event-hover-box.visible {
@@ -172,6 +184,17 @@
     line-height: 1.3;
 }
 
+/* FIX: Restored styles for event type borders */
+.event-hover-box.major {
+    border-top: 3px solid #4a6d8a;
+}
+.event-hover-box.minor {
+    border-top: 3px solid #f1c40f;
+}
+.event-hover-box.atrocity {
+    border-top: 3px solid #e74c3c;
+}
+
 #dots-container {
     position: absolute;
     top: 0;
@@ -179,7 +202,7 @@
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 1002;
+    z-index: 1002; /* Above lines, below hover boxes */
     transition: opacity 0.3s ease-out;
 }
 
@@ -200,13 +223,11 @@
   z-index: 9999;
   font-size: 15px;
   pointer-events: auto;
-  /* Start invisible and slightly offset */
   opacity: 0;
   transform: translate(-50%, calc(-100% - 20px));
   transition: opacity 0.2s ease-out, transform 0.2s ease-out;
 }
 .cluster-popup.visible {
-    /* Animate to visible and correct position */
     opacity: 1;
     transform: translate(-50%, calc(-100% - 15px));
 }
