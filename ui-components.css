@@ -251,6 +251,33 @@
     letter-spacing: 0.5px;
 }
 
+/* Close Button Styles - Matching Page Design */
+#closeModal, #closeContextModal {
+    background-color: rgba(40, 40, 40, 0.9);
+    border: 1px solid #666;
+    border-radius: 6px;
+    padding: 2px;
+    transition: all 0.2s ease;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#closeModal:hover, #closeContextModal:hover {
+    background-color: rgba(60, 60, 60, 0.9);
+    border-color: #888;
+    transform: scale(1.05);
+}
+
+#closeModal svg, #closeContextModal svg {
+    stroke: #ccc !important;
+    stroke-width: 2;
+    width: 16px;
+    height: 16px;
+}
+
 #modalEventType.major {
     background-color: #4a6d8a;
     color: white;
