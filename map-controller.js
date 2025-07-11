@@ -49,12 +49,17 @@ function initializeMap() {
         };
     };
     
+    // FIX: Only render dots on move IF the intro is finished
     state.map.on('move', debounce(() => {
-        if (state.currentPeriod) renderMapEvents(state.currentPeriod);
+        if (state.introFinished && state.currentPeriod) {
+            renderMapEvents(state.currentPeriod);
+        }
     }, 16));
     
     window.addEventListener('resize', debounce(() => {
-        if (state.currentPeriod) renderMapEvents(state.currentPeriod);
+        if (state.introFinished && state.currentPeriod) {
+            renderMapEvents(state.currentPeriod);
+        }
         positionSliderLabels();
     }, 100));
 }
@@ -215,15 +220,11 @@ function createClusterDot(clusterData) {
     return markerEl;
 }
 
-/**
- * FIX: Creates and displays a hover box with correct styling.
- */
 function showHoverBox(event, dotElement) {
     clearTimeout(hoverState.timeout);
     if (hoverState.activeElements.box) {
         hideHoverBox(true);
     }
-    // FIX: Add event type class for styling
     const box = document.createElement('div');
     box.className = `event-hover-box ${event.type}`;
     box.innerHTML = `<img src="${event.imageUrl}" alt="${event.title}"><div class="title">${event.title}</div>`;

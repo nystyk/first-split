@@ -6,6 +6,7 @@ const state = {
     currentEvent: null,
     geoJsonLayer: null,
     currentPeriod: 'pre-war',
+    introFinished: false, // FIX: Flag to track if the intro animation is complete
     eventFilters: {
         major: true,
         minor: true,

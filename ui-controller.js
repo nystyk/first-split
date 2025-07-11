@@ -206,6 +206,15 @@ function showModal(event) {
     eventTypeElement.textContent = getEventTypeLabel(event.type);
     eventTypeElement.className = `px-3 py-1 text-xs font-semibold rounded-full ${event.type}`;
     
+    // Update modal image overlay color based on event type
+    const modalImageOverlay = document.getElementById('modalImageOverlay');
+    const overlayColors = {
+        'major': 'from-blue-900/60 via-blue-800/40 to-blue-900/60',
+        'minor': 'from-yellow-700/60 via-yellow-600/40 to-yellow-700/60',
+        'atrocity': 'from-red-900/60 via-red-800/40 to-red-900/60'
+    };
+    modalImageOverlay.className = `absolute inset-0 bg-gradient-to-br ${overlayColors[event.type] || overlayColors.major}`;
+    
     let locationText = `Coordonate: ${event.lat.toFixed(4)}, ${event.lng.toFixed(4)}`;
     document.getElementById('modalLocationText').textContent = locationText;
     

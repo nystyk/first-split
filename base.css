@@ -147,7 +147,7 @@ h1, h2, .font-teko { font-family: 'Teko', sans-serif; }
     inset: 0;
     z-index: 1;
     pointer-events: none;
-    background: rgba(10, 20, 40, 0.88); /* even darker blue, slightly more opaque */
+    background: rgba(5, 10, 25, 0.92); /* darker blue, more opaque */
 }
 #intro-overlay::after {
     content: '';

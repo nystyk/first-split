@@ -572,7 +572,7 @@ const allEventsData = {
         title: 'Invazia Danemarcei și Norvegiei (Weserübung)',
         lat: 59.9139,
         lng: 10.7522,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Bundesarchiv_Bild_101I-040-3642-10A%2C_Norwegen%2C_Narvik%2C_deutsche_Gebirgsj%C3%A4ger.jpg/800px-Bundesarchiv_Bild_101I-040-3642-10A%2C_Norwegen%2C_Narvik%2C_deutsche_Gebirgsj%C3%A4ger.jpg',
+        imageUrl: 'images/1940/Weserübung.jpg',
         description: 'Pe 9 aprilie, Germania lansează Operațiunea Weserübung, invadând simultan Danemarca (care capitulează în câteva ore) și Norvegia, pentru a-și asigura rutele de minereu de fier din Suedia și a obține baze navale și aeriene strategice cu acces la Atlantic.',
         context: 'Germania era dependentă de minereul de fier suedez, transportat prin portul norvegian Narvik. Hitler se temea că Aliații ar putea ocupa Norvegia pentru a tăia această rută vitală, așa că a lansat o invazie preventivă.',
         figures: [
@@ -587,7 +587,7 @@ const allEventsData = {
         title: 'Bătălia Franței (Fall Gelb)',
         lat: 49.7020,
         lng: 4.9476,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Bundesarchiv_Bild_101I-123-0213-06%2C_Westfeldzug%2C_Panzer_IV.jpg/800px-Bundesarchiv_Bild_101I-123-0213-06%2C_Westfeldzug%2C_Panzer_IV.jpg',
+        imageUrl: 'images/1940/Fall Gelb.jpg',
         description: 'Pe 10 mai, Germania lansează o ofensivă fulgerătoare în vest, ocolind Linia Maginot printr-o mişcare surpriză cu tancuri prin Pădurea Ardeni. Tactica a dus la încercuirea forţelor aliate în Belgia și la o înfrângere catastrofală şi rapidă a Franţei.',
         context: 'După o perioadă de acalmie cunoscută ca "Războiul Ciudat", Germania a pus în aplicare Planul Manstein, un plan îndrăzneţ care miza pe viteză şi surpriză. Aliații au căzut în capcană, avansând în Belgia pentru a întâlni un atac de diversiune, lăsându-și flancul expus.',
         figures: [
@@ -603,7 +603,7 @@ const allEventsData = {
         title: 'Evacuarea de la Dunkerque (Dynamo)',
         lat: 51.0344,
         lng: 2.3768,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/The_evacuation_of_the_BEF_from_Dunkirk%2C_June_1940_F4826.jpg/800px-The_evacuation_of_the_BEF_from_Dunkirk%2C_June_1940_F4826.jpg',
+        imageUrl: 'images/1940/Evacuarea de la Dunkerque (Dynamo).jpg',
         description: 'O operaţiune de evacuare maritimă de o amploare fără precedent, prin care peste 338.000 de soldaţi aliaţi (britanici şi francezi) au fost salvați de pe plajele și din portul Dunkerque, după ce au fost încercuiți de armata germană.',
         context: 'Înaintarea rapidă a tancurilor germane a izolat Forța Expediţionară Britanică (BEF) și unități franceze. Un ordin controversat de oprire a tancurilor germane, dat de Hitler, a oferit o fereastră crucială de câteva zile pentru organizarea evacuării.',
         figures: [
@@ -618,7 +618,7 @@ const allEventsData = {
         title: 'Cedarea Basarabiei și a Bucovinei de Nord',
         lat: 47.0105,
         lng: 28.8638,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Cedarea_Basarabiei_si_a_Bucovinei_de_Nord_in_1940.jpg',
+        imageUrl: 'images/1940/Cedarea Basarabiei și a Bucovinei de Nord.jpg',
         description: 'În urma unui ultimatum sovietic din 26-27 iunie, România a fost forțată să cedeze Uniunii Sovietice teritoriile Basarabiei, Bucovinei de Nord şi ţinutului Herţa. Armata română s-a retras fără luptă pentru a evita un război.',
         context: 'Cedarea a fost o consecință directă a protocolului secret al Pactului Molotov-Ribbentrop. După căderea Franţei, principalul aliat al României, şi cu Germania concentrată în vest, Stalin a văzut oportunitatea de a-şi pune în aplicare pretențiile teritoriale.',
         figures: [
@@ -633,7 +633,7 @@ const allEventsData = {
         title: 'Promulgarea legilor rasiale în România',
         lat: 44.4396,
         lng: 26.0963,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Legile_rasiale_din_Romania_1940.jpg',
+        imageUrl: 'images/1940/Promulgarea legilor rasiale în România.jpg',
         description: 'În august, sub autoritatea Regelui Carol al II-lea, guvernul Ion Gigurtu a promulgat un pachet de legi rasiale care au definit juridic statutul evreilor pe criterii de sânge, interzicându-le accesul la viața publică şi economică.',
         context: 'Aceste legi au reprezentat culminarea unui proces îndelungat de antisemitism de stat. Prăbuşirea frontului de vest şi pierderea Basarabiei au creat un climat de panică, iar regimul a canalizat furia publică împotriva evreilor, prezentați drept țapi ispăşitori.',
         figures: [
@@ -648,7 +648,7 @@ const allEventsData = {
         title: 'Dictatul de la Viena',
         lat: 48.2082,
         lng: 16.3738,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Second_Vienna_Award_map-ro.svg/800px-Second_Vienna_Award_map-ro.svg.png',
+        imageUrl: 'images/1940/Dictatul de la Viena.jpg',
         description: 'Pe 30 august, un arbitraj teritorial impus de Germania Nazistă şi Italia Fascistă, prin care România a fost forţată să cedeze Ungariei partea de nord-vest a Transilvaniei.',
         context: 'După pierderea Basarabiei, România a rămas complet izolată diplomatic. Ungaria, un aliat al Axei, a profitat de slăbiciunea României. Hitler a mediat conflictul pentru a menţine stabilitatea în regiune şi a asigura loialitatea ambelor state.',
         figures: [
@@ -663,7 +663,7 @@ const allEventsData = {
         title: 'Instaurarea Statului Naţional-Legionar',
         lat: 44.4396,
         lng: 26.0963,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/d3/Antonescu_%26_Sima_1940.jpg',
+        imageUrl: 'images/1940/Instaurarea Statului Naţional-Legionar.jpg',
         description: 'În urma protestelor masive cauzate de pierderile teritoriale, Regele Carol al II-lea a fost forțat să abdice pe 6 septembrie în favoarea fiului său, Mihai I. Puterea reală a fost preluată de Generalul Ion Antonescu, care s-a autoproclamat "Conducător" şi a format un guvern împreună cu Garda de Fier.',
         context: 'Regimul autoritar al lui Carol al II-lea s-a prăbuşit sub greutatea umilinţelor teritoriale. Antonescu, o figură militară populară, a fost văzut ca singura persoană capabilă să stabilizeze ţara, în timp ce Garda de Fier era la apogeul popularităţii sale.',
         figures: [
@@ -679,7 +679,7 @@ const allEventsData = {
         title: 'Bătălia Angliei',
         lat: 51.3037,
         lng: -0.0903,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Battle_of_Britain_Air_Observer.jpg/800px-Battle_of_Britain_Air_Observer.jpg',
+        imageUrl: 'images/1940/Bătălia Angliei.jpg',
         description: 'O campanie aeriană crucială (iulie-octombrie) în care Royal Air Force (RAF) a apărat cu succes Marea Britanie împotriva atacurilor pe scară largă ale Luftwaffe. A fost prima bătălie majoră din istorie purtată integral în aer.',
         context: 'După căderea Franței, Hitler se pregătea să invadeze Marea Britanie (Operațiunea Leul de Mare), dar pentru aceasta avea nevoie de superioritate aeriană. Bătălia a fost o încercare a Germaniei de a distruge RAF.',
         figures: [
@@ -695,7 +695,7 @@ const allEventsData = {
         title: 'Intrarea Italiei în război',
         lat: 41.9028,
         lng: 12.4964,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Benito_Mussolini_e_Adolf_Hitler.jpg/800px-Benito_Mussolini_e_Adolf_Hitler.jpg',
+        imageUrl: 'images/1940/Intrarea Italiei în război.jpg',
         description: 'Pe 10 iunie, văzând prăbușirea iminentă a Franței, Benito Mussolini declară război Franței și Marii Britanii, sperând la câștiguri teritoriale ușoare și la un loc la masa negocierilor de pace.',
         context: 'Deși aliată cu Germania prin "Pactul de Oțel", Italia a rămas inițial neutră. Mussolini, invidios pe succesele lui Hitler și temându-se că va fi marginalizat, a decis să intre în război când a crezut că victoria Axei este sigură și iminentă.',
         figures: [
@@ -709,7 +709,7 @@ const allEventsData = {
         title: 'Căderea Parisului',
         lat: 48.8566,
         lng: 2.3522,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/Bundesarchiv_Bild_146-1975-042-13%2C_Paris%2C_deutsche_Truppen_am_Arc_de_Triomphe.jpg/800px-Bundesarchiv_Bild_146-1975-042-13%2C_Paris%2C_deutsche_Truppen_am_Arc_de_Triomphe.jpg',
+        imageUrl: 'images/1940/Căderea Parisului.jpg',
         description: 'Pe 14 iunie, trupele germane intră în capitala franceză, care fusese declarată oraș deschis pentru a evita distrugerea. Guvernul francez se refugiase la Bordeaux.',
         context: 'După străpungerea frontului la Sedan și încercuirea armatelor aliate, apărarea franceză s-a prăbușit. Pentru a salva orașul de la distrugeri, guvernul a decis să nu lupte pentru capitală.',
         figures: [
@@ -723,7 +723,7 @@ const allEventsData = {
         title: 'Armistițiul de la Compiègne',
         lat: 49.4275,
         lng: 2.8444,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Bundesarchiv_Bild_183-H28708%2C_Waffenstillstand_von_Compi%C3%A8gne%2C_Verhandlungen.jpg/800px-Bundesarchiv_Bild_183-H28708%2C_Waffenstillstand_von_Compi%C3%A8gne%2C_Verhandlungen.jpg',
+        imageUrl: 'images/1940/Armistițiul de la Compiègne.jpg',
         description: 'Pe 22 iunie, guvernul francez condus de Mareșalul Pétain semnează un armistițiu umilitor. Franța este împărțită într-o zonă ocupată în nord și vest și o zonă "liberă" în sud, guvernată de un regim colaboraționist la Vichy.',
         context: 'Hitler a insistat ca armistițiul să fie semnat în același vagon de tren în care Germania fusese forțată să semneze armistițiul din 1918, pentru a maximiza umilirea Franței.',
         figures: [
@@ -738,7 +738,7 @@ const allEventsData = {
         title: 'Începutul "The Blitz"',
         lat: 51.5072,
         lng: -0.1276,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/London_in_the_Blitz_1940_HU36113.jpg/800px-London_in_the_Blitz_1940_HU36113.jpg',
+        imageUrl: 'images/1940/Începutul The Blitz.jpg',
         description: 'Pe 7 septembrie, Luftwaffe își schimbă strategia și începe o campanie de bombardamente strategice susținute asupra Londrei și a altor orașe britanice. Campania a durat 8 luni și a ucis zeci de mii de civili.',
         context: 'După ce nu a reușit să distrugă RAF, Hitler a ordonat bombardarea orașelor pentru a teroriza populația civilă și a forța Marea Britanie să ceară pace. Această schimbare de tactică a oferit RAF un răgaz crucial pentru a-și reface forțele.',
         figures: [
@@ -753,7 +753,7 @@ const allEventsData = {
         title: 'Semnarea Pactului Tripartit',
         lat: 52.5200,
         lng: 13.4050,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Bundesarchiv_Bild_183-B02547%2C_Berlin%2C_Unterzeichnung_Dreim%C3%A4chtepakt.jpg/800px-Bundesarchiv_Bild_183-B02547%2C_Berlin%2C_Unterzeichnung_Dreim%C3%A4chtepakt.jpg',
+        imageUrl: 'images/1940/Semnarea Pactului Tripartit.jpg',
         description: 'Pe 27 septembrie, Germania, Italia și Japonia semnează Pactul Tripartit la Berlin, formând alianța militară cunoscută ca Puterile Axei. Ulterior, Ungaria, România, Slovacia și altele se vor alătura.',
         context: 'Pactul a formalizat alianța dintre cele trei puteri expansioniste. Acestea și-au recunoscut reciproc sferele de influență (Germania și Italia în Europa, Japonia în Asia de Est) și s-au angajat să se ajute reciproc dacă una dintre ele era atacată de o putere care nu era încă în război.',
         figures: [
@@ -769,7 +769,7 @@ const allEventsData = {
         title: 'Bătălia de la Taranto',
         lat: 40.4710,
         lng: 17.2398,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/The_Italian_battleship_Giulio_Cesare_under_attack_by_British_aircraft_at_the_Battle_of_Taranto_on_11_November_1940.jpg/800px-The_Italian_battleship_Giulio_Cesare_under_attack_by_British_aircraft_at_the_Battle_of_Taranto_on_11_November_1940.jpg',
+        imageUrl: 'images/1940/Bătălia de la Taranto.jpg',
         description: 'În noaptea de 11-12 noiembrie, un atac aerian surpriză, lansat de pe portavionul HMS Illustrious cu biplane învechite (Fairey Swordfish), neutralizează o mare parte a flotei de luptă italiene în portul Taranto.',
         context: 'Marina Regală Britanică dorea să schimbe echilibrul de putere navală în Mediterana. Atacul a fost planificat cu atenție pentru a demonstra că o flotă ancorată într-un port considerat sigur era vulnerabilă la un atac aerian.',
         figures: [
@@ -783,7 +783,7 @@ const allEventsData = {
         title: 'Operațiunea Compass',
         lat: 28.5,
         lng: 27.0,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Italian_prisoners_captured_during_Operation_Compass.jpg/800px-Italian_prisoners_captured_during_Operation_Compass.jpg',
+        imageUrl: 'images/1940/Operațiunea Compass.jpg',
         description: 'Între decembrie 1940 și februarie 1941, o contraofensivă aliată masivă în deșertul vestic (Egipt și Libia) distruge Armata a 10-a italiană, capturând 138.000 de prizonieri și avansând adânc în Libia.',
         context: 'După o invazie italiană anemică a Egiptului, forțele britanice, deși mult inferioare numeric, au lansat un raid la scară largă care s-a transformat într-o ofensivă totală datorită colapsului rapid al rezistenței italiene.',
         figures: [
@@ -798,7 +798,7 @@ const allEventsData = {
         title: 'Înființarea Lagărului Auschwitz',
         lat: 50.0264,
         lng: 19.2094,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Bundesarchiv_Bild_183-N0827-318%2C_KZ_Auschwitz%2C_Ankunft_ungarischer_Juden.jpg/800px-Bundesarchiv_Bild_183-N0827-318%2C_KZ_Auschwitz%2C_Ankunft_ungarischer_Juden.jpg',
+        imageUrl: 'images/1940/Înființarea Lagărului Auschwitz.jpg',
         description: 'Pe 20 mai, SS înființează lagărul de concentrare de la Auschwitz I, inițial pentru prizonieri politici polonezi. Acesta se va extinde și va deveni cel mai mare și mai letal complex de lagăre de concentrare și exterminare nazist, unde au fost uciși peste 1.1 milioane de oameni.',
         context: 'După ocuparea Poloniei, naziștii aveau nevoie de noi lagăre pentru a încarcera numărul mare de prizonieri. O fostă cazarmă militară poloneză de la Oświęcim (germanizat Auschwitz) a fost aleasă pentru locația sa strategică.',
         figures: [
@@ -813,7 +813,7 @@ const allEventsData = {
         title: 'Sigilarea Ghetoului din Varșovia',
         lat: 52.2461,
         lng: 20.9922,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Bundesarchiv_Bild_101I-134-0791-20%2C_Polen%2C_Warschauer_Ghetto%2C_Mauerbau.jpg/800px-Bundesarchiv_Bild_101I-134-0791-20%2C_Polen%2C_Warschauer_Ghetto%2C_Mauerbau.jpg',
+        imageUrl: 'images/1940/Sigilarea Ghetoului din Varșovia.jpg',
         description: 'Pe 16 noiembrie, cel mai mare ghetou din Europa este închis ermetic cu ziduri, sârmă ghimpată și paznici. Aproximativ 400.000 de evrei sunt înghesuiți într-o suprafață de 3,4 km², supuși înfometării, bolilor și violenței arbitrare.',
         context: 'Crearea ghetoului a fost un pas intermediar în "Soluția Finală". Scopul era izolarea completă a evreilor de restul populației, confiscarea proprietăților lor și concentrarea lor într-un singur loc pentru a facilita viitoarele deportări.',
         figures: [
@@ -831,7 +831,7 @@ const allEventsData = {
         title: 'Rebeliunea Legionară şi Pogromul de la Bucureşti',
         lat: 44.4396,
         lng: 26.0963,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/5/52/Bucharest_Pogrom_1941.jpg',
+        imageUrl: 'images/1941/Rebeliunea Legionară şi Pogromul de la Bucureşti.jpg',
         description: 'Între 21-23 ianuarie, o tentativă violentă a Gărzii de Fier de a prelua puterea totală în stat prin înlăturarea lui Ion Antonescu. Rebeliunea a fost însoțită de un pogrom brutal împotriva evreilor din Bucureşti, în special în cartierele Dudești și Văcărești.',
         context: 'Coabitarea dintre Antonescu şi Garda de Fier a fost extrem de tensionată. Legionarii doreau o revoluţie totală, în timp ce Antonescu dorea ordine şi disciplină, bazându-se pe sprijinul armatei. Conflictul a escaladat după ce Antonescu a început să înlăture prefecţii legionari.',
         figures: [
@@ -846,7 +846,7 @@ const allEventsData = {
         title: 'Intrarea României în război',
         lat: 47.0105,
         lng: 28.8638,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/a3/Propaganda_poster_for_the_war_against_the_Soviet_Union_in_Romania.jpg',
+        imageUrl: 'images/1941/Intrarea României în război.jpg',
         description: 'Pe 22 iunie, Armata Română, sub comanda lui Ion Antonescu, s-a alăturat Germaniei Naziste în invazia Uniunii Sovietice (Operațiunea Barbarossa). Obiectivul principal declarat a fost eliberarea Basarabiei şi a Bucovinei de Nord.',
         context: 'După pierderile teritoriale din 1940, opinia publică şi clasa politică românească erau dominate de un puternic sentiment revanşard. Alianța cu Germania era văzută ca singura cale de a recupera teritoriile pierdute în fața URSS.',
         figures: [
@@ -861,7 +861,7 @@ const allEventsData = {
         title: 'Pogromul de la Iași',
         lat: 47.1585,
         lng: 27.6014,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/d7/Ia%C8%99i_pogrom_-_Jews_being_led_to_the_police_station.jpg',
+        imageUrl: 'images/1941/Pogromul de la Iași.jpg',
         description: 'Un masacru de o brutalitate extremă (29 iunie - 6 iulie), în care autoritățile române, cu participare germană şi civilă, au ucis peste 13.000 de evrei. Evenimentul a inclus execuții în masă și deportări în "trenurile morţii".',
         context: 'Pogromul a avut loc la doar câteva zile după intrarea României în război. Autoritățile, în frunte cu Antonescu, au cultivat mitul "amenințării iudeo-bolșevice", folosind două bombardamente sovietice minore ca pretext pentru a dezlănțui o isterie colectivă și a da ordinul de "curățare a Iaşiului".',
         figures: [
@@ -877,7 +877,7 @@ const allEventsData = {
         title: 'Asediul Odesei și masacrele subsecvente',
         lat: 46.4825,
         lng: 30.7233,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e1/Romanian_soldiers_in_Odessa_1941.jpg',
+        imageUrl: 'images/1941/Asediul Odesei și masacrele subsecvente.jpg',
         description: 'O campanie militară majoră a Armatei a 4-a Române (august-octombrie) pentru cucerirea portului strategic Odesa, urmată de un masacru de proporţii împotriva populaţiei evreiești a oraşului.',
         context: 'După eliberarea Basarabiei, decizia lui Antonescu de a continua războiul dincolo de Nistru a transformat campania într-una de cucerire. Odesa, un important port la Marea Neagră, a devenit un obiectiv strategic principal.',
         figures: [
@@ -892,7 +892,7 @@ const allEventsData = {
         title: 'Operațiunea Barbarossa',
         lat: 52.0825,
         lng: 23.6536,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Bundesarchiv_Bild_101I-209-0013-05%2C_Russland%2C_Panzer_IV_mit_Infanterie.jpg/800px-Bundesarchiv_Bild_101I-209-0013-05%2C_Russland%2C_Panzer_IV_mit_Infanterie.jpg',
+        imageUrl: 'images/1941/Operațiunea Barbarossa.jpg',
         description: 'Pe 22 iunie, Germania lansează cea mai mare invazie terestră din istorie, atacând Uniunea Sovietică pe un front de mii de kilometri. Acţiunea a anulat Pactul Molotov-Ribbentrop şi a deschis Frontul de Est.',
         context: 'Motivat de ideologia sa anti-comunistă şi rasistă (planul de a cuceri "spațiul vital" - Lebensraum), Hitler dorea să distrugă Uniunea Sovietică într-o campanie rapidă. El a subestimat grav resursele URSS, adâncimea strategică a teritoriului și dificultățile climatice.',
         figures: [
@@ -907,7 +907,7 @@ const allEventsData = {
         title: 'Atacul de la Pearl Harbor',
         lat: 21.3686,
         lng: -157.9497,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/USS_Shaw_exploding_in_Pearl_Harbor.jpg/800px-USS_Shaw_exploding_in_Pearl_Harbor.jpg',
+        imageUrl: 'images/1941/Atacul de la Pearl Harbor.jpg',
         description: 'Pe 7 decembrie, un atac aerian surpriză devastator, lansat de marina imperială japoneză asupra bazei navale americane din Hawaii. Atacul a fost menit să neutralizeze flota americană din Pacific pentru a permite Japoniei să-și extindă imperiul în Asia de Sud-Est.',
         context: 'Tensiunile dintre SUA şi Japonia au escaladat din cauza expansiunii japoneze în China şi a embargoului american asupra petrolului și a altor materiale strategice. Conducerea militară japoneză a optat pentru o lovitură preventivă decisivă.',
         figures: [
@@ -922,7 +922,7 @@ const allEventsData = {
         title: 'Legea Lend-Lease',
         lat: 38.8951,
         lng: -77.0364,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Signing_the_Lend-Lease_Bill.jpg/800px-Signing_the_Lend-Lease_Bill.jpg',
+        imageUrl: 'images/1941/Legea Lend-Lease.jpg',
         description: 'Pe 11 martie, SUA adoptă Legea Lend-Lease, permițând transferul de materiale de război (fără plată imediată) către națiunile a căror apărare era considerată vitală pentru SUA, un pas decisiv care transformă SUA în "arsenalul democrației".',
         context: 'Marea Britanie era aproape de colaps financiar și nu mai putea plăti pentru armele necesare. Roosevelt a propus legea pentru a ocoli legile de neutralitate și a oferi un ajutor crucial Marii Britanii, și ulterior Chinei și Uniunii Sovietice.',
         figures: [
@@ -936,7 +936,7 @@ const allEventsData = {
         title: 'Invazia Iugoslaviei și Greciei',
         lat: 44.7866,
         lng: 20.4489,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Bundesarchiv_Bild_101I-169-1588-12%2C_Griechenland%2C_Soldaten_auf_Panzer_IV.jpg/800px-Bundesarchiv_Bild_101I-169-1588-12%2C_Griechenland%2C_Soldaten_auf_Panzer_IV.jpg',
+        imageUrl: 'images/1941/Invazia Iugoslaviei și Greciei.jpg',
         description: 'Pe 6 aprilie, Germania invadează Iugoslavia și Grecia pentru a securiza flancul sudic înainte de invazia URSS. Campania rapidă culminează cu Bătălia din Creta, prima invazie majoră aeropurtată din istorie.',
         context: 'Invazia a fost declanșată de o lovitură de stat pro-britanică la Belgrad, care a răsturnat un guvern pro-Axă. În același timp, Germania trebuia să salveze forțele italiene, care eșuaseră în încercarea de a invada Grecia.',
         figures: [
@@ -951,7 +951,7 @@ const allEventsData = {
         title: 'Asediul Tobrukului',
         lat: 32.0763,
         lng: 23.9598,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Australian_25-pounder_gun_at_El_Alamein_1942.jpg/800px-Australian_25-pounder_gun_at_El_Alamein_1942.jpg',
+        imageUrl: 'images/1941/Asediul Tobrukului.jpg',
         description: 'Timp de 241 de zile (aprilie-noiembrie), garnizoana aliată din portul strategic Tobruk, majoritatea australieni ("Șobolanii din Tobruk"), rezistă atacurilor germano-italiene, blocând înaintarea Axei spre Egipt.',
         context: 'După succesele inițiale ale lui Rommel, Tobruk a rămas o enclavă aliată în spatele liniilor Axei, amenințându-i constant flancul și liniile de aprovizionare. Portul era esențial pentru orice avansare ulterioară spre Canalul Suez.',
         figures: [
@@ -966,7 +966,7 @@ const allEventsData = {
         title: '"Holocaustul prin gloanțe"',
         lat: 50.4719,
         lng: 30.4494,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/The_massacre_of_Jews_in_Ivangorod%2C_Ukraine%2C_in_1942.jpg/800px-The_massacre_of_Jews_in_Ivangorod%2C_Ukraine%2C_in_1942.jpg',
+        imageUrl: 'images/1941/Holocaustul prin gloanțe.jpg',
         description: 'Începând cu iunie 1941, odată cu invazia URSS, unitățile mobile de ucidere (Einsatzgruppen) încep masacrarea sistematică prin împușcare a evreilor, oficialilor comuniști și romilor, ducând la moartea a peste 1,5 milioane de oameni.',
         context: 'Acesta a fost primul stadiu al "Soluției Finale", precedând uciderea industrializată în lagărele de exterminare. Einsatzgruppen operau în spatele armatei, adunând și executând victimele la marginea orașelor, în râpe sau în șanțuri antitanc.',
         figures: [
@@ -981,7 +981,7 @@ const allEventsData = {
         title: 'Asediul Leningradului',
         lat: 59.9343,
         lng: 30.3351,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/RIAN_archive_359_Leningrad_under_siege.jpg/800px-RIAN_archive_359_Leningrad_under_siege.jpg',
+        imageUrl: 'images/1941/Asediul Leningradului.jpg',
         description: 'Pe 8 septembrie, forțele germane și finlandeze încercuiesc complet Leningradul. Asediul de 872 de zile devine unul dintre cele mai lungi și mai brutale din istorie, ducând la moartea a peste un milion de civili, majoritatea prin înfometare.',
         context: 'Leningradul era un obiectiv major pentru Hitler datorită importanței sale industriale și simbolice (leagănul Revoluției Bolșevice). Planul german era de a încercui orașul și de a-l lăsa să moară de foame, fără a lansa un asalt costisitor.',
         figures: [
@@ -996,7 +996,7 @@ const allEventsData = {
         title: 'Masacrul de la Babi Yar',
         lat: 50.4719,
         lng: 30.4494,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Bundesarchiv_Bild_101I-218-0511-09%2C_Russland%2C_Babi_Jar%2C_Leichen.jpg/800px-Bundesarchiv_Bild_101I-218-0511-09%2C_Russland%2C_Babi_Jar%2C_Leichen.jpg',
+        imageUrl: 'images/1941/Masacrul de la Babi Yar.jpg',
         description: 'Pe 29-30 septembrie, la o râpă de la periferia Kievului, unități ale Einsatzgruppe C, împreună cu auxiliari locali, ucid prin împușcare 33.771 de evrei în decurs de două zile. Acesta rămâne unul dintre cele mai mari masacre individuale ale Holocaustului.',
         context: 'După capturarea Kievului, autoritățile naziste au ordonat populației evreiești să se adune pentru "relocare". În schimb, au fost duși la râpa Babi Yar, forțați să se dezbrace și împușcați în grupuri.',
         figures: [
@@ -1011,7 +1011,7 @@ const allEventsData = {
         title: 'Bătălia de la Moscova',
         lat: 55.7512,
         lng: 37.6184,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/RIAN_archive_858_T-34_tanks_in_ambush.jpg/800px-RIAN_archive_858_T-34_tanks_in_ambush.jpg',
+        imageUrl: 'images/1941/Bătălia de la Moscova.jpg',
         description: 'Ofensiva finală germană pentru capturarea Moscovei (Operațiunea Taifun) eșuează din cauza rezistenței sovietice acerbe, a noroiului și a gerului. Contraofensiva sovietică din decembrie marchează eșecul strategic al Operațiunii Barbarossa.',
         context: 'Moscova era principalul obiectiv politic, economic și de transport al URSS. Căderea sa ar fi putut duce la colapsul sovietic. Germanii au ajuns la doar câțiva kilometri de Kremlin, dar liniile lor de aprovizionare erau suprasolicitate, iar trupele epuizate.',
         figures: [
@@ -1026,7 +1026,7 @@ const allEventsData = {
         title: 'Germania și Italia declară război SUA',
         lat: 52.5200,
         lng: 13.4050,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Bundesarchiv_Bild_183-B20320%2C_Berlin%2C_Reichstagssitzung%2C_Rede_Adolf_Hitler.jpg/800px-Bundesarchiv_Bild_183-B20320%2C_Berlin%2C_Reichstagssitzung%2C_Rede_Adolf_Hitler.jpg',
+        imageUrl: 'images/1941/Germania și Italia declară război SUA.jpg',
         description: 'Pe 11 decembrie, la patru zile după Pearl Harbor, Hitler și Mussolini declară război Statelor Unite. A fost una dintre cele mai mari erori strategice ale lui Hitler.',
         context: 'Hitler nu era obligat de Pactul Tripartit să declare război, deoarece Japonia fusese agresorul. El a luat decizia din dispreț față de SUA, subestimându-i potențialul militar și industrial, și în speranța că Japonia va ataca URSS în Extremul Orient.',
         figures: [
@@ -1044,7 +1044,7 @@ const allEventsData = {
         title: 'Participarea României la Campania din Crimeea',
         lat: 44.9535,
         lng: 34.1024,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Romanian_mountain_troops_in_Crimea_1941.jpg/800px-Romanian_mountain_troops_in_Crimea_1941.jpg',
+        imageUrl: 'images/1942/Participarea României la Campania din Crimeea.jpg',
         description: 'Unități semnificative ale armatei române, în special Corpul Vânătorilor de Munte, au participat alături de Armata a 11-a germană la campania de cucerire a Peninsulei Crimeea, culminând cu asediul brutal şi căderea Sevastopolului în iulie 1942.',
         context: 'Cucerirea Crimeei a devenit o prioritate strategică pentru Axă, deoarece peninsula servea drept bază aeriană sovietică de unde se lansau raiduri asupra câmpurilor petrolifere vitale de la Ploieşti. Asigurarea Crimeei era esențială pentru protejarea resurselor de petrol ale României.',
         figures: [
@@ -1060,7 +1060,7 @@ const allEventsData = {
         title: 'Bătălia de la Stalingrad (Participarea României)',
         lat: 48.7080,
         lng: 44.5133,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Romanian_soldiers_at_Stalingrad_1942.jpg/800px-Romanian_soldiers_at_Stalingrad_1942.jpg',
+        imageUrl: 'images/1942/Bătălia de la Stalingrad (Participarea României).jpg',
         description: 'Armatele a 3-a şi a 4-a Române, slab echipate şi întinse pe un front mult prea larg, au fost însărcinate cu protejarea flancurilor Armatei a 6-a germane. Contraofensiva sovietică (Operațiunea Uranus) din noiembrie a lovit exact în aceste sectoare, spulberând trupele române.',
         context: 'După succesele din 1941, Antonescu a angajat un număr tot mai mare de trupe române pe Frontul de Est. Armatele române erau dotate cu armament antitanc inadecvat şi nu au primit sprijinul promis de la comandamentul german.',
         figures: [
@@ -1075,7 +1075,7 @@ const allEventsData = {
         title: 'Bătălia de la Midway',
         lat: 28.2076,
         lng: -177.3725,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/USS_Yorktown_%28CV-5%29_is_hit_on_4_June_1942.jpg/800px-USS_Yorktown_%28CV-5%29_is_hit_on_4_June_1942.jpg',
+        imageUrl: 'images/1942/Bătălia de la Midway.jpg',
         description: 'O bătălie navală și aeriană decisivă (4-7 iunie) și punctul de cotitură al războiului din Pacific. Flota americană a înfrânt în mod categoric flota japoneză, scufundând patru dintre portavioanele sale de elită (Akagi, Kaga, Soryu, Hiryu).',
         context: 'Marina japoneză a încercat să atragă flota americană într-o bătălie finală distrugătoare la atolul Midway. Datorită decriptării codurilor navale japoneze (JN-25), amiralul Nimitz cunoştea în detaliu planul de atac japonez și a putut pregăti o ambuscadă.',
         figures: [
@@ -1090,7 +1090,7 @@ const allEventsData = {
         title: 'Conferința de la Wannsee',
         lat: 52.4286,
         lng: 13.1594,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Wannsee_Villa.jpg/800px-Wannsee_Villa.jpg',
+        imageUrl: 'images/1942/Conferința de la Wannsee.jpg',
         description: 'Pe 20 ianuarie, o întâlnire a 15 înalți oficiali naziști pentru a coordona și birocratiza implementarea "Soluției Finale la problema evreiască", planul de exterminare sistematică a evreilor europeni.',
         context: 'Decizia de a extermina evreii fusese deja luată la nivel înalt. Conferința nu a fost pentru a decide, ci pentru a asigura cooperarea diferitelor ministere și agenții ale statului în organizarea logistică a genocidului.',
         figures: [
@@ -1105,7 +1105,7 @@ const allEventsData = {
         title: 'Căderea Singaporelui',
         lat: 1.3521,
         lng: 103.8198,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/The_surrender_of_Singapore%2C_15_February_1942.jpg/800px-The_surrender_of_Singapore%2C_15_February_1942.jpg',
+        imageUrl: 'images/1942/Căderea Singaporelui.jpg',
         description: 'Pe 15 februarie, căderea "fortăreței" Singapore în fața forțelor japoneze a fost una dintre cele mai mari înfrângeri militare britanice, Churchill numind-o "cel mai mare dezastru" din istoria militară britanică.',
         context: 'Japonezii au lansat un atac surpriză prin jungla malaeziană, considerată impenetrabilă, ocolind apărarea principală a orașului, care era orientată spre mare. Forțele aliate, slab pregătite, au fost rapid copleșite.',
         figures: [
@@ -1120,7 +1120,7 @@ const allEventsData = {
         title: 'Începutul Operațiunii Reinhard',
         lat: 50.3758,
         lng: 23.4589,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Belzec_camp_memorial.jpg/800px-Belzec_camp_memorial.jpg',
+        imageUrl: 'images/1942/Începutul Operațiunii Reinhard.jpg',
         description: 'În martie, lagărul de exterminare de la Bełżec devine operațional, marcând începutul fazei celei mai letale a Holocaustului în Polonia ocupată. Împreună cu Sobibór și Treblinka, aceste lagăre vor duce la moartea a 1,7 milioane de evrei.',
         context: 'Operațiunea Reinhard a fost numele de cod dat planului de a ucide evreii din Guvernământul General (Polonia ocupată). Aceste lagăre erau "fabrici ale morții", proiectate exclusiv pentru exterminare rapidă prin gazare.',
         figures: [
@@ -1135,7 +1135,7 @@ const allEventsData = {
         title: 'Marșul Morții din Bataan',
         lat: 14.65,
         lng: 120.5,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Bataan_Death_March_memorial_in_Capas.jpg/800px-Bataan_Death_March_memorial_in_Capas.jpg',
+        imageUrl: 'images/1942/Marșul Morții din Bataan.jpg',
         description: 'În aprilie, după capitularea forțelor americane și filipineze în Peninsula Bataan, aproximativ 75.000 de prizonieri sunt forțați să mărșăluiască peste 100 km spre un lagăr de prizonieri. Mii mor pe drum din cauza brutalității, înfometării și bolilor.',
         context: 'Forțele aliate din Filipine, conduse de Generalul Douglas MacArthur (care a fost evacuat), au rezistat eroic timp de câteva luni. După capitulare, japonezii nu erau pregătiți să gestioneze un număr atât de mare de prizonieri.',
         figures: [
@@ -1149,7 +1149,7 @@ const allEventsData = {
         title: 'Raidul Doolittle',
         lat: 35.6895,
         lng: 139.6917,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Doolittle_Raid_-_USS_Hornet.jpg/800px-Doolittle_Raid_-_USS_Hornet.jpg',
+        imageUrl: 'images/1942/Raidul Doolittle.jpg',
         description: 'Pe 18 aprilie, 16 bombardiere B-25, lansate de pe portavionul USS Hornet, efectuează primul raid aerian american care a lovit insulele natale japoneze. Deși cu impact militar redus, a fost o victorie morală majoră pentru SUA.',
         context: 'După Pearl Harbor și o serie de înfrângeri, moralul american era la pământ. Raidul a fost conceput ca o acțiune îndrăzneață pentru a demonstra că Japonia nu era invulnerabilă și pentru a ridica moralul pe frontul intern.',
         figures: [
@@ -1163,7 +1163,7 @@ const allEventsData = {
         title: 'Bătălia din Marea Coralilor',
         lat: -15.0,
         lng: 150.0,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/USS_Lexington_explodes.jpg/800px-USS_Lexington_explodes.jpg',
+        imageUrl: 'images/1942/Bătălia din Marea Coralilor.jpg',
         description: 'În mai, prima bătălie navală din istorie purtată exclusiv de avioane de pe portavioane; navele inamice nu s-au văzut niciodată. A fost o victorie strategică aliată, deoarece a oprit invazia japoneză a Port Moresby, Noua Guinee.',
         context: 'Japonezii încercau să izoleze Australia prin capturarea Port Moresby. Datorită interceptării comunicațiilor, forțele americane au putut trimite o flotă de portavioane pentru a contracara forța de invazie japoneză.',
         figures: [
@@ -1177,7 +1177,7 @@ const allEventsData = {
         title: 'Campania din Guadalcanal',
         lat: -9.5843,
         lng: 160.1562,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Guadalcanal_Marines.jpg/800px-Guadalcanal_Marines.jpg',
+        imageUrl: 'images/1942/Campania din Guadalcanal.jpg',
         description: 'Începând cu 7 august, prima ofensivă terestră majoră a Aliaților în Pacific. Șase luni de lupte brutale pe uscat, pe mare și în aer se încheie cu o victorie aliată care asigură o bază strategică vitală.',
         context: 'Pușcașii marini americani au debarcat pentru a captura un aerodrom în construcție de către japonezi, care ar fi amenințat liniile de comunicație dintre SUA și Australia. Bătălia s-a transformat într-o campanie de uzură sângeroasă.',
         figures: [
@@ -1191,7 +1191,7 @@ const allEventsData = {
         title: 'Raidul de la Dieppe',
         lat: 49.9229,
         lng: 1.0774,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Landing_craft_at_Dieppe_1942.jpg/800px-Landing_craft_at_Dieppe_1942.jpg',
+        imageUrl: 'images/1942/Raidul de la Dieppe.jpg',
         description: 'Pe 19 august, un raid amfibiu dezastruos al forțelor canadiene, menit să testeze apărarea germană și să adune informații. Lecțiile dureroase, dar esențiale, învățate aici au fost cruciale pentru succesul debarcării din Normandia.',
         context: 'Aliații erau presați de Stalin să deschidă un al doilea front. Raidul a fost un compromis, o operațiune la scară mai mică pentru a testa fezabilitatea unei invazii pe scară largă. Planificarea a fost deficitară, iar apărarea germană subestimată.',
         figures: [
@@ -1205,7 +1205,7 @@ const allEventsData = {
         title: 'A Doua Bătălie de la El Alamein',
         lat: 30.8222,
         lng: 28.9543,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Australian_25-pounder_gun_at_El_Alamein_1942.jpg/800px-Australian_25-pounder_gun_at_El_Alamein_1942.jpg',
+        imageUrl: 'images/1942/A Doua Bătălie de la El Alamein.jpg',
         description: 'Între 23 octombrie - 11 noiembrie, Armata a 8-a britanică, sub comanda lui Montgomery, obține o victorie decisivă care oprește avansul Axei spre Egipt și marchează un punct de cotitură în Africa de Nord.',
         context: 'După o serie de victorii, Rommel a ajuns periculos de aproape de Alexandria. Montgomery a refuzat să atace până când nu a acumulat o superioritate copleșitoare în oameni și materiale, în special tancuri Sherman americane.',
         figures: [
@@ -1220,7 +1220,7 @@ const allEventsData = {
         title: 'Operațiunea Torța',
         lat: 36.7783,
         lng: 3.0588,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Operation_Torch_-_landings_at_Algiers_-_November_1942.jpg/800px-Operation_Torch_-_landings_at_Algiers_-_November_1942.jpg',
+        imageUrl: 'images/1942/Operațiunea Torța.jpg',
         description: 'Pe 8 noiembrie, debarcări amfibii masive anglo-americane în Algeria și Maroc. După o scurtă rezistență, forțele franceze de la Vichy se alătură Aliaților, deschizând un nou front în spatele forțelor Axei din Tunisia.',
         context: 'A fost prima operațiune amfibie majoră a SUA în teatrul european. Scopul era de a prinde forțele lui Rommel într-un clește, între armata lui Montgomery din est și noile forțe din vest.',
         figures: [
@@ -1238,7 +1238,7 @@ const allEventsData = {
         title: 'Revolta din Ghetoul din Varșovia',
         lat: 52.2497,
         lng: 20.9944,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Warsaw_Ghetto_Uprising_-_Stroop_Report_-_cover.jpg/800px-Warsaw_Ghetto_Uprising_-_Stroop_Report_-_cover.jpg',
+        imageUrl: 'images/1943/Revolta din Ghetoul din Varșovia.jpg',
         description: 'Un act de rezistență armată eroic, dar sortit eșecului, al luptătorilor evrei din ghetoul din Varşovia împotriva deportărilor finale către lagărul de exterminare Treblinka. A fost cel mai mare şi mai important act de rezistență armată evreiască din timpul Holocaustului.',
         context: 'După ce majoritatea locuitorilor ghetoului fuseseră deja deportați în 1942, luptătorii rămaşi, organizați în ŻOB și ŻZW, au decis să lupte până la moarte în loc să se supună pasiv deportării, folosind arme de contrabandă și cocktailuri Molotov.',
         figures: [
@@ -1253,7 +1253,7 @@ const allEventsData = {
         title: 'Bombardamentele Aliate asupra României (Operațiunea Tidal Wave)',
         lat: 44.9333,
         lng: 26.0167,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/d7/Operation_Tidal_Wave_bombing_of_Ploesti_Romania.jpg',
+        imageUrl: 'images/1943/Bombardamentele Aliate asupra României (Operațiunea Tidal Wave).jpg',
         description: 'Pe 1 august, un raid aerian masiv şi îndrăzneţ lansat de forțele aeriene americane (USAAF) împotriva rafinăriilor de petrol de la Ploieşti. A fost unul dintre cele mai faimoase şi costisitoare raiduri aeriene ale războiului.',
         context: 'Rafinăriile de la Ploieşti erau o țintă strategică vitală, furnizând aproximativ o treime din necesarul de petrol al maşinii de război naziste. Aliații sperau că distrugerea acestora va paraliza mobilitatea armatei germane.',
         figures: [
@@ -1267,7 +1267,7 @@ const allEventsData = {
         title: 'Conferința de la Casablanca',
         lat: 33.5731,
         lng: -7.5898,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Casablanca_Conference_1943.jpg/800px-Casablanca_Conference_1943.jpg',
+        imageUrl: 'images/1943/Conferința de la Casablanca.jpg',
         description: 'În ianuarie, o întâlnire strategică între Roosevelt și Churchill unde a fost stabilită strategia aliată pentru anul următor și anunțată politica de "capitulare necondiționată" a Axei.',
         context: 'Conferința a avut loc după succesele din Africa de Nord (Operațiunea Torța) și Stalingrad. Aliații trebuiau să decidă următorul pas. S-a hotărât invadarea Siciliei și intensificarea bombardamentelor strategice asupra Germaniei.',
         figures: [
@@ -1282,7 +1282,7 @@ const allEventsData = {
         title: 'Capitularea Germană la Stalingrad',
         lat: 48.7080,
         lng: 44.5133,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Bundesarchiv_Bild_183-J0128-0502-003%2C_Russland%2C_Kapitulation_Stalingrad%2C_Paulus.jpg/800px-Bundesarchiv_Bild_183-J0128-0502-003%2C_Russland%2C_Kapitulation_Stalingrad%2C_Paulus.jpg',
+        imageUrl: 'images/1943/Capitularea Germană la Stalingrad.jpg',
         description: 'Pe 2 februarie, ultimele unități ale Armatei a 6-a germane, conduse de Mareșalul Paulus, se predau. Peste 91.000 de soldați sunt luați prizonieri. Victoria sovietică este un punct de cotitură psihologic și strategic major.',
         context: 'După ce au fost încercuiți în noiembrie 1942, soldații germani au fost lăsați de Hitler să moară de foame și de frig, interzicându-le să încerce să spargă încercuirea. Podul aerian promis de Göring a fost un eșec total.',
         figures: [
@@ -1297,7 +1297,7 @@ const allEventsData = {
         title: 'Lichidarea Ghetoului din Cracovia',
         lat: 50.0497,
         lng: 19.9445,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Krakow_Ghetto_liquidation.jpg/800px-Krakow_Ghetto_liquidation.jpg',
+        imageUrl: 'images/1943/Lichidarea Ghetoului din Cracovia.jpg',
         description: 'Pe 13-14 martie, SS și poliția germană lichidează ghetoul. Mii de evrei considerați inapți pentru muncă sunt uciși în timpul operațiunii, iar restul sunt deportați în lagărele Płaszów și Auschwitz.',
         context: 'Ghetoul din Cracovia a fost unul dintre cele cinci ghetouri majore din Polonia. Lichidarea sa a făcut parte din Operațiunea Reinhard, planul de exterminare a evreilor polonezi.',
         figures: [
@@ -1311,7 +1311,7 @@ const allEventsData = {
         title: 'Capitularea Axei în Tunisia',
         lat: 36.8065,
         lng: 10.1815,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/German_and_Italian_prisoners_in_Tunisia_1943.jpg/800px-German_and_Italian_prisoners_in_Tunisia_1943.jpg',
+        imageUrl: 'images/1943/Capitularea Axei în Tunisia.jpg',
         description: 'Pe 13 mai, forțele Axei din Africa de Nord, prinse între două armate aliate, capitulează. Aproximativ 275.000 de soldați germani și italieni sunt luați prizonieri, deschizând calea pentru invazia Siciliei.',
         context: 'După debarcările din Operațiunea Torța și victoria de la El Alamein, forțele germano-italiene au fost prinse într-un clește în Tunisia. În ciuda unei rezistențe inițiale puternice, au fost copleșite numeric și au rămas fără provizii.',
         figures: [
@@ -1325,7 +1325,7 @@ const allEventsData = {
         title: 'Bătălia de la Kursk',
         lat: 51.7301,
         lng: 36.1911,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Bundesarchiv_Bild_101I-221-0616-24%2C_Russland%2C_Schlacht_um_Kursk%2C_Panzer_VI_%28Tiger_I%29.jpg/800px-Bundesarchiv_Bild_101I-221-0616-24%2C_Russland%2C_Schlacht_um_Kursk%2C_Panzer_VI_%28Tiger_I%29.jpg',
+        imageUrl: 'images/1943/Bătălia de la Kursk.jpg',
         description: 'În iulie-august, cea mai mare bătălie de tancuri din istorie. O ofensivă masivă germană (Operațiunea Citadela) este oprită de o apărare sovietică în adâncime, bine pregătită, marcând sfârșitul definitiv al ofensivei strategice germane pe Frontul de Est.',
         context: 'După înfrângerea de la Stalingrad, germanii au încercat să recâștige inițiativa printr-un atac masiv asupra proeminenței de la Kursk. Sovieticii, însă, cunoșteau planurile germane prin spionaj și au construit fortificații defensive formidabile.',
         figures: [
@@ -1340,7 +1340,7 @@ const allEventsData = {
         title: 'Invazia Aliată a Siciliei (Husky)',
         lat: 37.0696,
         lng: 15.2052,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Operation_Husky_-_Landing_craft_approach_the_Sicilian_coast_in_July_1943.jpg/800px-Operation_Husky_-_Landing_craft_approach_the_Sicilian_coast_in_July_1943.jpg',
+        imageUrl: 'images/1943/Invazia Aliată a Siciliei (Husky).jpg',
         description: 'Pe 10 iulie, forțele aliate anglo-americane debarcă în Sicilia. Campania se încheie cu succes, deschizând "pântecele moale" al Europei și accelerând prăbușirea regimului fascist din Italia.',
         context: 'După victoria din Africa de Nord, Aliații au decis să invadeze Italia prin Sicilia pentru a elimina Italia din război, a securiza Mediterana și a forța Germania să devieze trupe de pe alte fronturi.',
         figures: [
@@ -1356,7 +1356,7 @@ const allEventsData = {
         title: 'Armistițiul cu Italia',
         lat: 37.0696,
         lng: 15.2052,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Signature_of_the_Italian_armistice_at_Cassibile.jpg/800px-Signature_of_the_Italian_armistice_at_Cassibile.jpg',
+        imageUrl: 'images/1943/Armistițiul cu Italia.jpg',
         description: 'Pe 3 septembrie, noul guvern italian condus de Pietro Badoglio semnează un armistițiu cu Aliații. Germania reacționează imediat prin Operațiunea Achse, ocupând nordul și centrul Italiei și dezarmând armata italiană.',
         context: 'După demiterea lui Mussolini, guvernul Badoglio a pretins public că va continua lupta alături de Germania, în timp ce negocia în secret cu Aliații. Anunțul public al armistițiului pe 8 septembrie a aruncat armata italiană în haos.',
         figures: [
@@ -1370,7 +1370,7 @@ const allEventsData = {
         title: 'Revolta de la Sobibor',
         lat: 51.4469,
         lng: 23.5931,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Sobibor_uprising_memorial.jpg/800px-Sobibor_uprising_memorial.jpg',
+        imageUrl: 'images/1943/Revolta de la Sobibor.jpg',
         description: 'Pe 14 octombrie, o revoltă organizată în lagărul de exterminare Sobibór, condusă de ofițerul sovietic Alexander Pechersky. Prizonierii ucid mai mulți ofițeri SS și paznici ucraineni. Aproximativ 300 de prizonieri reușesc să evadeze.',
         context: 'Prizonierii știau că, odată ce transporturile de evrei se vor opri, vor fi și ei uciși. Revolta a fost planificată meticulos pentru a atrage și ucide ofițerii SS unul câte unul, înainte de a lansa un asalt asupra porților.',
         figures: [
@@ -1385,7 +1385,7 @@ const allEventsData = {
         title: 'Conferința de la Teheran',
         lat: 35.6892,
         lng: 51.3890,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Tehran_Conference%2C_1943.jpg/800px-Tehran_Conference%2C_1943.jpg',
+        imageUrl: 'images/1943/Conferința de la Teheran.jpg',
         description: 'În noiembrie-decembrie, prima întâlnire a "Celor Trei Mari" (Roosevelt, Churchill și Stalin). Se ia decizia finală pentru deschiderea unui al doilea front în vestul Europei (Operațiunea Overlord) în mai/iunie 1944.',
         context: 'Conferința a avut loc după victorii aliate decisive (Stalingrad, Kursk, Africa de Nord). Stalin a presat puternic pentru deschiderea celui de-al doilea front, promis încă din 1942, pentru a slăbi presiunea asupra Frontului de Est.',
         figures: [
@@ -1404,7 +1404,7 @@ const allEventsData = {
         title: 'Lovitura de stat de la 23 august',
         lat: 44.4396,
         lng: 26.0963,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/King_Michael_of_Romania_in_1940s.jpg/800px-King_Michael_of_Romania_in_1940s.jpg',
+        imageUrl: 'images/1944/Lovitura de stat de la 23 august.jpg',
         description: 'Regele Mihai I, sprijinit de liderii partidelor politice istorice şi de ofiţeri superiori ai armatei, l-a arestat pe mareşalul Ion Antonescu şi a anunţat ieşirea României din alianța cu Axa şi alăturarea sa la Coaliția Națiunilor Unite.',
         context: 'În vara anului 1944, cu frontul prăbuşindu-se sub ofensiva sovietică masivă Iași-Chișinău și cu ţara devastată de bombardamente, devenise clar că alianța cu Germania ducea la un dezastru total. Regele şi opoziția democratică au decis să acționeze.',
         figures: [
@@ -1420,7 +1420,7 @@ const allEventsData = {
         title: 'Bătălia de la Monte Cassino',
         lat: 41.4906,
         lng: 13.8136,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Monte_Cassino_bombing_15_February_1944.jpg/800px-Monte_Cassino_bombing_15_February_1944.jpg',
+        imageUrl: 'images/1944/Bătălia de la Monte Cassino.jpg',
         description: 'O serie de patru asalturi aliate sângeroase (ianuarie-mai) asupra Liniei Gustav. Linia este în cele din urmă străpunsă de Corpul Polonez II și forțele coloniale franceze, deschizând drumul spre Roma.',
         context: 'Mănăstirea istorică de la Monte Cassino domina strategic valea Liri, o rută cheie spre Roma. Deși germanii nu o ocupaseră inițial, Aliații au bombardat-o controversat, crezând că este folosită ca post de observație. După bombardament, parașutiștii germani au ocupat ruinele, transformându-le într-o fortăreață formidabilă.',
         figures: [
@@ -1435,7 +1435,7 @@ const allEventsData = {
         title: 'Deportarea evreilor maghiari',
         lat: 47.4979,
         lng: 19.0402,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Selection_on_the_ramp_at_Auschwitz-Birkenau%2C_May_1944.jpg/800px-Selection_on_the_ramp_at_Auschwitz-Birkenau%2C_May_1944.jpg',
+        imageUrl: 'images/1944/Deportarea evreilor maghiari.jpg',
         description: 'Între mai și iulie, după ocuparea Ungariei de către Germania, aproximativ 440.000 de evrei sunt deportați, majoritatea la Auschwitz. Aceasta este una dintre cele mai rapide și mai mari operațiuni de exterminare din timpul Holocaustului.',
         context: 'Deși Ungaria era aliată a Germaniei, regentul Horthy a refuzat mult timp să predea populația evreiască. După ce Germania a ocupat Ungaria în martie 1944 pentru a preveni ieșirea acesteia din război, Adolf Eichmann a fost trimis la Budapesta pentru a organiza deportările cu o eficiență brutală, cu sprijinul autorităților maghiare.',
         figures: [
@@ -1450,7 +1450,7 @@ const allEventsData = {
         title: 'Eliberarea Romei',
         lat: 41.9028,
         lng: 12.4964,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/American_troops_pass_the_Colosseum_in_Rome_1944.jpg/800px-American_troops_pass_the_Colosseum_in_Rome_1944.jpg',
+        imageUrl: 'images/1944/Eliberarea Romei.jpg',
         description: 'Pe 4 iunie, forțele Armatei a 5-a americane intră în Roma, prima capitală a Axei care este eliberată. Evenimentul este însă umbrit de iminenta debarcare din Normandia, care are loc două zile mai târziu.',
         context: 'După străpungerea Liniei Gustav la Monte Cassino, drumul spre Roma era deschis. Generalul american Mark Clark a ales să intre triumfal în Roma, în loc să încerce să încercuiască Armata a 10-a germană, permițându-i acesteia să se retragă spre nord.',
         figures: [
@@ -1464,7 +1464,7 @@ const allEventsData = {
         title: 'Ziua Z: Debarcarea din Normandia (Overlord)',
         lat: 49.3400,
         lng: -0.5500,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Into_the_Jaws_of_Death_23-0455M_edit.jpg/800px-Into_the_Jaws_of_Death_23-0455M_edit.jpg',
+        imageUrl: 'images/1944/Ziua Z Debarcarea din Normandia (Overlord).jpg',
         description: 'Pe 6 iunie, în cea mai mare invazie amfibie din istorie, peste 156.000 de soldați aliați debarcă pe cinci plaje din Normandia (Utah, Omaha, Gold, Juno, Sword), deschizând un al doilea front major în Europa de Vest și începând eliberarea Franței.',
         context: 'După luni de planificare și o operațiune masivă de dezinformare (Operațiunea Fortitude), Aliații au lansat atacul promis lui Stalin la Teheran. Succesul depindea de obținerea unui cap de pod sigur în prima zi.',
         figures: [
@@ -1479,7 +1479,7 @@ const allEventsData = {
         title: 'Operațiunea Bagration',
         lat: 53.9000,
         lng: 27.5667,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/RIAN_archive_40166_Minsk_Offensive_Operation.jpg/800px-RIAN_archive_40166_Minsk_Offensive_Operation.jpg',
+        imageUrl: 'images/1944/Operațiunea Bagration.jpg',
         description: 'O ofensivă masivă sovietică în Belarus (iunie-august) care a distrus complet Grupul de Armate Centru german, provocând cele mai mari pierderi Germaniei într-o singură operațiune și accelerând colapsul Frontului de Est.',
         context: 'Lansată la 22 iunie, exact la trei ani de la începutul Operațiunii Barbarossa, ofensiva sovietică a folosit tactici de dezinformare (maskirovka) pentru a ascunde amploarea și direcția principală a atacului.',
         figures: [
@@ -1494,7 +1494,7 @@ const allEventsData = {
         title: 'Eliberarea Parisului',
         lat: 48.8566,
         lng: 2.3522,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Leclerc_in_Paris_1944.jpg/800px-Leclerc_in_Paris_1944.jpg',
+        imageUrl: 'images/1944/Eliberarea Parisului.jpg',
         description: 'Pe 25 august, după o insurecție a Rezistenței Franceze, Divizia a 2-a Blindată franceză a generalului Leclerc și forțele americane intră în Paris. Comandantul german sfidează ordinele lui Hitler de a distruge orașul și se predă.',
         context: 'Pe măsură ce forțele aliate se apropiau, Rezistența Franceză a declanșat o insurecție în oraș. Pentru a preveni o baie de sânge și distrugerea orașului, Eisenhower a fost convins de Charles de Gaulle să trimită trupe pentru a elibera capitala.',
         figures: [
@@ -1510,7 +1510,7 @@ const allEventsData = {
         title: 'Revolta din Varșovia',
         lat: 52.2297,
         lng: 21.0122,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Warsaw_Uprising_by_Polski_Zolnierz.jpg/800px-Warsaw_Uprising_by_Polski_Zolnierz.jpg',
+        imageUrl: 'images/1944/Revolta din Varșovia.jpg',
         description: 'Pe 1 august, Rezistența poloneză (Armata Teritorială) lansează o insurecție pentru a elibera Varșovia. Stalin oprește înaintarea sovietică la porțile orașului, permițând germanilor să zdrobească revolta după 63 de zile de lupte, distrugând sistematic orașul.',
         context: 'Armata Teritorială (Armia Krajowa), loială guvernului polonez în exil de la Londra, a dorit să elibereze capitala pentru a preveni instaurarea unui regim comunist de către sovietici. Ei se așteptau la ajutor din partea Armatei Roșii, care se apropia.',
         figures: [
@@ -1525,7 +1525,7 @@ const allEventsData = {
         title: 'Operațiunea Market Garden',
         lat: 51.8126,
         lng: 5.8372,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/British_paratroopers_at_Arnhem_1944.jpg/800px-British_paratroopers_at_Arnhem_1944.jpg',
+        imageUrl: 'images/1944/Operațiunea Market Garden.jpg',
         description: 'În septembrie, un plan aliat îndrăzneț de a cuceri o serie de poduri în Olanda cu forțe aeropurtate pentru a pătrunde în Germania și a termina războiul până la Crăciun. Operațiunea eșuează la ultimul pod, cel de la Arnhem ("un pod prea îndepărtat").',
         context: 'Concepută de Mareșalul Montgomery, operațiunea a fost un pariu riscant care combina cea mai mare operațiune aeropurtată din istorie (Market) cu un avans rapid al forțelor terestre (Garden).',
         figures: [
@@ -1540,7 +1540,7 @@ const allEventsData = {
         title: 'Bătălia din Golful Leyte',
         lat: 10.8700,
         lng: 125.4550,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/USS_St._Lo_%28CVE-63%29_is_hit_by_a_kamikaze_off_Samar_on_25_October_1944.jpg/800px-USS_St._Lo_%28CVE-63%29_is_hit_by_a_kamikaze_off_Samar_on_25_October_1944.jpg',
+        imageUrl: 'images/1944/Bătălia din Golful Leyte.jpg',
         description: 'În octombrie, considerată cea mai mare bătălie navală din istorie, a fost o victorie decisivă a Aliaților care a paralizat marina imperială japoneză și a deschis calea pentru eliberarea Filipinelor. Aici au fost folosite pentru prima dată pe scară largă atacurile kamikaze.',
         context: 'Marina japoneză a lansat un plan complex și disperat pentru a distruge flota americană care sprijinea debarcările din Filipine. Planul a eșuat din cauza complexității sale și a superiorității copleșitoare a forțelor americane.',
         figures: [
@@ -1555,7 +1555,7 @@ const allEventsData = {
         title: 'Bătălia de la Bulge (Ofensiva din Ardeni)',
         lat: 50.17,
         lng: 6.05,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/American_soldiers_of_the_289th_Infantry_Regiment_march_through_a_snow-covered_forest_in_the_vicinity_of_Amonines%2C_Belgium_-_NARA_-_531201.jpg/800px-American_soldiers_of_the_289th_Infantry_Regiment_march_through_a_snow-covered_forest_in_the_vicinity_of_Amonines%2C_Belgium_-_NARA_-_531201.jpg',
+        imageUrl: 'images/1944/Bătălia de la Bulge (Ofensiva din Ardeni).jpg',
         description: 'În decembrie, ultima ofensivă majoră a Germaniei pe Frontul de Vest. Un atac surpriză prin Ardeni a creat o "pungă" în liniile aliate, dar a eșuat din cauza rezistenței americane tenace (ex. la Bastogne) și a intervenției aviației aliate.',
         context: 'Hitler a mizat pe un atac surpriză în timpul iernii pentru a diviza forțele aliate, a captura portul Anvers și a forța o pace negociată. Ofensiva a surprins total forțele americane, care erau slab pregătite în acest sector considerat "liniștit".',
         figures: [
@@ -1572,7 +1572,7 @@ const allEventsData = {
         title: 'Lupta Armatei Române pe Frontul de Vest',
         lat: 47.4979,
         lng: 19.0402,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Romanian_soldiers_in_Budapest_1945.jpg/800px-Romanian_soldiers_in_Budapest_1945.jpg',
+        imageUrl: 'images/1945/Lupta Armatei Române pe Frontul de Vest.jpg',
         description: 'După 23 august 1944, Armata Română a luptat alături de Armata Sovietică împotriva forţelor germane şi maghiare, participând la eliberarea Transilvaniei de Nord şi continuând lupta în Ungaria (Bătălia pentru Budapesta), Cehoslovacia și Austria, până la sfârșitul războiului.',
         context: 'Conform convenţiei de armistițiu, România era obligată să participe la efortul de război aliat. Armata română, deşi epuizată şi prost tratată de către "aliaţii" sovietici (care au luat sute de mii de prizonieri după 23 august), a luptat cu determinare.',
         figures: [
@@ -1586,7 +1586,7 @@ const allEventsData = {
         title: 'Impunerea guvernului Petru Groza',
         lat: 44.4396,
         lng: 26.0963,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Petru_Groza_government.jpg/800px-Petru_Groza_government.jpg',
+        imageUrl: 'images/1945/Impunerea guvernului Petru Groza.jpg',
         description: 'Pe 6 martie, sub presiunea directă a Uniunii Sovietice, reprezentată de Andrei Vişinski, Regele Mihai I a fost forțat să numească un guvern pro-comunist condus de Petru Groza.',
         context: 'Profitând de prezenţa Armatei Roşii, Partidul Comunist Român, mic, dar sprijinit de Moscova, a orchestrat o campanie de destabilizare. Vişinski i-a dat un ultimatum Regelui, ameninţând cu dispariţia României ca stat independent.',
         figures: [
@@ -1602,7 +1602,7 @@ const allEventsData = {
         title: 'Eliberarea Lagărului Auschwitz',
         lat: 50.0264,
         lng: 19.2094,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Liberation_of_Auschwitz.jpg/800px-Liberation_of_Auschwitz.jpg',
+        imageUrl: 'images/1945/Eliberarea Lagărului Auschwitz.jpg',
         description: 'Pe 27 ianuarie, trupele sovietice eliberează Auschwitz, găsind aproximativ 7.000 de prizonieri bolnavi și muribunzi. Eliberarea expune lumii, la scară largă, realitatea industrializată a genocidului nazist.',
         context: 'Cu câteva zile înainte de sosirea sovieticilor, SS-ul a evacuat forțat aproape 60.000 de prizonieri în "marșurile morții" spre alte lagăre din Germania, ucigând mii de oameni pe drum. Au încercat să distrugă camerele de gazare și crematoriile pentru a ascunde crimele.',
         figures: [
@@ -1616,7 +1616,7 @@ const allEventsData = {
         title: 'Conferința de la Ialta',
         lat: 44.4994,
         lng: 34.1697,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Yalta_Conference_%28Churchill%2C_Roosevelt%2C_Stalin%29_%28B%26W%29.jpg/800px-Yalta_Conference_%28Churchill%2C_Roosevelt%2C_Stalin%29_%28B%26W%29.jpg',
+        imageUrl: 'images/1945/Conferința de la Ialta.jpg',
         description: 'În februarie, a doua întâlnire a "Celor Trei Mari" (Roosevelt, Churchill și Stalin) pentru a discuta despre reorganizarea postbelică a Europei, inclusiv împărțirea Germaniei în zone de ocupație, frontierele Poloniei și intrarea URSS în războiul împotriva Japoniei.',
         context: 'Conferința a avut loc într-un moment în care victoria asupra Germaniei era iminentă. Armata Roșie controla deja o mare parte din Europa de Est, oferindu-i lui Stalin o poziție de negociere extrem de puternică.',
         figures: [
@@ -1632,7 +1632,7 @@ const allEventsData = {
         title: 'Bombardarea Dresdei',
         lat: 51.0504,
         lng: 13.7373,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Dresden-bombing-1945-aftermath-02.jpg/800px-Dresden-bombing-1945-aftermath-02.jpg',
+        imageUrl: 'images/1945/Bombardarea Dresdei.jpg',
         description: 'În februarie, într-una dintre cele mai controversate acțiuni ale războiului, raiduri aeriene masive aliate (britanice și americane) creează o furtună de foc care distruge centrul istoric al Dresdei și ucide zeci de mii de civili.',
         context: 'Justificarea militară a raidului este încă dezbătută. Aliații au susținut că Dresda era un important centru industrial și de transport. Criticii susțin că a fost un act de teroare disproporționat, orașul fiind plin de refugiați.',
         figures: [
@@ -1646,7 +1646,7 @@ const allEventsData = {
         title: 'Bătălia de la Iwo Jima',
         lat: 24.7800,
         lng: 141.3200,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Raising_the_Flag_on_Iwo_Jima_by_Joe_Rosenthal_color_photo.jpg/800px-Raising_the_Flag_on_Iwo_Jima_by_Joe_Rosenthal_color_photo.jpg',
+        imageUrl: 'images/1945/Bătălia de la Iwo Jima.jpg',
         description: 'În februarie-martie, pușcașii marini americani invadează mica insulă vulcanică. Bătălia este extrem de sângeroasă, dar aerodromurile de pe insulă se dovedesc vitale. Imaginea ridicării steagului pe Muntele Suribachi devine un simbol iconic.',
         context: 'Iwo Jima era importantă strategic deoarece aerodromurile sale puteau fi folosite ca baze pentru avioanele de vânătoare care escortau bombardierele B-29 în raidurile asupra Japoniei. Apărătorii japonezi, conduși de Generalul Kuribayashi, au construit o rețea vastă de buncăre și tuneluri.',
         figures: [
@@ -1660,7 +1660,7 @@ const allEventsData = {
         title: 'Capturarea Podului de la Remagen',
         lat: 50.5786,
         lng: 7.2361,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Crossing_the_Rhine_at_the_Remagen_bridge.jpg/800px-Crossing_the_Rhine_at_the_Remagen_bridge.jpg',
+        imageUrl: 'images/1945/Capturarea Podului de la Remagen.jpg',
         description: 'Pe 7 martie, trupele americane capturează intact Podul Ludendorff de peste Rin, după ce încercările germanilor de a-l distruge au eșuat. Această lovitură de noroc permite Aliaților să stabilească rapid un cap de pod.',
         context: 'Rinul era ultima barieră naturală majoră în calea spre inima Germaniei. Capturarea unui pod intact a fost o surpriză totală și un bonus strategic imens pentru Aliați.',
         figures: [
@@ -1674,7 +1674,7 @@ const allEventsData = {
         title: 'Bătălia de la Okinawa',
         lat: 26.2123,
         lng: 127.6792,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Okinawa_Marines_in_action.jpg/800px-Okinawa_Marines_in_action.jpg',
+        imageUrl: 'images/1945/Bătălia de la Okinawa.jpg',
         description: 'În aprilie-iunie, ultima și cea mai mare bătălie din Pacific. Invazia americană întâmpină o rezistență japoneză fanatică, inclusiv atacuri kamikaze masive. Costul uman uriaș influențează decizia de a folosi bomba atomică.',
         context: 'Okinawa era ultima oprire înainte de o invazie a Japoniei. Capturarea sa ar fi oferit o bază aeriană și navală crucială pentru asaltul final. Bătălia a implicat și un număr mare de victime civile.',
         figures: [
@@ -1689,7 +1689,7 @@ const allEventsData = {
         title: 'Bătălia Berlinului',
         lat: 52.5200,
         lng: 13.4050,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Soviet_soldiers_raising_the_Soviet_flag_over_the_Reichstag_in_Berlin%2C_Germany%2C_on_May_2%2C_1945.jpg/800px-Soviet_soldiers_raising_the_Soviet_flag_over_the_Reichstag_in_Berlin%2C_Germany%2C_on_May_2%2C_1945.jpg',
+        imageUrl: 'images/1945/Bătălia Berlinului.jpg',
         description: 'În aprilie-mai, ofensiva finală sovietică pentru capturarea capitalei Reich-ului. După lupte de o violență extremă, Armata Roșie cucerește orașul.',
         context: 'Stalin dorea cu ardoare să captureze Berlinul înaintea Aliaților occidentali, atât din motive de prestigiu, cât și pentru a asigura controlul asupra tehnologiei și programului nuclear german. Apărarea orașului era formată din unități disparate, inclusiv Tineretul Hitlerist și bătrâni.',
         figures: [
@@ -1704,7 +1704,7 @@ const allEventsData = {
         title: 'Execuția lui Benito Mussolini',
         lat: 45.9818,
         lng: 9.2709,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Mussolini_e_Petacci_a_Piazzale_Loreto%2C_1945.jpg/800px-Mussolini_e_Petacci_a_Piazzale_Loreto%2C_1945.jpg',
+        imageUrl: 'images/1945/Execuția lui Benito Mussolini.jpg',
         description: 'Pe 28 aprilie, Mussolini și amanta sa, Clara Petacci, sunt capturați și executați de partizanii italieni în timp ce încercau să fugă în Elveția. Corpurile lor sunt expuse public în Piazzale Loreto din Milano.',
         context: 'După ce a fost înlăturat în 1943, Mussolini a fost instalat de germani ca lider al unui stat-marionetă în nordul Italiei (Republica de la Salò). Pe măsură ce forțele aliate și partizanii avansau, regimul său s-a prăbușit.',
         figures: [
@@ -1719,7 +1719,7 @@ const allEventsData = {
         title: 'Sinuciderea lui Adolf Hitler',
         lat: 52.5162,
         lng: 13.3777,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Reichskanzlei_after_the_war.jpg/800px-Reichskanzlei_after_the_war.jpg',
+        imageUrl: 'images/1945/Sinuciderea lui Adolf Hitler.jpg',
         description: 'Pe 30 aprilie, în buncărul său de sub Cancelaria Reich-ului (Führerbunker), înconjurat de forțele sovietice, Adolf Hitler se sinucide împreună cu soția sa, Eva Braun. Moartea sa marchează sfârșitul simbolic al celui de-al Treilea Reich.',
         context: 'Cu Berlinul pe punctul de a cădea și fiind informat de execuția lui Mussolini, Hitler a refuzat să fie capturat viu. Și-a dictat testamentul politic și s-a căsătorit cu Eva Braun înainte de a se sinucide.',
         figures: [
@@ -1734,7 +1734,7 @@ const allEventsData = {
         title: 'Capitularea Germaniei (Ziua Victoriei în Europa)',
         lat: 49.2583,
         lng: 4.0317,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/The_German_Surrender_at_Reims%2C_7_May_1945.jpg/800px-The_German_Surrender_at_Reims%2C_7_May_1945.jpg',
+        imageUrl: 'images/1945/Capitularea Germaniei (Ziua Victoriei în Europa).jpg',
         description: 'Pe 7 mai, la Reims, Franța, Generalul Alfred Jodl semnează capitularea necondiționată a tuturor forțelor germane. Ceremonia este repetată a doua zi la Berlin, la cererea sovieticilor. Războiul în Europa se încheie oficial la 8 mai.',
         context: 'După sinuciderea lui Hitler, succesorul său, Marele Amiral Karl Dönitz, a autorizat capitularea pentru a pune capăt vărsării de sânge și a încerca să salveze cât mai mulți soldați și civili de la capturarea de către sovietici.',
         figures: [
@@ -1750,7 +1750,7 @@ const allEventsData = {
         title: 'Conferința de la Potsdam',
         lat: 52.3918,
         lng: 13.0636,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Potsdam_Conference_%281945%29.jpg/800px-Potsdam_Conference_%281945%29.jpg',
+        imageUrl: 'images/1945/Conferința de la Potsdam.jpg',
         description: 'În iulie-august, Truman, Churchill (înlocuit de Attlee) și Stalin se întâlnesc pentru a stabili detaliile ocupației Germaniei și pentru a emite un ultimatum Japoniei, cerând capitularea necondiționată.',
         context: 'A fost ultima conferință a Celor Trei Mari. Tensiunile erau deja mari, în special după ce Truman l-a informat pe Stalin despre existența unei noi "arme de o forță distructivă neobișnuită" (bomba atomică).',
         figures: [
@@ -1766,7 +1766,7 @@ const allEventsData = {
         title: 'Bombardamentul Atomic de la Hiroshima',
         lat: 34.3853,
         lng: 132.4553,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Atomic_bombing_of_Japan.jpg/800px-Atomic_bombing_of_Japan.jpg',
+        imageUrl: 'images/1945/Bombardamentul Atomic de la Hiroshima.jpg',
         description: 'Pe 6 august, bombardierul B-29 "Enola Gay" lansează prima bombă atomică, "Little Boy", asupra orașului Hiroshima. Explozia ucide instantaneu între 70.000 și 80.000 de oameni și distruge complet orașul.',
         context: 'După ce ultimatumul de la Potsdam a fost ignorat de Japonia, președintele Truman a autorizat folosirea bombei atomice, dezvoltată în secret în cadrul Proiectului Manhattan, pentru a forța o capitulare rapidă și a evita pierderi masive de vieți americane într-o invazie.',
         figures: [
@@ -1781,7 +1781,7 @@ const allEventsData = {
         title: 'Bombardamentul Atomic de la Nagasaki',
         lat: 32.7642,
         lng: 129.8727,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Nagasakibomb.jpg/800px-Nagasakibomb.jpg',
+        imageUrl: 'images/1945/Bombardamentul Atomic de la Nagasaki.jpg',
         description: 'Pe 9 august, deoarece Japonia nu a capitulat, un al doilea bombardier B-29, "Bockscar", lansează a doua bombă atomică, "Fat Man", asupra orașului Nagasaki, provocând din nou distrugeri masive și ucigând aproximativ 40.000 de oameni instantaneu.',
         context: 'În aceeași zi, Uniunea Sovietică a invadat Manciuria, conform acordului de la Ialta, adăugând o presiune imensă asupra conducerii japoneze. Combinația celor două bombe atomice și a invaziei sovietice a fost decisivă.',
         figures: [
@@ -1796,7 +1796,7 @@ const allEventsData = {
         title: 'Capitularea Japoniei (Ziua Victoriei asupra Japoniei)',
         lat: 35.5504,
         lng: 139.7845,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/MacArthur_signs_surrender_instrument.jpg/800px-MacArthur_signs_surrender_instrument.jpg',
+        imageUrl: 'images/1945/Capitularea Japoniei (Ziua Victoriei asupra Japoniei).jpg',
         description: 'Pe 2 septembrie, la bordul cuirasatului USS Missouri, în Golful Tokyo, reprezentanții Japoniei semnează actul de capitulare necondiționată. Al Doilea Război Mondial se încheie oficial.',
         context: 'După anunțul împăratului din 15 august, a urmat o perioadă de tranziție pentru a asigura capitularea tuturor forțelor japoneze dispersate în Asia și Pacific și pentru a organiza ceremonia oficială.',
         figures: [
@@ -1811,7 +1811,7 @@ const allEventsData = {
         title: 'Fondarea Națiunilor Unite',
         lat: 40.7489,
         lng: -73.9680,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/United_Nations_Headquarters_in_New_York_City_aerial_view.jpg/800px-United_Nations_Headquarters_in_New_York_City_aerial_view.jpg',
+        imageUrl: 'images/post-war/Fondarea Națiunilor Unite.jpg',
         description: 'Pe 24 octombrie, Carta Națiunilor Unite intră în vigoare, fondând oficial organizația menită să prevină viitoare conflicte mondiale și să promoveze cooperarea internațională. Sediul său va fi stabilit la New York.',
         context: 'Ideea unei noi organizații internaționale, care să înlocuiască eșuata Ligă a Națiunilor, a fost discutată pe parcursul războiului. Carta a fost semnată la San Francisco în iunie 1945 de 50 de state.',
         figures: [
@@ -1825,7 +1825,7 @@ const allEventsData = {
         title: 'Începutul Proceselor de la Nürnberg',
         lat: 49.4542,
         lng: 11.0475,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Nuremberg_trials_defendants.jpg/800px-Nuremberg_trials_defendants.jpg',
+        imageUrl: 'images/1945/Începutul Proceselor de la Nürnberg.jpg',
         description: 'Pe 20 noiembrie, la Palatul de Justiție din Nürnberg, Tribunalul Militar Internațional începe procesul a 22 de lideri naziști de rang înalt pentru crime de război, crime împotriva păcii și, pentru prima dată, crime împotriva umanității.',
         context: 'Aliații au decis că liderii naziști trebuie să fie trași la răspundere pentru crimele lor într-un proces public, nu executați sumar. Nürnberg a fost ales simbolic, deoarece era locul mitingurilor anuale ale Partidului Nazist.',
         figures: [
@@ -1843,7 +1843,7 @@ const allEventsData = {
         title: 'Alegerile generale fraudate în România',
         lat: 44.4396,
         lng: 26.0963,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Alegeri_1946_Romania_buletin_vot.jpg/800px-Alegeri_1946_Romania_buletin_vot.jpg',
+        imageUrl: 'images/post-war/Alegerile generale fraudate în România.jpg',
         description: 'Pe 19 noiembrie, primele alegeri parlamentare postbelice, care au fost masiv fraudate de către Blocul Partidelor Democrate, controlat de comuniști, pentru a asigura o victorie zdrobitoare și a legitima preluarea puterii.',
         context: 'După impunerea guvernului Groza, Partidul Comunist a început acapararea puterii. Partidele istorice (PNȚ și PNL) se bucurau încă de popularitate masivă. Alegerile au fost un moment crucial, iar comuniștii au folosit intimidarea, violența și frauda pentru a câștiga.',
         figures: [
@@ -1859,7 +1859,7 @@ const allEventsData = {
         title: 'Înscenarea de la Tămădău',
         lat: 44.435,
         lng: 26.538,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/ro/c/c5/T%C4%83m%C4%83d%C4%83u.jpg',
+        imageUrl: 'images/post-war/Înscenarea de la Tămădău.jpg',
         description: 'Pe 14 iulie, o operațiune de tip "steag fals" orchestrată de autorităţile comuniste, prin care lideri marcanți ai Partidului Național Țărănesc (PNȚ) au fost arestați pe aerodromul din Tămădău în timp ce încercau să părăsească ţara.',
         context: 'După fraudarea alegerilor din 1946, PNȚ rămăsese cea mai importantă forţă de opoziție. Pentru a instaura un control total, comuniştii trebuiau să elimine acest ultim obstacol, acuzându-l de trădare naţională.',
         figures: [
@@ -1875,7 +1875,7 @@ const allEventsData = {
         title: 'Abdicarea forţată a Regelui Mihai I',
         lat: 44.4396,
         lng: 26.0963,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Act_of_abdication_of_King_Michael_I_of_Romania.jpg/800px-Act_of_abdication_of_King_Michael_I_of_Romania.jpg',
+        imageUrl: 'images/post-war/Abdicarea forţată a Regelui Mihai I.jpg',
         description: 'Pe 30 decembrie, Regele Mihai I a fost chemat la palat de către liderii comunişti Petru Groza şi Gheorghe Gheorghiu-Dej, care l-au ameninţat cu un război civil și executarea a 1.000 de studenți arestați, forțându-l să semneze actul de abdicare. În aceeaşi zi, a fost proclamată Republica Populară Română.',
         context: 'După fraudarea alegerilor şi eliminarea partidelor istorice, monarhia rămăsese ultimul simbol al democrației și al legăturii cu Occidentul. Comuniştii, la ordinul lui Stalin, au decis să elimine acest ultim obstacol.',
         figures: [
@@ -1891,7 +1891,7 @@ const allEventsData = {
         title: 'Discursul "Cortina de Fier"',
         lat: 38.8467,
         lng: -91.9481,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Winston_Churchill_delivers_his_%22Iron_Curtain%22_speech_at_Westminster_College_in_Fulton%2C_Missouri.jpg/800px-Winston_Churchill_delivers_his_%22Iron_Curtain%22_speech_at_Westminster_College_in_Fulton%2C_Missouri.jpg',
+        imageUrl: 'images/post-war/Discursul Cortina de Fier.jpg',
         description: 'Pe 5 martie, la Fulton, Missouri, fostul prim-ministru britanic Winston Churchill rostește faimosul său discurs în care declară că "de la Stettin, la Marea Baltică, până la Trieste, la Marea Adriatică, o cortină de fier a coborât de-a curmezișul continentului".',
         context: 'Discursul a fost rostit într-un moment de tensiuni crescânde între foștii aliați. Uniunea Sovietică își consolida controlul asupra statelor din Europa de Est, încălcând promisiunile de la Ialta privind alegerile libere.',
         figures: [
@@ -1906,7 +1906,7 @@ const allEventsData = {
         title: 'Pogromul de la Kielce',
         lat: 50.8661,
         lng: 20.6286,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Kielce_pogrom_-_survivors.jpg/800px-Kielce_pogrom_-_survivors.jpg',
+        imageUrl: 'images/post-war/Pogromul de la Kielce.jpg',
         description: 'Pe 4 iulie, un masacru violent al supraviețuitorilor evrei ai Holocaustului în orașul polonez Kielce, cel mai sângeros atac antisemit din Polonia postbelică, care a determinat un exod masiv al evreilor polonezi.',
         context: 'Pogromul a fost declanșat de un zvon fals de omor ritual, conform căruia evreii ar fi răpit un băiat creștin. O mulțime furioasă, cu participarea unor polițiști și soldați, a atacat clădirea comitetului evreiesc, ucigând 42 de oameni.',
         figures: [],
@@ -1918,7 +1918,7 @@ const allEventsData = {
         title: 'Primul Război din Indochina',
         lat: 21.0285,
         lng: 105.8542,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/French_Union_forces_in_Indochina_1953.jpg/800px-French_Union_forces_in_Indochina_1953.jpg',
+        imageUrl: 'images/post-war/Primul Război din Indochina.jpg',
         description: 'Pe 19 decembrie, începe un conflict armat între forțele coloniale franceze și Việt Minh-ul lui Ho Chi Minh pentru controlul Vietnamului, marcând începutul a decenii de război în regiune.',
         context: 'După capitularea Japoniei, Ho Chi Minh a proclamat independența Vietnamului. Franța, însă, a încercat să-și restabilească imperiul colonial, ceea ce a dus la un conflict de gherilă de lungă durată.',
         figures: [
@@ -1933,7 +1933,7 @@ const allEventsData = {
         title: 'Doctrina Truman',
         lat: 38.8951,
         lng: -77.0364,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Harry_S_Truman_addresses_Congress.jpg/800px-Harry_S_Truman_addresses_Congress.jpg',
+        imageUrl: 'images/post-war/Doctrina Truman.jpg',
         description: 'Pe 12 martie, Președintele Truman anunță într-un discurs în fața Congresului o nouă politică externă a SUA: politica de "containment" (stăvilire) a expansiunii sovietice, oferind sprijin economic și militar națiunilor amenințate de comunism.',
         context: 'Marea Britanie, epuizată financiar, a anunțat că nu mai poate sprijini guvernele pro-occidentale din Grecia (aflată în război civil cu comuniștii) și Turcia (supusă presiunilor sovietice). SUA au decis să preia acest rol pentru a preveni căderea acestor țări sub influența sovietică.',
         figures: [
@@ -1948,7 +1948,7 @@ const allEventsData = {
         title: 'Partiția Indiei',
         lat: 28.6139,
         lng: 77.2090,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Train_to_Pakistan.jpg/800px-Train_to_Pakistan.jpg',
+        imageUrl: 'images/post-war/Partiția Indiei.jpg',
         description: 'Pe 15 august, Imperiul Britanic al Indiei este împărțit în două state independente, India (cu majoritate hindusă) și Pakistan (cu majoritate musulmană). Partiția a declanșat violențe inter-comunitare masive și una dintre cele mai mari migrații umane din istorie.',
         context: 'După decenii de luptă pentru independență, britanicii au decis să se retragă. Tensiunile dintre Liga Musulmană (care cerea un stat separat) și Congresul Național Indian (care dorea o Indie unită) au făcut partiția inevitabilă.',
         figures: [
@@ -1964,7 +1964,7 @@ const allEventsData = {
         title: 'Planul Marshall',
         lat: 48.8566,
         lng: 2.3522,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Marshall_Plan_poster.JPG/800px-Marshall_Plan_poster.JPG',
+        imageUrl: 'images/post-war/Planul Marshall.jpg',
         description: 'Un program masiv de ajutor economic american (oficial "Programul de Reconstrucție Europeană") pentru refacerea economiilor din Europa de Vest devastate de război. A oferit peste 13 miliarde de dolari în asistență.',
         context: 'După război, Europa se confrunta cu distrugeri masive, foamete și instabilitate politică, condiții considerate fertile pentru expansiunea comunismului. Planul a fost conceput pentru a combate aceste probleme.',
         figures: [
@@ -1979,7 +1979,7 @@ const allEventsData = {
         title: 'Proclamarea Statului Israel',
         lat: 32.1093,
         lng: 34.8555,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Ben-Gurion_proclaims_Israel%27s_independence.jpg/800px-Ben-Gurion_proclaims_Israel%27s_independence.jpg',
+        imageUrl: 'images/post-war/Proclamarea Statului Israel.jpg',
         description: 'Pe 14 mai, David Ben-Gurion proclamă independența statului Israel. A doua zi, statele arabe vecine (Egipt, Iordania, Siria, Liban, Irak) invadează, declanșând Războiul Arabo-Israelian din 1948.',
         context: 'După Holocaust, presiunea pentru crearea unui stat evreiesc a crescut. În 1947, ONU a votat un plan de partiție a Palestinei Mandatare într-un stat evreiesc și unul arab. Planul a fost acceptat de liderii evrei și respins de liderii arabi.',
         figures: [
@@ -1993,7 +1993,7 @@ const allEventsData = {
         title: 'Blocada Berlinului și Podul Aerian',
         lat: 52.5200,
         lng: 13.4050,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/C-54_over_the_ruins_of_Berlin_1948.jpg/800px-C-54_over_the_ruins_of_Berlin_1948.jpg',
+        imageUrl: 'images/post-war/Blocada Berlinului și Podul Aerian.jpg',
         description: 'Pe 24 iunie, Uniunea Sovietică blochează toate căile terestre și feroviare către sectoarele occidentale ale Berlinului. Aliații Occidentali răspund cu un pod aerian masiv pentru a aproviziona orașul, o primă confruntare majoră a Războiului Rece.',
         context: 'Blocada a fost răspunsul lui Stalin la introducerea unei noi monede (Deutsche Mark) de către Aliații occidentali în zonele lor de ocupație, o mișcare pe care a văzut-o ca un pas spre crearea unui stat vest-german separat.',
         figures: [
@@ -2009,7 +2009,7 @@ const allEventsData = {
         title: 'Înființarea NATO',
         lat: 38.8951,
         lng: -77.0364,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Signing_of_the_North_Atlantic_Treaty.jpg/800px-Signing_of_the_North_Atlantic_Treaty.jpg',
+        imageUrl: 'images/post-war/Înființarea NATO.jpg',
         description: 'Pe 4 aprilie, la Washington D.C., Statele Unite, Canada și zece țări europene semnează Tratatul Atlanticului de Nord, creând o alianță militară defensivă pentru a contracara amenințarea sovietică. Principiul de bază este Articolul 5: un atac asupra unui membru este considerat un atac asupra tuturor.',
         context: 'Blocada Berlinului a demonstrat necesitatea unei alianțe militare formale pentru a descuraja o agresiune sovietică în Europa. A marcat sfârșitul politicii tradiționale americane de a evita "alianțele încurcate".',
         figures: [
@@ -2024,7 +2024,7 @@ const allEventsData = {
         title: 'Proclamarea Republicii Populare Chineze',
         lat: 39.9042,
         lng: 116.4074,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Founding_of_the_People%27s_Republic_of_China_in_1949.jpg/800px-Founding_of_the_People%27s_Republic_of_China_in_1949.jpg',
+        imageUrl: 'images/post-war/Proclamarea Republicii Populare Chineze.jpg',
         description: 'Pe 1 octombrie, după victoria în Războiul Civil Chinez împotriva naționaliștilor (Kuomintang), Mao Zedong proclamă Republica Populară Chineză în Piața Tiananmen din Beijing.',
         context: 'După înfrângerea Japoniei, războiul civil dintre comuniștii lui Mao și naționaliștii lui Chiang Kai-shek, sprijiniți de SUA, a reizbucnit. Comuniștii, cu sprijin popular larg și tactici militare superioare, au obținut o victorie rapidă.',
         figures: [

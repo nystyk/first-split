@@ -32,7 +32,19 @@ function handlePeriodChange(selectedPeriod, force) {
     const targetBounds = getBounds(events);
 
     const { flyToBounds: flyConfig } = config.map;
-    let maxZoom = events.length <= 3 ? flyConfig.maxZoomSmall : (events.length > 10 ? flyConfig.maxZoomLarge : flyConfig.maxZoomMedium);
+    
+    // --- MODIFICATION: Adjust maxZoom for specific years ---
+    let maxZoom;
+    if (selectedPeriod === '1944') {
+        maxZoom = 3; // Set an even more zoomed-out view for 1944
+    } else if (selectedPeriod === '1942' || selectedPeriod === '1943') {
+        maxZoom = 4; // Set a more zoomed-out view for these years
+    } else {
+        // Use the default logic for all other years
+        maxZoom = events.length <= 3 ? flyConfig.maxZoomSmall : (events.length > 10 ? flyConfig.maxZoomLarge : flyConfig.maxZoomMedium);
+    }
+    // --- END MODIFICATION ---
+
     let paddingTopLeft = events.length > 10 ? flyConfig.paddingLarge : flyConfig.paddingSmall;
     let paddingBottomRight = events.length > 10 ? flyConfig.paddingBottomLarge : flyConfig.paddingBottomSmall;
 
@@ -68,8 +80,6 @@ function initialLoad() {
     renderLegend(activePeriod);
     showContextModal(activePeriod);
     updateSliderVisuals(state.dom.timelineSlider.value);
-    
-    // FIX: Do NOT render dots on initial load. They will be rendered after the intro animation.
 }
 
 // --- INTERACTION LOCKING ---
@@ -179,9 +189,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                     state.map.once('moveend', () => {
                         showContextModal(activePeriod);
-                        // FIX: Render initial dots only AFTER intro animation is complete
                         renderMapEvents(activePeriod);
                         unlockInteractions();
+                        state.introFinished = true;
                     });
                 } catch (err) {
                     console.error('Error during intro animation:', err);
