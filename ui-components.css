@@ -290,13 +290,13 @@
 /* ----------------------------------------------------------------------- */
 /* 8. Stiluri pentru Modale și Animații                                  */
 /* ----------------------------------------------------------------------- */
-#modal, #contextModal, #helpModal, #creditsModal { 
+#modal, #contextModal, #helpModal, #creditsModal, #quizModal { 
     opacity: 0;
     pointer-events: none;
     visibility: hidden;
     transition: opacity 0.3s ease-in-out, visibility 0s 0.3s;
 }
-#modal.visible, #contextModal.visible, #helpModal.visible, #creditsModal.visible {
+#modal.visible, #contextModal.visible, #helpModal.visible, #creditsModal.visible, #quizModal.visible {
     opacity: 1;
     pointer-events: all;
     visibility: visible;
@@ -311,7 +311,8 @@
 #modal.visible .modal-content,
 #contextModal.visible .context-modal-content,
 #helpModal.visible .help-modal-content,
-#creditsModal.visible .credits-modal-content {
+#creditsModal.visible .credits-modal-content,
+#quizModal.visible .quiz-modal-content {
     animation: slideUp 0.4s ease-out;
 }
 
@@ -323,7 +324,7 @@
 }
 
 /* Close Button Styles - Matching Page Design */
-#closeModal, #closeContextModal, #closeHelpModal, #closeCreditsModal {
+#closeModal, #closeContextModal, #closeHelpModal, #closeCreditsModal, #closeQuizModal {
     background-color: rgba(40, 40, 40, 0.9);
     border: 1px solid #666;
     border-radius: 6px;
@@ -336,13 +337,13 @@
     justify-content: center;
 }
 
-#closeModal:hover, #closeContextModal:hover, #closeHelpModal:hover, #closeCreditsModal:hover {
+#closeModal:hover, #closeContextModal:hover, #closeHelpModal:hover, #closeCreditsModal:hover, #closeQuizModal:hover {
     background-color: rgba(60, 60, 60, 0.9);
     border-color: #888;
     transform: scale(1.05);
 }
 
-#closeModal svg, #closeContextModal svg, #closeHelpModal svg, #closeCreditsModal svg {
+#closeModal svg, #closeContextModal svg, #closeHelpModal svg, #closeCreditsModal svg, #closeQuizModal svg {
     stroke: #ccc !important;
     stroke-width: 2;
     width: 16px;
@@ -544,10 +545,73 @@
 
 .context-modal-content,
 .help-modal-content,
-.credits-modal-content {
+.credits-modal-content,
+.quiz-modal-content {
     background-color: rgba(40,40,40,0.7);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Quiz Styles */
+.answer-option {
+    transition: all 0.3s ease;
+}
+
+.answer-option:hover {
+    background-color: #374151;
+    border-color: #4b5563;
+}
+
+.answer-option.correct {
+    background-color: #065f46;
+    border-color: #10b981;
+    color: #d1fae5;
+}
+
+.answer-option.incorrect {
+    background-color: #7f1d1d;
+    border-color: #ef4444;
+    color: #fecaca;
+}
+
+.answer-option.selected {
+    background-color: #1e40af;
+    border-color: #3b82f6;
+    color: #dbeafe;
+}
+
+.answer-option input[type="radio"] {
+    accent-color: #3b82f6;
+}
+
+.answer-option.correct input[type="radio"] {
+    accent-color: #10b981;
+}
+
+.answer-option.incorrect input[type="radio"] {
+    accent-color: #ef4444;
+}
+
+.quiz-difficulty-btn,
+.quiz-type-btn {
+    transition: all 0.3s ease;
+}
+
+.quiz-difficulty-btn:hover,
+.quiz-type-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+#quizModal {
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+#quizModal.visible {
+    opacity: 1;
+    visibility: visible;
 }
 
 

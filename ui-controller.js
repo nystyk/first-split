@@ -293,11 +293,13 @@ function updateModalProgress(event) {
 function setupModalInteractions(event) {
     document.getElementById('viewOnMapBtn').onclick = () => {
         hideModal();
-        state.map.flyTo([event.lat, event.lng], 8, {
+        state.map.flyTo([event.lat, event.lng], 6, {
             duration: 2,
             easeLinearity: 0.25
         });
     };
+    
+
     
     const currentPeriod = getEventPeriod(event);
     const eventsInPeriod = allEventsData[currentPeriod] || [];
@@ -406,6 +408,301 @@ function hideCreditsModal() {
     document.getElementById('creditsModal').classList.remove('visible');
 }
 
+// === QUIZ MODAL FUNCTIONS ===
+let quizState = {
+    currentDifficulty: null,
+    currentQuestions: [],
+    currentQuestionIndex: 0,
+    userAnswers: [],
+    correctAnswers: 0,
+    quizType: null, // 'general', 'period'
+    quizTarget: null // period name
+};
+
+function showQuizModal(quizType = 'general', target = null) {
+    quizState.quizType = quizType;
+    quizState.quizTarget = target;
+    
+    document.getElementById('quizModal').classList.add('visible');
+    showQuizWelcome();
+}
+
+function hideQuizModal() {
+    document.getElementById('quizModal').classList.remove('visible');
+    resetQuizState();
+}
+
+function resetQuizState() {
+    quizState = {
+        currentDifficulty: null,
+        currentQuestions: [],
+        currentQuestionIndex: 0,
+        userAnswers: [],
+        correctAnswers: 0,
+        quizType: null,
+        quizTarget: null
+    };
+}
+
+function showQuizWelcome() {
+    document.getElementById('quizWelcome').classList.remove('hidden');
+    document.getElementById('quizDifficulty').classList.add('hidden');
+    document.getElementById('quizQuestions').classList.add('hidden');
+    document.getElementById('quizResults').classList.add('hidden');
+    
+    // Reset quiz state
+    quizState.quizType = null;
+    quizState.quizTarget = null;
+}
+
+function showQuizDifficultySelection(quizType) {
+    quizState.quizType = quizType;
+    
+    if (quizType === 'period') {
+        quizState.quizTarget = state.currentPeriod || config.periods[state.dom.timelineSlider.value];
+    }
+    
+    document.getElementById('quizWelcome').classList.add('hidden');
+    document.getElementById('quizDifficulty').classList.remove('hidden');
+    document.getElementById('quizQuestions').classList.add('hidden');
+    document.getElementById('quizResults').classList.add('hidden');
+    
+    // Update difficulty screen content
+    const titleElement = document.getElementById('difficultyTitle');
+    const descriptionElement = document.getElementById('difficultyDescription');
+    
+    if (quizType === 'period') {
+        const periodLabel = quizGenerator.getPeriodLabel(quizState.quizTarget);
+        titleElement.textContent = `Test - Perioada ${periodLabel}`;
+        descriptionElement.textContent = `Selectează nivelul de dificultate pentru testul despre perioada ${periodLabel}.`;
+    } else {
+        titleElement.textContent = 'Test General - Al Doilea Război Mondial';
+        descriptionElement.textContent = 'Selectează nivelul de dificultate pentru testul general.';
+    }
+}
+
+function startQuiz(difficulty) {
+    quizState.currentDifficulty = difficulty;
+    
+    // Generate questions based on quiz type
+    switch (quizState.quizType) {
+        case 'period':
+            quizState.currentQuestions = quizGenerator.generatePeriodQuestions(quizState.quizTarget, difficulty);
+            break;
+        default:
+            quizState.currentQuestions = [...quizData[difficulty]];
+    }
+    
+    quizState.currentQuestionIndex = 0;
+    quizState.userAnswers = new Array(quizState.currentQuestions.length).fill(null);
+    quizState.correctAnswers = 0;
+    
+    document.getElementById('quizWelcome').classList.add('hidden');
+    document.getElementById('quizDifficulty').classList.add('hidden');
+    document.getElementById('quizQuestions').classList.remove('hidden');
+    document.getElementById('quizResults').classList.add('hidden');
+    
+    showCurrentQuestion();
+}
+
+function showCurrentQuestion() {
+    const question = quizState.currentQuestions[quizState.currentQuestionIndex];
+    const questionNumber = quizState.currentQuestionIndex + 1;
+    const totalQuestions = quizState.currentQuestions.length;
+    
+    document.getElementById('currentQuestion').textContent = questionNumber;
+    document.getElementById('totalQuestions').textContent = totalQuestions;
+    document.getElementById('questionText').textContent = question.question;
+    
+    // Update progress bar
+    const progress = (questionNumber / totalQuestions) * 100;
+    document.getElementById('quizProgressBar').style.width = `${progress}%`;
+    
+    // Generate answer options
+    const answerOptionsContainer = document.getElementById('answerOptions');
+    answerOptionsContainer.innerHTML = '';
+    
+    question.options.forEach((option, index) => {
+        const optionDiv = document.createElement('div');
+        optionDiv.className = 'answer-option p-3 border border-gray-600 rounded-lg cursor-pointer hover:bg-gray-700 transition-colors';
+        optionDiv.innerHTML = `
+            <input type="radio" name="answer" value="${index}" id="answer${index}" class="mr-3">
+            <label for="answer${index}" class="cursor-pointer w-full block">${option}</label>
+        `;
+        
+        // Make the entire div clickable
+        optionDiv.addEventListener('click', () => {
+            const radio = optionDiv.querySelector('input[type="radio"]');
+            radio.checked = true;
+        });
+        
+        answerOptionsContainer.appendChild(optionDiv);
+    });
+    
+    // Update navigation buttons
+    document.getElementById('prevQuestionBtn').disabled = quizState.currentQuestionIndex === 0;
+    document.getElementById('checkAnswerBtn').classList.remove('hidden');
+    document.getElementById('nextQuestionBtn').classList.add('hidden');
+    
+    // Clear previous selections
+    const radioButtons = document.querySelectorAll('input[name="answer"]');
+    radioButtons.forEach(radio => radio.checked = false);
+    
+    // Remove previous feedback
+    const answerOptions = document.querySelectorAll('.answer-option');
+    answerOptions.forEach(option => {
+        option.classList.remove('correct', 'incorrect', 'selected');
+    });
+}
+
+function checkAnswer() {
+    const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+    if (!selectedAnswer) {
+        alert('Te rugăm să selectezi un răspuns!');
+        return;
+    }
+    
+    const selectedIndex = parseInt(selectedAnswer.value);
+    const question = quizState.currentQuestions[quizState.currentQuestionIndex];
+    const isCorrect = selectedIndex === question.correct;
+    
+    // Store user answer
+    quizState.userAnswers[quizState.currentQuestionIndex] = selectedIndex;
+    if (isCorrect) {
+        quizState.correctAnswers++;
+    }
+    
+    // Show feedback
+    const answerOptions = document.querySelectorAll('.answer-option');
+    answerOptions.forEach((option, index) => {
+        if (index === selectedIndex) {
+            option.classList.add('selected');
+        }
+        if (index === question.correct) {
+            option.classList.add('correct');
+        } else if (index === selectedIndex && !isCorrect) {
+            option.classList.add('incorrect');
+        }
+    });
+    
+    // Show explanation
+    const explanationDiv = document.createElement('div');
+    explanationDiv.className = 'mt-4 p-3 bg-blue-900 rounded-lg';
+    explanationDiv.innerHTML = `<strong>Explicație:</strong> ${question.explanation}`;
+    document.getElementById('answerOptions').appendChild(explanationDiv);
+    
+    // Update buttons
+    document.getElementById('checkAnswerBtn').classList.add('hidden');
+    if (quizState.currentQuestionIndex < quizState.currentQuestions.length - 1) {
+        document.getElementById('nextQuestionBtn').classList.remove('hidden');
+    } else {
+        // Show finish button for last question
+        const finishBtn = document.getElementById('nextQuestionBtn');
+        finishBtn.textContent = 'Vezi Rezultatele';
+        finishBtn.classList.remove('hidden');
+    }
+}
+
+function nextQuestion() {
+    if (quizState.currentQuestionIndex < quizState.currentQuestions.length - 1) {
+        quizState.currentQuestionIndex++;
+        showCurrentQuestion();
+    } else {
+        showQuizResults();
+    }
+}
+
+function previousQuestion() {
+    if (quizState.currentQuestionIndex > 0) {
+        quizState.currentQuestionIndex--;
+        showCurrentQuestion();
+        
+        // Restore previous answer if exists
+        const previousAnswer = quizState.userAnswers[quizState.currentQuestionIndex];
+        if (previousAnswer !== null) {
+            const radioButton = document.querySelector(`input[name="answer"][value="${previousAnswer}"]`);
+            if (radioButton) {
+                radioButton.checked = true;
+            }
+        }
+    }
+}
+
+function quitTest() {
+    // Calculate current score based on answered questions
+    const answeredQuestions = quizState.userAnswers.filter(answer => answer !== null).length;
+    const currentCorrect = quizState.correctAnswers;
+    
+    // Show confirmation dialog
+    const confirmed = confirm(`Ești sigur că vrei să termini testul? Ai răspuns la ${answeredQuestions} din ${quizState.currentQuestions.length} întrebări și ai ${currentCorrect} răspunsuri corecte.`);
+    
+    if (confirmed) {
+        showQuizResults();
+    }
+}
+
+function showQuizResults() {
+    document.getElementById('quizWelcome').classList.add('hidden');
+    document.getElementById('quizQuestions').classList.add('hidden');
+    document.getElementById('quizResults').classList.remove('hidden');
+    
+    const totalQuestions = quizState.currentQuestions.length;
+    const answeredQuestions = quizState.userAnswers.filter(answer => answer !== null).length;
+    const percentage = Math.round((quizState.correctAnswers / totalQuestions) * 100);
+    
+    // Check if test was completed or quit early
+    const wasCompleted = answeredQuestions === totalQuestions;
+    
+    document.getElementById('finalScore').textContent = `${quizState.correctAnswers}/${totalQuestions}`;
+    document.getElementById('scorePercentage').textContent = `${percentage}%`;
+    
+    // Set score message
+    let scoreMessage = '';
+    if (!wasCompleted) {
+        scoreMessage = `Test terminat înainte de final. Ai răspuns la ${answeredQuestions} din ${totalQuestions} întrebări.`;
+    } else if (percentage >= 90) {
+        scoreMessage = 'Excelent! Ai cunoștințe excepționale despre istoria celui de-al Doilea Război Mondial!';
+    } else if (percentage >= 70) {
+        scoreMessage = 'Foarte bine! Ai o înțelegere solidă a evenimentelor din această perioadă.';
+    } else if (percentage >= 50) {
+        scoreMessage = 'Bun! Ai cunoștințe de bază, dar mai ai de învățat.';
+    } else {
+        scoreMessage = 'Încearcă să studiezi mai mult evenimentele din această perioadă istorică.';
+    }
+    document.getElementById('scoreMessage').textContent = scoreMessage;
+    
+    // Generate results summary
+    const answersReview = document.getElementById('answersReview');
+    answersReview.innerHTML = '';
+    
+    quizState.currentQuestions.forEach((question, index) => {
+        const userAnswer = quizState.userAnswers[index];
+        
+        // Only show answered questions if test was quit early
+        if (!wasCompleted && userAnswer === null) {
+            return;
+        }
+        
+        const isCorrect = userAnswer === question.correct;
+        
+        const resultDiv = document.createElement('div');
+        resultDiv.className = `p-3 rounded-lg ${isCorrect ? 'bg-green-900' : 'bg-red-900'}`;
+        resultDiv.innerHTML = `
+            <div class="flex items-center gap-2 mb-2">
+                <span class="font-semibold">Întrebarea ${index + 1}:</span>
+                <span class="${isCorrect ? 'text-green-400' : 'text-red-400'}">
+                    ${isCorrect ? '✓ Corect' : '✗ Greșit'}
+                </span>
+            </div>
+            <p class="text-sm mb-1"><strong>Întrebare:</strong> ${question.question}</p>
+            <p class="text-sm mb-1"><strong>Răspunsul tău:</strong> ${userAnswer !== null ? question.options[userAnswer] : 'Nu ai răspuns'}</p>
+            <p class="text-sm mb-1"><strong>Răspunsul corect:</strong> ${question.options[question.correct]}</p>
+            <p class="text-sm"><strong>Explicație:</strong> ${question.explanation}</p>
+        `;
+        answersReview.appendChild(resultDiv);
+    });
+}
+
 // === RESET BUTTON FUNCTIONALITY ===
 function resetMapView() {
     const currentPeriod = state.currentPeriod || config.periods[state.dom.timelineSlider.value];
@@ -434,9 +731,15 @@ document.addEventListener('DOMContentLoaded', function() {
         showCreditsModal();
     });
     
+    // Quiz button functionality
+    document.getElementById('quiz-btn').addEventListener('click', function() {
+        showQuizModal();
+    });
+    
     // Close button event listeners
     document.getElementById('closeHelpModal').addEventListener('click', hideHelpModal);
     document.getElementById('closeCreditsModal').addEventListener('click', hideCreditsModal);
+    document.getElementById('closeQuizModal').addEventListener('click', hideQuizModal);
     
     // Close modals when clicking outside
     document.getElementById('helpModal').addEventListener('click', function(e) {
@@ -449,6 +752,36 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target === this) {
             hideCreditsModal();
         }
+    });
+    
+    document.getElementById('quizModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            hideQuizModal();
+        }
+    });
+    
+    // Quiz event listeners
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('quiz-type-btn')) {
+            const quizType = e.target.getAttribute('data-type');
+            showQuizDifficultySelection(quizType);
+        }
+        if (e.target.classList.contains('quiz-difficulty-btn')) {
+            const difficulty = e.target.getAttribute('data-difficulty');
+            startQuiz(difficulty);
+        }
+    });
+    
+    document.getElementById('checkAnswerBtn').addEventListener('click', checkAnswer);
+    document.getElementById('nextQuestionBtn').addEventListener('click', nextQuestion);
+    document.getElementById('prevQuestionBtn').addEventListener('click', previousQuestion);
+    document.getElementById('quitTestBtn').addEventListener('click', quitTest);
+    document.getElementById('restartQuizBtn').addEventListener('click', function() {
+        showQuizWelcome();
+    });
+    document.getElementById('closeQuizBtn').addEventListener('click', hideQuizModal);
+    document.getElementById('backToQuizType').addEventListener('click', function() {
+        showQuizWelcome();
     });
     
     const backBtn = document.getElementById('story-back');
