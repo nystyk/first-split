@@ -385,6 +385,21 @@ const allEventsData = {
 
    '1939': [
     {
+        type: 'major',
+        year: 1939,
+        title: 'Pactul de Oțel',
+        lat: 52.5200,
+        lng: 13.4050,
+        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e1/Pact_of_Steel_signing.jpg',
+        description: 'Pe 22 mai, Germania Nazistă și Italia Fascistă semnează la Berlin "Pactul de Oțel", o alianță militară și politică care formalizează legăturile dintre cele două regimuri totalitare. Pactul obliga oricare dintre părți să o ajute pe cealaltă în cazul unui război.',
+        context: 'După ce ambele țări au încălcat în mod repetat ordinea internațională, această alianță a fost menită să intimideze democrațiile occidentale. Mussolini a fost inițial reticent, dar a fost convins de succesele diplomatice ale lui Hitler, creând o axă formală Berlin-Roma.',
+        figures: [
+            { name: 'Galeazzo Ciano', role: 'Ministrul de Externe al Italiei' },
+            { name: 'Joachim von Ribbentrop', role: 'Ministrul de Externe al Germaniei' }
+        ],
+        impact: 'A solidificat alianța Axei și a eliminat orice îndoială cu privire la intențiile agresive comune ale celor două dictaturi. A fost un pas diplomatic crucial care a pregătit terenul pentru declanșarea războiului câteva luni mai târziu.'
+    },
+    {
         type: 'minor',
         year: 1939,
         title: 'Operațiunea Himmler - Gleiwitz',
@@ -447,6 +462,21 @@ const allEventsData = {
     {
         type: 'major',
         year: 1939,
+        title: 'Asasinarea lui Armand Călinescu',
+        lat: 44.4410,
+        lng: 26.0881,
+        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Asasinarea_lui_Armand_Calinescu.jpg',
+        description: 'Pe 21 septembrie, prim-ministrul României, Armand Călinescu, este asasinat la București de un comando al Gărzii de Fier. Călinescu era un adversar ferm al Germaniei Naziste și al mișcării legionare, susținând o politică de neutralitate pro-aliată.',
+        context: 'Asasinatul a fost un act de răzbunare pentru executarea liderului legionar Corneliu Zelea Codreanu în 1938 și o încercare de a destabiliza statul. Acțiunea a fost susținută de serviciile secrete germane, care doreau înlăturarea unui obstacol din calea influenței lor în România.',
+        figures: [
+            { name: 'Armand Călinescu', role: 'Prim-ministrul României' },
+            { name: 'Horia Sima', role: 'Noul lider al Gărzii de Fier, a orchestrat asasinatul din exil' }
+        ],
+        impact: 'Asasinatul a declanșat o represiune brutală din partea statului: asasinii au fost executați public la locul crimei, iar sute de alți legionari au fost uciși în lagăre. Evenimentul a adâncit criza politică din România și a demonstrat violența extremă a Gărzii de Fier.'
+    },
+    {
+        type: 'major',
+        year: 1939,
         title: 'Capitularea Varșoviei',
         lat: 52.2297,
         lng: 21.0122,
@@ -503,6 +533,21 @@ const allEventsData = {
         impact: 'A fost o victorie de propagandă uriașă pentru Germania și o lovitură devastatoare pentru moralul britanic. A demonstrat vulnerabilitatea navelor de suprafață și a forțat Marina Regală să implementeze îmbunătățiri majore ale apărării bazelor sale navale.'
     },
     {
+        type: 'minor',
+        year: 1939,
+        title: 'Războiul Ciudat (Phoney War)',
+        lat: 49.4,
+        lng: 6.3,
+        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e3/British_soldiers_in_the_Maginot_Line.jpg',
+        description: 'O perioadă de aproape opt luni (septembrie 1939 - mai 1940) de inactivitate militară pe Frontul de Vest, după declarațiile de război ale Franței și Marii Britanii. În ciuda stării de război, au avut loc doar lupte minore și sporadice.',
+        context: 'După invazia Poloniei, Aliații au adoptat o strategie defensivă, bazându-se pe Linia Maginot și pe o blocadă economică a Germaniei. Această pasivitate a permis Germaniei să-și consolideze forțele și să se pregătească pentru ofensiva din 1940.',
+        figures: [
+            { name: 'Maurice Gamelin', role: 'Comandantul suprem francez' },
+            { name: 'Lord Gort', role: 'Comandantul Forței Expediționare Britanice' }
+        ],
+        impact: 'A creat un fals sentiment de securitate în rândul Aliaților și a permis Germaniei să aleagă momentul și locul ofensivei din vest. Perioada s-a încheiat brusc pe 10 mai 1940, odată cu invazia germană a Franței și a Țărilor de Jos.'
+    },
+    {
         type: 'major',
         year: 1939,
         title: 'Începutul Războiului de Iarnă',
@@ -516,23 +561,9 @@ const allEventsData = {
             { name: 'Kliment Voroșilov', role: 'Comandantul inițial al Armatei Roșii' }
         ],
         impact: 'Deși Finlanda a fost în cele din urmă forțată să cedeze teritorii, rezistența sa eroică a umilit Armata Roșie, expunând slăbiciunile acesteia după epurările staliniste. Acest lucru l-a încurajat pe Hitler în decizia sa de a invada URSS în 1941.'
-    },
-    {
-        type: 'minor',
-        year: 1939,
-        title: 'Bătălia de la Río de la Plata',
-        lat: -34.8833,
-        lng: -55.1667,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/GrafSpeeInFlames.jpg/800px-GrafSpeeInFlames.jpg',
-        description: 'Pe 13 decembrie, o escadră de crucișătoare britanice avariază cuirasatul de buzunar german Admiral Graf Spee, care se refugiază în portul neutru Montevideo. Câteva zile mai târziu, este sabordat de propriul comandant.',
-        context: 'Graf Spee era un "raider" comercial, vânând nave de marfă aliate în Atlanticul de Sud. Escadra britanică, deși inferioară ca putere de foc, a reușit să-l angajeze într-o luptă și să-l avarieze suficient pentru a-l forța să caute refugiu.',
-        figures: [
-            { name: 'Hans Langsdorff', role: 'Căpitanul cuirasatului Admiral Graf Spee' },
-            { name: 'Henry Harwood', role: 'Comodorul escadrei britanice' }
-        ],
-        impact: 'A fost prima victorie navală majoră a Aliaților în război și o lovitură pentru prestigiul marinei germane. A demonstrat că, în ciuda pierderilor, Marina Regală Britanică era încă o forță formidabilă pe mările lumii.'
     }
 ],
+
 
     '1940': [
     {

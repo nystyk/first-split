@@ -24,7 +24,8 @@
     z-index: 1002;
     pointer-events: none;
     background: url('https://www.transparenttextures.com/patterns/diamond-upholstery.png') repeat;
-    opacity: 0.13;
+    /* --- MODIFICARE --- Am redus opacitatea de la 0.13 pentru a face textura mai subtilă */
+    opacity: 0.05; 
     mix-blend-mode: lighten;
 }
 
