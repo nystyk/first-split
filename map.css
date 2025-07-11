@@ -28,22 +28,14 @@
     mix-blend-mode: lighten;
 }
 
+/* MODIFICARE CHEIE: Fundalul containerului principal Leaflet este setat la
+   culoarea albastră dorită. Acesta va fi vizibil mereu, deoarece nu mai
+   există un strat de hărți (tile layer) care să-l acopere. */
 .leaflet-container {
-    background: #3d3d3d;
+    background: #1a2747;
 }
 
-.leaflet-interactive {
-    transition: fill 0.4s ease-in-out;
-}
-
-.leaflet-tile {
-    transition: opacity 0.3s ease-in-out;
-    background-color: #3d3d3d; /* Match tile background to map/image color */
-}
-
-.leaflet-tile-pane {
-    transition: opacity 0.3s ease-in-out;
-}
+/* MODIFICAT: S-a eliminat complet blocul .leaflet-interactive care era gol. */
 
 #map-background-fake {
     position: absolute;
@@ -257,5 +249,3 @@
     pointer-events: none;
     background: none !important;
 }
-
-

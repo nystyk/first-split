@@ -25,6 +25,10 @@ function initializeMap() {
         worldCopyJump: true
     });
     state.map.setView(config.map.initialCenter, config.map.initialZoom);
+
+    // MODIFICARE CHEIE: S-a eliminat complet stratul de hărți (tile layer).
+    // Fundalul albastru este acum gestionat de fișierul CSS (map.css),
+    // asigurând că este mereu prezent, fără întârzieri de încărcare.
     
     // Create and append hover containers to the main map container
     const mapContainer = document.getElementById('map-container');
@@ -102,32 +106,19 @@ function getStyleForAllegiance(allegiance) {
 }
 
 /**
- * Updates the colors of the countries on the map with a fade-through-neutral animation.
+ * Updates the colors of the countries on the map instantly.
  */
 function updateMapColors(newPeriod, oldPeriod) {
-    const oldControl = territorialData[oldPeriod];
     const newControl = territorialData[newPeriod];
     if (!state.geoJsonLayer || !newControl) return;
 
     state.geoJsonLayer.eachLayer(layer => {
         const countryName = layer.feature.properties.name;
         const newAllegiance = getAllegiance(countryName, newControl);
-
-        if (oldControl) {
-            const oldAllegiance = getAllegiance(countryName, oldControl);
-            if (oldAllegiance !== newAllegiance) {
-                layer.setStyle(getStyleForAllegiance('neutral'));
-                setTimeout(() => {
-                    layer.setStyle(getStyleForAllegiance(newAllegiance));
-                }, 400);
-            } else {
-                layer.setStyle(getStyleForAllegiance(newAllegiance));
-            }
-        } else {
-            layer.setStyle(getStyleForAllegiance(newAllegiance));
-        }
+        layer.setStyle(getStyleForAllegiance(newAllegiance));
     });
 }
+
 
 /**
  * Calculates the optimal map bounds to fit all visible events for a period.

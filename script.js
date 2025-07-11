@@ -43,19 +43,11 @@ function handlePeriodChange(selectedPeriod, force) {
     // Calculate target zoom level
     const targetZoom = Math.min(maxZoom, state.map.getBoundsZoom(targetBounds, false, paddingTopLeft, paddingBottomRight));
     
-    // Add aesthetic tile layer that matches the current style
-    const aestheticTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '© OpenStreetMap contributors, © CARTO',
-        subdomains: 'abcd',
-        maxZoom: 19
-    });
-    
-    // Add the tile layer to the map
-    aestheticTileLayer.addTo(state.map);
-    
-    // Start the animation immediately
+    // MODIFICARE: Logica pentru stratul temporar ('aestheticTileLayer') a fost eliminată.
+    // Acum, actualizăm culorile direct pe stratul GeoJSON permanent.
     updateMapColors(selectedPeriod, oldPeriod);
     
+    // Animația va rula acum peste harta deja colorată corect.
     state.map.flyToBounds(targetBounds, {
         paddingTopLeft,
         paddingBottomRight,
@@ -63,18 +55,14 @@ function handlePeriodChange(selectedPeriod, force) {
         duration: flyConfig.duration
     });
 
-    // Wait for animation to complete and tiles to load
+    // După terminarea animației, randăm evenimentele (punctele).
     state.map.once('moveend', () => {
-        // Wait a bit more for tiles to fully load
         setTimeout(() => {
-            // Remove the aesthetic tile layer once the main tiles are loaded
-            aestheticTileLayer.remove();
-            
-            // Render events
-            setTimeout(() => renderMapEvents(selectedPeriod), 100);
-        }, 500);
+            renderMapEvents(selectedPeriod);
+        }, 100); // Delay redus pentru o apariție mai rapidă
     });
 }
+
 
 /**
  * Handles the initial loading sequence of the application.
