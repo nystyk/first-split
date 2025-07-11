@@ -481,6 +481,14 @@ function renderThematicOverlays() {
                 const polyline = L.polyline(overlay.coords, overlay.style);
                 polyline.addTo(state.map);
                 state.thematicLayers[key] = polyline;
+                // Force pointer-events: none on overlay SVG
+                setTimeout(() => {
+                    const pane = state.map.getPane('overlayPane');
+                    if (pane) {
+                        const svgs = pane.querySelectorAll('svg, canvas');
+                        svgs.forEach(el => el.style.pointerEvents = 'none');
+                    }
+                }, 0);
             }
         } else if (!shouldBeVisible && layerExists) {
             // Remove the layer from the map

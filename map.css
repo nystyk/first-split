@@ -248,3 +248,8 @@
     pointer-events: none;
     background: none !important;
 }
+
+.leaflet-overlay-pane svg,
+.leaflet-overlay-pane canvas {
+    pointer-events: none !important;
+}

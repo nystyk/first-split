@@ -436,7 +436,7 @@ const allEventsData = {
         title: 'Ofensiva din Saar',
         lat: 49.2333,
         lng: 7.0000,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Saar_Offensive_1939.svg/800px-Saar_Offensive_1939.svg.png',
+        imageUrl: 'images/Ofensiva din Saar.png',
         description: 'Între 7-16 septembrie, într-o încercare simbolică de a ajuta Polonia, armata franceză avansează aproximativ 8 km în teritoriul german Saarland. Ofensiva este oprită rapid, iar forțele se retrag în spatele Liniei Maginot.',
         context: 'Conform alianței militare franco-poloneze, Franța era obligată să lanseze o ofensivă majoră la 15 zile după mobilizare. Ofensiva din Saar a fost o acțiune limitată și lipsită de convingere, reflectând strategia defensivă a Comandamentului Francez.',
         figures: [
@@ -465,7 +465,7 @@ const allEventsData = {
         title: 'Asasinarea lui Armand Călinescu',
         lat: 44.4410,
         lng: 26.0881,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/90/Asasinarea_lui_Armand_Calinescu.jpg',
+        imageUrl: 'images/Asasinarea lui Armand Călinescu.jpg',
         description: 'Pe 21 septembrie, prim-ministrul României, Armand Călinescu, este asasinat la București de un comando al Gărzii de Fier. Călinescu era un adversar ferm al Germaniei Naziste și al mișcării legionare, susținând o politică de neutralitate pro-aliată.',
         context: 'Asasinatul a fost un act de răzbunare pentru executarea liderului legionar Corneliu Zelea Codreanu în 1938 și o încercare de a destabiliza statul. Acțiunea a fost susținută de serviciile secrete germane, care doreau înlăturarea unui obstacol din calea influenței lor în România.',
         figures: [
@@ -523,7 +523,7 @@ const allEventsData = {
         title: 'Scufundarea HMS Royal Oak',
         lat: 58.9850,
         lng: -2.9340,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/HMS_Royal_Oak_sinking_in_Scapa_Flow.jpg/800px-HMS_Royal_Oak_sinking_in_Scapa_Flow.jpg',
+        imageUrl: 'images/Scufundarea HMS Royal Oak.png',
         description: 'Pe 14 octombrie, submarinul german U-47, comandat de Günther Prien, pătrunde în baza navală britanică de la Scapa Flow și scufundă cuirasatul HMS Royal Oak, ucigând peste 800 de membri ai echipajului.',
         context: 'Scapa Flow era considerată cea mai sigură bază a Marinei Regale Britanice. Prien a reușit să navigheze printr-un canal îngust și să evite plasele anti-submarin pentru a lansa un atac surpriză în inima flotei britanice.',
         figures: [
@@ -538,7 +538,7 @@ const allEventsData = {
         title: 'Războiul Ciudat (Phoney War)',
         lat: 49.4,
         lng: 6.3,
-        imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/e/e3/British_soldiers_in_the_Maginot_Line.jpg',
+        imageUrl: 'images/Phoney War.jpg',
         description: 'O perioadă de aproape opt luni (septembrie 1939 - mai 1940) de inactivitate militară pe Frontul de Vest, după declarațiile de război ale Franței și Marii Britanii. În ciuda stării de război, au avut loc doar lupte minore și sporadice.',
         context: 'După invazia Poloniei, Aliații au adoptat o strategie defensivă, bazându-se pe Linia Maginot și pe o blocadă economică a Germaniei. Această pasivitate a permis Germaniei să-și consolideze forțele și să se pregătească pentru ofensiva din 1940.',
         figures: [
