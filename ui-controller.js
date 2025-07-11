@@ -1,8 +1,7 @@
 // --- UI CONTROLLER ---
 
 /**
- * REVISED: Renders the legend, handles default states, and cleans up irrelevant overlays.
- * Now triggers slide-in animation.
+ * Renders the legend, handles default states, and cleans up irrelevant overlays.
  */
 function renderLegend(period) {
     const legendPanel = state.dom.legendPanel;
@@ -65,7 +64,6 @@ function renderLegend(period) {
     }
 
     legendPanel.innerHTML = eventTypesHTML + thematicHTML + allegianceHTML;
-    // --- ANIMATION: Make the legend panel visible, triggering the slide-up animation ---
     legendPanel.classList.add('visible');
 
     // --- Add Event Listeners ---
@@ -77,7 +75,7 @@ function renderLegend(period) {
 
             if (filterType === 'event') {
                 state.eventFilters[type] = isVisible;
-                renderMapEvents(state.currentPeriod, true); 
+                renderMapEvents(state.currentPeriod); 
             } else if (filterType === 'overlay') {
                 state.overlayFilters[type] = isVisible;
                 renderThematicOverlays();
@@ -129,9 +127,7 @@ function positionSliderLabels() {
     const labelsContainer = document.getElementById('slider-labels');
     if (!labelsContainer || !state.dom.timelineSlider) return;
     
-    // Position labels to match slider stops more precisely
     Array.from(labelsContainer.children).forEach((label, index) => {
-        // Calculate position based on slider step
         const slider = state.dom.timelineSlider;
         const sliderWidth = slider.clientWidth;
         const thumbWidth = 25;
@@ -157,7 +153,6 @@ function renderFilterBar() {
     labelsContainer.style.pointerEvents = 'none';
     labelsContainer.style.height = '20px';
     
-    // Position labels to match slider stops more precisely
     Array.from(labelsContainer.children).forEach((label, index) => {
         label.className = 'slider-label';
         label.style.position = 'absolute';
@@ -167,7 +162,6 @@ function renderFilterBar() {
         label.style.transform = 'translateX(-50%)';
         label.style.top = '0';
         
-        // Calculate position based on slider step
         const slider = state.dom.timelineSlider;
         const sliderWidth = slider.clientWidth;
         const thumbWidth = 25;
@@ -198,41 +192,33 @@ function renderFilterBar() {
 
 window.addEventListener('resize', () => setTimeout(positionSliderLabels, 0));
 
-// --- MODAL MANAGEMENT (REVISED for animations) ---
+// --- MODAL MANAGEMENT ---
 function showModal(event) {
     state.currentEvent = event;
     const modal = state.dom.modal;
     
-    // Basic event information
     document.getElementById('modalTitle').textContent = event.title;
     document.getElementById('modalDescription').textContent = event.description;
     document.getElementById('modalImage').src = event.imageUrl;
     document.getElementById('modalYear').textContent = event.year;
     
-    // Event type badge
     const eventTypeElement = document.getElementById('modalEventType');
     eventTypeElement.textContent = getEventTypeLabel(event.type);
     eventTypeElement.className = `px-3 py-1 text-xs font-semibold rounded-full ${event.type}`;
     
-    // Location information
     let locationText = `Coordonate: ${event.lat.toFixed(4)}, ${event.lng.toFixed(4)}`;
     document.getElementById('modalLocationText').textContent = locationText;
     
-    // Historical context, Key Figures, and Impact
     document.getElementById('modalContext').innerHTML = `<p>${event.context || 'Context istoric nu este disponibil.'}</p>`;
     document.getElementById('modalFigures').innerHTML = generateKeyFiguresHTML(event.figures);
     document.getElementById('modalImpact').innerHTML = `<p>${event.impact || 'Impactul și consecințele nu sunt disponibile.'}</p>`;
     
-    // Progress indicator
     updateModalProgress(event);
     
-    // --- ANIMATION: Show modal by adding .visible class ---
     modal.classList.add('visible');
     
-    // Add event listeners for interactive buttons
     setupModalInteractions(event);
 
-    // Add document click listener to close on outside click
     function handleOutsideClick(e) {
         const content = modal.querySelector('.modal-content');
         if (content && !content.contains(e.target)) {
@@ -292,7 +278,6 @@ function updateModalProgress(event) {
 }
 
 function setupModalInteractions(event) {
-    // View on Map button
     document.getElementById('viewOnMapBtn').onclick = () => {
         hideModal();
         state.map.flyTo([event.lat, event.lng], 8, {
@@ -301,7 +286,6 @@ function setupModalInteractions(event) {
         });
     };
     
-    // Navigation buttons
     const currentPeriod = getEventPeriod(event);
     const eventsInPeriod = allEventsData[currentPeriod] || [];
     const currentIndex = eventsInPeriod.findIndex(e => e.title === event.title);
@@ -321,11 +305,9 @@ function setupModalInteractions(event) {
         }
     };
     
-    // Update button states
     prevBtn.disabled = currentIndex <= 0;
     nextBtn.disabled = currentIndex >= eventsInPeriod.length - 1;
     
-    // Keyboard navigation
     const handleKeyPress = (e) => {
         if (e.key === 'Escape') {
             hideModal();
@@ -338,21 +320,17 @@ function setupModalInteractions(event) {
     
     document.addEventListener('keydown', handleKeyPress);
     
-    // Store the handler to remove it later
     state.currentModalKeyHandler = handleKeyPress;
 }
 
 function hideModal() {
-    // --- ANIMATION: Hide modal by removing .visible class ---
     state.dom.modal.classList.remove('visible');
     state.currentEvent = null;
     
-    // Remove keyboard event listener
     if (state.currentModalKeyHandler) {
         document.removeEventListener('keydown', state.currentModalKeyHandler);
         state.currentModalKeyHandler = null;
     }
-    // Remove outside click handler if present
     if (state.modalOutsideClickHandler) {
         document.removeEventListener('mousedown', state.modalOutsideClickHandler);
         document.removeEventListener('touchstart', state.modalOutsideClickHandler);
@@ -360,25 +338,27 @@ function hideModal() {
     }
 }
 
+/**
+ * FIX: Show or hide the context modal with animations.
+ * @param {string} key - The period key (e.g., 'pre-war').
+ */
 function showContextModal(key) {
     const data = contextData[key];
-    if (!data) {
+    // Only show for pre-war and post-war
+    if (!data || (key !== 'pre-war' && key !== 'post-war')) {
         hideContextModal();
         return;
     }
     state.dom.contextModal.querySelector('#contextModalTitle').textContent = data.title;
     state.dom.contextModal.querySelector('#contextModalDescription').textContent = data.description;
-    // --- ANIMATION: Show context modal by adding .visible class ---
     state.dom.contextModal.classList.add('visible');
 
-    // Add document click listener to close on outside click
     function handleOutsideClick(e) {
         const content = state.dom.contextModal.querySelector('.context-modal-content');
         if (content && !content.contains(e.target)) {
             hideContextModal();
         }
     }
-    // Store handler so it can be removed later
     state.contextModalOutsideClickHandler = handleOutsideClick;
     setTimeout(() => {
         document.addEventListener('mousedown', handleOutsideClick);
@@ -387,9 +367,7 @@ function showContextModal(key) {
 }
 
 function hideContextModal() {
-    // --- ANIMATION: Hide context modal by removing .visible class ---
     state.dom.contextModal.classList.remove('visible');
-    // Remove outside click handler if present
     if (state.contextModalOutsideClickHandler) {
         document.removeEventListener('mousedown', state.contextModalOutsideClickHandler);
         document.removeEventListener('touchstart', state.contextModalOutsideClickHandler);
@@ -398,24 +376,6 @@ function hideContextModal() {
 }
 
 // === RESET BUTTON FUNCTIONALITY ===
-function addAestheticTileLayer() {
-    const aestheticTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '© OpenStreetMap contributors, © CARTO',
-        subdomains: 'abcd',
-        maxZoom: 19
-    });
-    
-    aestheticTileLayer.addTo(state.map);
-    
-    setTimeout(() => {
-        if (aestheticTileLayer._map) {
-            aestheticTileLayer.remove();
-        }
-    }, 2500);
-    
-    return aestheticTileLayer;
-}
-
 function resetMapView() {
     const currentPeriod = state.currentPeriod || config.periods[state.dom.timelineSlider.value];
     if (typeof handlePeriodChange === 'function') {

@@ -13,12 +13,10 @@
     border: 1px solid #666;
     pointer-events: all;
     width: 280px;
-    /* --- ANIMATION: Start off-screen and invisible --- */
     transform: translateY(calc(100% + 2rem));
     opacity: 0;
     transition: transform 0.4s ease-out, opacity 0.4s ease-out;
 }
-/* --- ANIMATION: Class to slide the legend into view --- */
 #legend-panel.visible {
     transform: translateY(0);
     opacity: 1;
@@ -43,7 +41,7 @@
     align-items: center;
     margin-top: 8px;
     font-size: 0.85rem;
-    cursor: pointer; /* Make the whole item clickable */
+    cursor: pointer;
 }
 .legend-symbol {
     width: 45px;
@@ -89,7 +87,7 @@
     margin-top: 10px;
 }
 .legend-toggle input[type="checkbox"] {
-    display: none; /* Hide the default checkbox */
+    display: none;
 }
 .legend-toggle .checkbox-visual {
     width: 18px;
@@ -148,10 +146,9 @@
     max-width: 900px;
     margin: 0 auto;
     position: relative;
-    padding: 35px 12.5px 0 12.5px; /* Spațiu adăugat pentru tooltip */
+    padding: 35px 12.5px 0 12.5px;
 }
 
-/* --- ANIMATION: Slider tooltip fade in/out is already implemented here --- */
 #slider-tooltip {
     position: absolute;
     top: -20px;
@@ -251,9 +248,7 @@
 /* ----------------------------------------------------------------------- */
 /* 8. Stiluri pentru Modale și Animații                                  */
 /* ----------------------------------------------------------------------- */
-
-/* --- ANIMATION: Modal fade in/out --- */
-#modal, #contextModal {
+#modal, #contextModal { 
     opacity: 0;
     pointer-events: none;
     visibility: hidden;
@@ -266,7 +261,6 @@
     transition: opacity 0.3s ease-in-out, visibility 0s 0s;
 }
 
-/* --- ANIMATION: Modal content slide-up --- */
 @keyframes slideUp { 
     from { transform: translateY(30px); opacity: 0; } 
     to { transform: translateY(0); opacity: 1; } 
@@ -416,189 +410,10 @@
     }
 }
 
-.ai-btn { background-color: #4a5568; transition: background-color 0.3s, transform 0.2s; }
-.ai-btn:hover { background-color: #2d3748; transform: translateY(-2px); }
-.ai-btn:disabled { background-color: #2d3748; opacity: 0.5; cursor: not-allowed; }
-.loader { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; }
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
 .context-modal-content {
     background-color: rgba(40,40,40,0.7);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,0.2);
-}
-
-/* --- NEW: Styles for Thematic Overlays --- */
-.thematic-line {
-    fill: none;
-    stroke-width: 4px;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    opacity: 0.85;
-}
-
-.maginot-line {
-    stroke: #1976d2;
-    stroke-dasharray: 6, 4;
-}
-.siegfried-line {
-    stroke: #388e3c;
-    stroke-dasharray: 10, 6;
-}
-.gustav-line {
-    stroke: #fbc02d;
-    stroke-dasharray: 2, 6;
-}
-.gothic-line {
-    stroke: #8e24aa;
-    stroke-dasharray: 8, 4, 2, 4;
-}
-.atlantic-wall {
-    stroke: #e74c3c;
-    stroke-dasharray: 8, 8;
-}
-
-/* --- SUPPLY LINES --- */
-.supply-line-murmansk {
-    stroke: #00bcd4;
-    stroke-width: 4px;
-    stroke-dasharray: 2, 8;
-}
-.supply-line-persian {
-    stroke: #ff9800;
-    stroke-width: 4px;
-    stroke-dasharray: 6, 6;
-}
-.supply-line-africa {
-    stroke: #43a047;
-    stroke-width: 4px;
-    stroke-dasharray: 1, 6;
-}
-.supply-line-burma {
-    stroke: #ab47bc;
-    stroke-width: 4px;
-    stroke-dasharray: 4, 4;
-}
-
-/* ----------------------------------------------------------------------- */
-/* 8. Stiluri pentru Controalele Reset View                               */
-/* ----------------------------------------------------------------------- */
-#story-controls {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-}
-
-.story-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    background-color: rgba(52, 152, 219, 0.9);
-    border: 1px solid #3498db;
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.story-btn:hover:not(:disabled) {
-    background-color: rgba(52, 152, 219, 1);
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
-}
-
-.story-btn:active:not(:disabled) {
-    transform: scale(0.95);
-}
-
-.story-btn.disabled {
-    background-color: rgba(128, 128, 128, 0.3);
-    border-color: #666;
-    color: #999;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.story-btn.disabled:hover {
-    background-color: rgba(128, 128, 128, 0.3);
-    transform: none;
-    box-shadow: none;
-}
-
-/* Cluster marker styles */
-.cluster-dot {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  background: #333;
-  border: 2px solid #fff;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 2;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.18);
-  transition: box-shadow 0.2s, transform 0.2s;
-}
-.cluster-dot:hover {
-  box-shadow: 0 0 10px #8ec6ff, 0 4px 12px rgba(0,0,0,0.28);
-  background: #444;
-  transform: scale(1.25);
-}
-.cluster-badge {
-  color: #fff;
-  font-weight: bold;
-  font-size: 13px;
-  pointer-events: none;
-  user-select: none;
-}
-
-/* Cluster popup styles */
-.cluster-popup {
-  position: absolute;
-  min-width: 180px;
-  background: #222;
-  color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-  padding: 8px 0 4px 0;
-  z-index: 9999;
-  font-size: 15px;
-  animation: fadeIn 0.18s;
-  pointer-events: auto;
-}
-.cluster-popup-title {
-  font-weight: bold;
-  padding: 4px 16px 6px 16px;
-  border-bottom: 1px solid #444;
-  margin-bottom: 4px;
-}
-.cluster-popup-item {
-  padding: 6px 16px;
-  cursor: pointer;
-  transition: background 0.15s, text-decoration 0.15s;
-  outline: none;
-  text-decoration: none;
-  color: #8ec6ff;
-  border-radius: 4px;
-}
-.cluster-popup-item:hover, .cluster-popup-item:focus {
-  background: #444;
-  text-decoration: underline;
-  color: #fff;
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: none; }
-}
-
-.cluster-dot, .event-element {
-  pointer-events: auto;
 }
 
 /* Custom scrollbar for modal */

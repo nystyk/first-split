@@ -18,20 +18,13 @@ function handlePeriodChange(selectedPeriod, force) {
     state.dom.labelsContainer.innerHTML = '';
     state.dom.lineCanvas.innerHTML = '';
     
-    // --- MODIFICATION: Use a class to animate out all dots ---
+    // Animate out all existing dots
     const existingDots = state.dom.dotsContainer.querySelectorAll('.event-element');
     existingDots.forEach(dot => {
-        dot.classList.add('hiding');
-        // Remove after animation. The duration should match the CSS animation.
+        dot.classList.remove('visible'); // Start animation
+        // Remove from DOM after animation finishes
         dot.addEventListener('transitionend', () => dot.remove(), { once: true });
     });
-    
-    // A fallback to clear any stragglers after the transition.
-    setTimeout(() => {
-        if (state.dom.dotsContainer.children.length > 0) {
-           // state.dom.dotsContainer.innerHTML = '';
-        }
-    }, 500); // Should be slightly longer than the transition duration
     
     renderLegend(selectedPeriod);
     showContextModal(selectedPeriod);
@@ -43,15 +36,10 @@ function handlePeriodChange(selectedPeriod, force) {
     let paddingTopLeft = events.length > 10 ? flyConfig.paddingLarge : flyConfig.paddingSmall;
     let paddingBottomRight = events.length > 10 ? flyConfig.paddingBottomLarge : flyConfig.paddingBottomSmall;
 
-    // 1. Actualizează culorile hărții.
-    updateMapColors(selectedPeriod, oldPeriod);
+    updateMapColors(selectedPeriod);
 
-    // 2. MODIFICARE CHEIE: Folosim o tehnică de dublă animație pentru a forța
-    // browserul să randeze noile culori ÎNAINTE de a porni animația de zbor.
-    // Acest lucru garantează că stratul colorat este vizibil pe parcursul mișcării.
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-            // 3. Pornește animația de zbor.
             state.map.flyToBounds(targetBounds, {
                 paddingTopLeft,
                 paddingBottomRight,
@@ -61,7 +49,6 @@ function handlePeriodChange(selectedPeriod, force) {
         });
     });
 
-    // După terminarea animației, randăm evenimentele (punctele).
     state.map.once('moveend', () => {
         setTimeout(() => {
             renderMapEvents(selectedPeriod);
@@ -76,20 +63,13 @@ function handlePeriodChange(selectedPeriod, force) {
 function initialLoad() {
     const activePeriod = config.periods[state.dom.timelineSlider.value];
     state.currentPeriod = activePeriod;
-    const events = allEventsData[activePeriod] || [];
-    // Set a wide initial view (no fitBounds)
     state.map.setView(config.map.initialCenter, config.map.initialZoom, { animate: false });
-    updateMapColors(activePeriod, null);
+    updateMapColors(activePeriod);
     renderLegend(activePeriod);
-    if (activePeriod !== 'pre-war') {
-        showContextModal(activePeriod);
-    } else {
-        state.dom.contextModal.classList.add('hidden');
-    }
+    showContextModal(activePeriod);
     updateSliderVisuals(state.dom.timelineSlider.value);
-    state.map.whenReady(() => {
-        renderMapEvents(activePeriod);
-    });
+    
+    // FIX: Do NOT render dots on initial load. They will be rendered after the intro animation.
 }
 
 // --- INTERACTION LOCKING ---
@@ -111,14 +91,12 @@ function unlockInteractions() {
         state.dom.timelineSlider.disabled = false;
         state.dom.timelineSlider.style.opacity = '';
     }
-    // Do NOT enable map interactions (keep map static)
 }
 window.lockInteractions = lockInteractions;
 window.unlockInteractions = unlockInteractions;
 
 // --- INITIALIZATION ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Cache DOM elements into the state object
     state.dom.mapEl = document.getElementById('map');
     state.dom.dotsContainer = document.getElementById('dots-container');
     state.dom.labelsContainer = document.getElementById('labels-container');
@@ -133,27 +111,21 @@ document.addEventListener('DOMContentLoaded', () => {
     state.dom.timelineSlider = document.getElementById('timeline-slider');
     state.dom.sliderTooltip = document.getElementById('slider-tooltip');
 
-    // Disable interactions until intro animation is finished
     lockInteractions();
 
-    // Attach global event listeners
     state.dom.closeModalBtn.addEventListener('click', hideModal);
     state.dom.contextModal.addEventListener('click', (e) => (e.target === state.dom.contextModal) && hideContextModal());
     state.dom.closeContextModal.addEventListener('click', hideContextModal);
     window.addEventListener('resize', positionSliderLabels);
 
-    // Start the application
     initializeMap();
 
-    // --- FIX: Hide dots during map movement ---
-    if (state.map) {
-        state.map.on('movestart', () => {
-            state.dom.dotsContainer.classList.add('map-is-moving');
-        });
-        state.map.on('moveend', () => {
-            state.dom.dotsContainer.classList.remove('map-is-moving');
-        });
-    }
+    state.map.on('movestart', () => {
+        state.dom.dotsContainer.classList.add('map-is-moving');
+    });
+    state.map.on('moveend', () => {
+        state.dom.dotsContainer.classList.remove('map-is-moving');
+    });
 
     renderFilterBar();
     setTimeout(() => {
@@ -161,7 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateSliderVisuals(state.dom.timelineSlider.value);
     }, 100);
 
-    // --- INTRO OVERLAY LOGIC ---
     const introOverlay = document.getElementById('intro-overlay');
     const introStartBtn = document.getElementById('intro-start-btn');
     introOverlay.style.display = 'flex';
@@ -207,9 +178,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         duration: flyConfig.duration
                     });
                     state.map.once('moveend', () => {
-                        if (activePeriod === 'pre-war') {
-                            showContextModal('pre-war');
-                        }
+                        showContextModal(activePeriod);
+                        // FIX: Render initial dots only AFTER intro animation is complete
+                        renderMapEvents(activePeriod);
                         unlockInteractions();
                     });
                 } catch (err) {
