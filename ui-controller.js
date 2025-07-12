@@ -299,14 +299,19 @@ function setupModalInteractions(event) {
         });
     };
     
-
-    
     const currentPeriod = getEventPeriod(event);
     const eventsInPeriod = allEventsData[currentPeriod] || [];
     const currentIndex = eventsInPeriod.findIndex(e => e.title === event.title);
     
     const prevBtn = document.getElementById('prevEventBtn');
     const nextBtn = document.getElementById('nextEventBtn');
+    
+    // Store navigation data in state for arrow key handling
+    state.currentModalNavigation = {
+        currentPeriod,
+        eventsInPeriod,
+        currentIndex
+    };
     
     prevBtn.onclick = () => {
         if (currentIndex > 0) {
@@ -327,20 +332,35 @@ function setupModalInteractions(event) {
         if (e.key === 'Escape') {
             hideModal();
         } else if (e.key === 'ArrowLeft' && !prevBtn.disabled) {
-            prevBtn.click();
+            e.preventDefault(); // Prevent default browser behavior
+            if (state.currentModalNavigation && state.currentModalNavigation.currentIndex > 0) {
+                const newIndex = state.currentModalNavigation.currentIndex - 1;
+                showModal(state.currentModalNavigation.eventsInPeriod[newIndex]);
+            }
         } else if (e.key === 'ArrowRight' && !nextBtn.disabled) {
-            nextBtn.click();
+            e.preventDefault(); // Prevent default browser behavior
+            if (state.currentModalNavigation && state.currentModalNavigation.currentIndex < state.currentModalNavigation.eventsInPeriod.length - 1) {
+                const newIndex = state.currentModalNavigation.currentIndex + 1;
+                showModal(state.currentModalNavigation.eventsInPeriod[newIndex]);
+            }
         }
     };
     
-    document.addEventListener('keydown', handleKeyPress);
+    // Remove any existing key handler before adding new one
+    if (state.currentModalKeyHandler) {
+        document.removeEventListener('keydown', state.currentModalKeyHandler);
+    }
     
+    document.addEventListener('keydown', handleKeyPress);
     state.currentModalKeyHandler = handleKeyPress;
 }
 
 function hideModal() {
     state.dom.modal.classList.remove('visible');
     state.currentEvent = null;
+    
+    // Clean up navigation data
+    state.currentModalNavigation = null;
     
     if (state.currentModalKeyHandler) {
         document.removeEventListener('keydown', state.currentModalKeyHandler);
